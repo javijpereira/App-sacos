@@ -188,7 +188,7 @@ let currentSeason = Object.keys(data)[0];
 
 
 /* ===== TEMPORADAS ===== */
-function loadSeasons(){
+ function loadSeasons(){
   seasonSelect.innerHTML="";
   Object.keys(data).forEach(s=>{
     seasonSelect.innerHTML+=`<option>${s}</option>`;
@@ -200,30 +200,26 @@ seasonSelect.onchange=()=>{
   showDatos(document.querySelector("nav button.active"));
 };
 
-function addSeason(){
+ async function addSeason(){
   const name=prompt("Nombre de la temporada");
   if(!name||data[name]) return;
   data[name]={sacos:0,duracion:1,pickups:[]};
   currentSeason=name;
-  save(); loadSeasons();
+  await save(); loadSeasons();
   showDatos(document.querySelector("nav button"));
 }
 
-function deleteSeason(){
+ async function deleteSeason(){
   if(!confirm("¿Borrar temporada completa?")) return;
   delete data[currentSeason];
   currentSeason=Object.keys(data)[0];
-  save(); loadSeasons();
+  await save(); loadSeasons();
   showDatos(document.querySelector("nav button"));
 }
 
-/* ===== UTIL ===== */
-function save(){
-  localStorage.setItem("sacosApp",JSON.stringify(data));
-}
 
 /* ===== RESUMEN ===== */
-function resumenSacos(){
+ function resumenSacos(){
   const p=data[currentSeason];
   const hoy=new Date(); hoy.setHours(0,0,0,0);
   const consumidos=p.pickups
@@ -235,13 +231,13 @@ function resumenSacos(){
 }
 
 /* ===== NAV ===== */
-function setActive(btn){
+ function setActive(btn){
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
 }
 
 /* ===== DATOS ===== */
-function showDatos(btn){
+ function showDatos(btn){
   setActive(btn);
   const p=data[currentSeason];
   const r=resumenSacos();
@@ -280,25 +276,25 @@ function showDatos(btn){
   `;
 }
 
-function saveGeneral(){
+async function saveGeneral(){
   data[currentSeason].sacos=+sacos.value;
   data[currentSeason].duracion=+duracion.value;
-  save(); showDatos(document.querySelector("nav button.active"));
+  await save(); showDatos(document.querySelector("nav button.active"));
 }
 
-function addPickup(){
+async function addPickup(){
   if(!fecha.value||!cantidad.value) return alert("Datos incompletos");
   data[currentSeason].pickups.push({fecha:fecha.value,sacos:+cantidad.value});
-  save(); showDatos(document.querySelector("nav button.active"));
+  await save(); showDatos(document.querySelector("nav button.active"));
 }
 
-function deletePickup(i){
+async function deletePickup(i){
   data[currentSeason].pickups.splice(i,1);
-  save(); showDatos(document.querySelector("nav button.active"));
+  await save(); showDatos(document.querySelector("nav button.active"));
 }
 
 /* ===== CALENDARIO ===== */
-function showCalendario(btn){
+ function showCalendario(btn){
   setActive(btn);
   content.innerHTML=`<div id="calendar"></div>`;
   const p=data[currentSeason];
@@ -403,8 +399,3 @@ showDatos(document.querySelector("nav button"));
 
 </body>
 </html>
-
-
-
-
-
