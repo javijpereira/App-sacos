@@ -62,6 +62,7 @@ async function save() {
 onSnapshot(datosRef, (docSnap) => {
   if (docSnap.exists()) {
     data = docSnap.data();
+    console.log("Datos actualizados en tiempo real");
     loadSeasons();
     showDatos(document.querySelector("nav button.active"));
   }
@@ -188,17 +189,19 @@ canvas{
 
 <script>
 /* ===== DATOS ===== */
-let data = {}; // vacío al inicio
+let data; // vacío al inicio
 let currentSeason;
 
 async function loadData() {
   const docSnap = await getDoc(datosRef);
   if (docSnap.exists()) {
     data = docSnap.data();
+    console.log("Datos cargados desde Firestore");
   } else {
-    // Primer guardado
+    // Si no existe, creamos datos iniciales
     data = { "Invierno 2025-2026": { sacos:120, duracion:1.33, pickups:[] } };
-    await save();
+    await save(); // Guardamos los datos iniciales
+    console.log("Documento creado en Firestore con datos iniciales");
   }
   currentSeason = Object.keys(data)[0];
   loadSeasons();
@@ -211,33 +214,36 @@ loadData();
 
 
 /* ===== TEMPORADAS ===== */
- function loadSeasons(){
-  seasonSelect.innerHTML="";
-  Object.keys(data).forEach(s=>{
-    seasonSelect.innerHTML+=`<option>${s}</option>`;
+function loadSeasons(){
+  seasonSelect.innerHTML = "";
+  Object.keys(data).forEach(s => {
+    seasonSelect.innerHTML += `<option>${s}</option>`;
   });
-  seasonSelect.value=currentSeason;
+  seasonSelect.value = currentSeason;
 }
-seasonSelect.onchange=()=>{
-  currentSeason=seasonSelect.value;
+
+seasonSelect.onchange = () => {
+  currentSeason = seasonSelect.value;
   showDatos(document.querySelector("nav button.active"));
 };
 
- async function addSeason(){
-  const name=prompt("Nombre de la temporada");
-  if(!name||data[name]) return;
-  data[name]={sacos:0,duracion:1,pickups:[]};
-  currentSeason=name;
-  await save(); loadSeasons();
-  showDatos(document.querySelector("nav button"));
+async function addSeason() {
+  const name = prompt("Nombre de la temporada");
+  if (!name || data[name]) return;
+  data[name] = { sacos:0, duracion:1, pickups:[] };
+  currentSeason = name;
+  await save();
+  loadSeasons();
+  showDatos(document.querySelector("nav button.active"));
 }
 
- async function deleteSeason(){
-  if(!confirm("¿Borrar temporada completa?")) return;
+async function deleteSeason() {
+  if (!confirm("¿Borrar temporada completa?")) return;
   delete data[currentSeason];
-  currentSeason=Object.keys(data)[0];
-  await save(); loadSeasons();
-  showDatos(document.querySelector("nav button"));
+  currentSeason = Object.keys(data)[0];
+  await save();
+  loadSeasons();
+  showDatos(document.querySelector("nav button.active"));
 }
 
 
@@ -299,21 +305,25 @@ seasonSelect.onchange=()=>{
   `;
 }
 
-async function saveGeneral(){
-  data[currentSeason].sacos=+sacos.value;
-  data[currentSeason].duracion=+duracion.value;
-  await save(); showDatos(document.querySelector("nav button.active"));
+/* ===== DATOS GENERALES ===== */
+async function saveGeneral() {
+  data[currentSeason].sacos = +sacos.value;
+  data[currentSeason].duracion = +duracion.value;
+  await save();
+  showDatos(document.querySelector("nav button.active"));
 }
 
-async function addPickup(){
-  if(!fecha.value||!cantidad.value) return alert("Datos incompletos");
-  data[currentSeason].pickups.push({fecha:fecha.value,sacos:+cantidad.value});
-  await save(); showDatos(document.querySelector("nav button.active"));
+async function addPickup() {
+  if (!fecha.value || !cantidad.value) return alert("Datos incompletos");
+  data[currentSeason].pickups.push({ fecha: fecha.value, sacos: +cantidad.value });
+  await save();
+  showDatos(document.querySelector("nav button.active"));
 }
 
-async function deletePickup(i){
+async function deletePickup(i) {
   data[currentSeason].pickups.splice(i,1);
-  await save(); showDatos(document.querySelector("nav button.active"));
+  await save();
+  showDatos(document.querySelector("nav button.active"));
 }
 
 /* ===== CALENDARIO ===== */
@@ -419,3 +429,4 @@ function exportExcel(){
 
 </body>
 </html>
+
