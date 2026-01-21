@@ -10,6 +10,61 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+// Configuración Firebase
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_STORAGE_BUCKET",
+  messagingSenderId: "TU_MESSAGING_SENDER_ID",
+  appId: "TU_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const datosRef = doc(db, "datos", "principal");
+
+// Cargar datos desde Firestore
+async function loadData() {
+  const docSnap = await getDoc(datosRef);
+  if (docSnap.exists()) {
+    data = docSnap.data();
+    currentSeason = Object.keys(data)[0];
+  } else {
+    await setDoc(datosRef, data); // guardamos por primera vez
+  }
+  loadSeasons();
+  showDatos(document.querySelector("nav button.active"));
+}
+
+// Guardar cambios en Firestore
+async function save() {
+  await setDoc(datosRef, data);
+}
+
+// Escuchar cambios en tiempo real
+onSnapshot(datosRef, (docSnap) => {
+  if (docSnap.exists()) {
+    data = docSnap.data();
+    loadSeasons();
+    showDatos(document.querySelector("nav button.active"));
+  }
+});
+
+// Llamamos a loadData al inicio
+loadData();
+</script>
+
 <style>
 /* ===== GENERAL ===== */
 body{
@@ -127,10 +182,11 @@ canvas{
 
 <script>
 /* ===== DATOS ===== */
-let data = JSON.parse(localStorage.getItem("sacosApp")) || {
+let data = {
   "Invierno 2025-2026": { sacos:120, duracion:1.33, pickups:[] }
 };
 let currentSeason = Object.keys(data)[0];
+
 
 /* ===== TEMPORADAS ===== */
 function loadSeasons(){
@@ -348,5 +404,8 @@ showDatos(document.querySelector("nav button"));
 
 </body>
 </html>
+
+
+
 
 
