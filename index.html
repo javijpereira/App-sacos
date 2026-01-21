@@ -49,8 +49,14 @@ async function loadData() {
 
 // Guardar cambios en Firestore
 async function save() {
-  await setDoc(datosRef, data);
+  try {
+    await setDoc(datosRef, data);
+    console.log("Datos guardados en Firestore");
+  } catch (err) {
+    console.error("Error guardando en Firestore:", err);
+  }
 }
+
 
 // Escuchar cambios en tiempo real
 onSnapshot(datosRef, (docSnap) => {
@@ -182,8 +188,25 @@ canvas{
 
 <script>
 /* ===== DATOS ===== */
-let data = { "Invierno 2025-2026": { sacos:120, duracion:1.33, pickups:[] } };
-let currentSeason = Object.keys(data)[0];
+let data = {}; // vacío al inicio
+let currentSeason;
+
+async function loadData() {
+  const docSnap = await getDoc(datosRef);
+  if (docSnap.exists()) {
+    data = docSnap.data();
+  } else {
+    // Primer guardado
+    data = { "Invierno 2025-2026": { sacos:120, duracion:1.33, pickups:[] } };
+    await save();
+  }
+  currentSeason = Object.keys(data)[0];
+  loadSeasons();
+  showDatos(document.querySelector("nav button.active"));
+}
+
+// Llamada al inicio
+loadData();
 
 
 
@@ -392,9 +415,6 @@ function exportExcel(){
   XLSX.writeFile(wb,"sacos.xlsx");
 }
 
-/* INIT */
-loadSeasons();
-showDatos(document.querySelector("nav button"));
 </script>
 
 </body>
