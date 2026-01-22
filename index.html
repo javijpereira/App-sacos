@@ -155,18 +155,33 @@ async function deleteSeason() {
 
 /* ===== DATOS GENERALES ===== */
 async function saveGeneral() {
-  data[currentSeason].sacos = +sacos.value;
-  data[currentSeason].duracion = +duracion.value;
+  const sacosInput = document.getElementById("sacos");
+  const duracionInput = document.getElementById("duracion");
+
+  data[currentSeason].sacos = Number(sacosInput.value);
+  data[currentSeason].duracion = Number(duracionInput.value);
+
   await save();
   showDatos(document.querySelector("nav button.active"));
 }
 
 async function addPickup() {
-  if (!fecha.value || !cantidad.value) return alert("Datos incompletos");
-  data[currentSeason].pickups.push({ fecha: fecha.value, sacos: +cantidad.value });
+  const fechaInput = document.getElementById("fecha");
+  const cantidadInput = document.getElementById("cantidad");
+
+  if (!fechaInput.value || !cantidadInput.value) {
+    return alert("Datos incompletos");
+  }
+
+  data[currentSeason].pickups.push({
+    fecha: fechaInput.value,
+    sacos: Number(cantidadInput.value)
+  });
+
   await save();
   showDatos(document.querySelector("nav button.active"));
 }
+
 
 async function deletePickup(i) {
   data[currentSeason].pickups.splice(i,1);
@@ -426,6 +441,7 @@ canvas{
 
 </body>
 </html>
+
 
 
 
