@@ -35,183 +35,31 @@ const db = getFirestore(app);
 const datosRef = doc(db, "datos", "principal");
 
 // Cargar datos desde Firestore
+
+let data = {
+  "Invierno 2025-2026": {
+    sacos: 120,
+    duracion: 1.33,
+    pickups: []
+  }
+};
+let currentSeason = "Invierno 2025-2026";
+
 async function loadData() {
   const docSnap = await getDoc(datosRef);
+
   if (docSnap.exists()) {
     data = docSnap.data();
     currentSeason = Object.keys(data)[0];
-  } else {
-    await setDoc(datosRef, data); // guardamos por primera vez
-  }
-  loadSeasons();
-  showDatos(document.querySelector("nav button.active"));
-}
-
-// Guardar cambios en Firestore
-async function save() {
-  try {
-    await setDoc(datosRef, data);
-    console.log("Datos guardados en Firestore");
-  } catch (err) {
-    console.error("Error guardando en Firestore:", err);
-  }
-}
-
-
-// Escuchar cambios en tiempo real
-onSnapshot(datosRef, (docSnap) => {
-  if (docSnap.exists()) {
-    data = docSnap.data();
-    console.log("Datos actualizados en tiempo real");
-    loadSeasons();
-    showDatos(document.querySelector("nav button.active"));
-  }
-});
-
-// Llamamos a loadData al inicio
-loadData();
-</script>
-
-<style>
-/* ===== GENERAL ===== */
-body{
-  margin:0;
-  font-family:system-ui, Arial;
-  background:#121212;
-  color:#f0f0f0;
-  overflow-x:hidden;
-}
-header{
-  background:#1f2937;
-  color:#fff;
-  padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-header select, header button{
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  background:#2c2c2c;
-  color:#fff;
-  font-size:1rem;
-}
-nav{
-  display:flex;
-  background:#1f2937;
-  border-bottom:1px solid #333;
-}
-nav button{
-  flex:1;
-  padding:14px;
-  border:none;
-  background:none;
-  font-weight:600;
-  color:#ccc;
-  font-size:1rem;
-}
-nav button.active{
-  border-bottom:3px solid #2563eb;
-  color:#fff;
-}
-#content{
-  padding:12px;
-  overflow-y:auto;
-}
-.card{
-  background:#1e1e1e;
-  border-radius:12px;
-  padding:15px;
-  margin-bottom:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.5);
-}
-input, button{
-  width:100%;
-  padding:12px;
-  margin-bottom:8px;
-  border-radius:8px;
-  border:none;
-  background:#2c2c2c;
-  color:#fff;
-  font-size:1rem;
-}
-button.primary{
-  background:#2563eb;
-  color:#fff;
-  font-weight:600;
-}
-#calendar{
-  width:100%;
-  max-width:100%;
-  margin:auto;
-  background:#1e1e1e;
-  border-radius:12px;
-  padding:6px;
-}
-canvas{
-  width:100% !important;
-  max-width:100% !important;
-  height:auto !important;
-}
-
-/* ===== EVENTOS ===== */
-.green-event{ background:#4ade80!important; color:#000!important; }
-.yellow-event{ background:#facc15!important; color:#000!important; }
-.pickup-event{ background:#60a5fa!important; color:#000!important; }
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:600px){
-  header select, header button, nav button, input, button{
-    font-size:1rem;
-    padding:14px;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <select id="seasonSelect"></select>
-  <button onclick="addSeason()">➕ Añadir temporada</button>
-  <button onclick="deleteSeason()">❌ Borrar temporada</button>
-</header>
-
-<nav>
-  <button class="active" onclick="showDatos(this)">Datos</button>
-  <button onclick="showCalendario(this)">Calendario</button>
-  <button onclick="showGrafica(this)">Gráfica</button>
-</nav>
-
-<div id="content"></div>
-
-<script>
-/* ===== DATOS ===== */
-let data; // vacío al inicio
-let currentSeason;
-
-async function loadData() {
-  const docSnap = await getDoc(datosRef);
-  if (docSnap.exists()) {
-    data = docSnap.data();
     console.log("Datos cargados desde Firestore");
   } else {
-    // Si no existe, creamos datos iniciales
-    data = { "Invierno 2025-2026": { sacos:120, duracion:1.33, pickups:[] } };
-    await save(); // Guardamos los datos iniciales
-    console.log("Documento creado en Firestore con datos iniciales");
+    await setDoc(datosRef, data);
+    console.log("Documento creado en Firestore");
   }
-  currentSeason = Object.keys(data)[0];
+
   loadSeasons();
   showDatos(document.querySelector("nav button.active"));
 }
-
-// Llamada al inicio
-loadData();
-
-
 
 /* ===== TEMPORADAS ===== */
 function loadSeasons(){
@@ -425,8 +273,159 @@ function exportExcel(){
   XLSX.writeFile(wb,"sacos.xlsx");
 }
 
+// Guardar cambios en Firestore
+async function save() {
+  try {
+    await setDoc(datosRef, data);
+    console.log("Datos guardados en Firestore");
+  } catch (err) {
+    console.error("Error guardando en Firestore:", err);
+  }
+}
+
+
+// Escuchar cambios en tiempo real
+onSnapshot(datosRef, (docSnap) => {
+  if (docSnap.exists()) {
+    data = docSnap.data();
+    console.log("Datos actualizados en tiempo real");
+    loadSeasons();
+    showDatos(document.querySelector("nav button.active"));
+  }
+});
+
+// Llamamos a loadData al inicio
+loadData();
+
+// ===== EXPONER FUNCIONES AL HTML =====
+window.addSeason = addSeason;
+window.deleteSeason = deleteSeason;
+window.showDatos = showDatos;
+window.showCalendario = showCalendario;
+window.showGrafica = showGrafica;
+window.saveGeneral = saveGeneral;
+window.addPickup = addPickup;
+window.deletePickup = deletePickup;
+
 </script>
+
+<style>
+/* ===== GENERAL ===== */
+body{
+  margin:0;
+  font-family:system-ui, Arial;
+  background:#121212;
+  color:#f0f0f0;
+  overflow-x:hidden;
+}
+header{
+  background:#1f2937;
+  color:#fff;
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+header select, header button{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  background:#2c2c2c;
+  color:#fff;
+  font-size:1rem;
+}
+nav{
+  display:flex;
+  background:#1f2937;
+  border-bottom:1px solid #333;
+}
+nav button{
+  flex:1;
+  padding:14px;
+  border:none;
+  background:none;
+  font-weight:600;
+  color:#ccc;
+  font-size:1rem;
+}
+nav button.active{
+  border-bottom:3px solid #2563eb;
+  color:#fff;
+}
+#content{
+  padding:12px;
+  overflow-y:auto;
+}
+.card{
+  background:#1e1e1e;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,.5);
+}
+input, button{
+  width:100%;
+  padding:12px;
+  margin-bottom:8px;
+  border-radius:8px;
+  border:none;
+  background:#2c2c2c;
+  color:#fff;
+  font-size:1rem;
+}
+button.primary{
+  background:#2563eb;
+  color:#fff;
+  font-weight:600;
+}
+#calendar{
+  width:100%;
+  max-width:100%;
+  margin:auto;
+  background:#1e1e1e;
+  border-radius:12px;
+  padding:6px;
+}
+canvas{
+  width:100% !important;
+  max-width:100% !important;
+  height:auto !important;
+}
+
+/* ===== EVENTOS ===== */
+.green-event{ background:#4ade80!important; color:#000!important; }
+.yellow-event{ background:#facc15!important; color:#000!important; }
+.pickup-event{ background:#60a5fa!important; color:#000!important; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  header select, header button, nav button, input, button{
+    font-size:1rem;
+    padding:14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <select id="seasonSelect"></select>
+  <button onclick="addSeason()">➕ Añadir temporada</button>
+  <button onclick="deleteSeason()">❌ Borrar temporada</button>
+</header>
+
+<nav>
+  <button class="active" onclick="showDatos(this)">Datos</button>
+  <button onclick="showCalendario(this)">Calendario</button>
+  <button onclick="showGrafica(this)">Gráfica</button>
+</nav>
+
+<div id="content"></div>
 
 </body>
 </html>
+
+
 
