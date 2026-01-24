@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Control de Sacos - Oscuro</title>
 
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
@@ -288,11 +288,12 @@ document.getElementById("btnAdmin").onclick = ()=>{
 
 // ================= RENDER DATOS =================
 function updateDatos() {
+  const p = data[currentSeason];
+  if(!p) return;
   const resumenDiv = document.getElementById("resumenSacos");
   const pickupsDiv = document.getElementById("listPickups");
   if(!resumenDiv || !pickupsDiv) return;
 
-  const p = data[currentSeason];
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const consumidos = p.pickups.filter(r=>new Date(r.fecha)<=hoy).reduce((a,b)=>a+b.sacos,0);
   const restantes = Math.max(p.sacos - consumidos,0);
@@ -310,7 +311,9 @@ function updateDatos() {
 
 function renderDatos(){
   const p = data[currentSeason];
+  if(!p) return;   // ⬅️ CLAVE
   content.innerHTML = `
+
     <!-- Resumen sacos -->
     <div class="card" id="resumenSacos"></div>
 
@@ -393,9 +396,10 @@ async function deleteSeason(){
 
 // ================= CALENDARIO =================
 function showCalendario(btn){
+  const p = data[currentSeason];
+  if(!p) return;   // ⬅️ ESTA LÍNEA ES LA CLAVE
   setActive(btn);
   content.innerHTML=`<div id="calendar"></div>`;
-  const p = data[currentSeason];
   const calEl = document.getElementById("calendar");
   const calendar = new FullCalendar.Calendar(calEl,{
     locale:"es",
@@ -429,9 +433,10 @@ function showCalendario(btn){
 
 // ================= GRÁFICA =================
 function showGrafica(btn){
+  const p = data[currentSeason];
+  if(!p) return;
   setActive(btn);
   content.innerHTML=`<canvas id="chart"></canvas>`;
-  const p = data[currentSeason];
   let restantes = p.sacos;
   const labels=[], values=[];
   p.pickups.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha)).forEach(r=>{
@@ -507,3 +512,4 @@ window.showGrafica = showGrafica;
 </script>
 </body>
 </html>
+
