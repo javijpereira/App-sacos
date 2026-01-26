@@ -95,12 +95,12 @@ canvas{
 
 /* ===== PANEL ADMIN ===== */
 #adminPanel{
-  position:fixed;
+  position:absolute;
   top:10px;
   right:10px;
   display:flex;
   gap:8px;
-  z-index:100;
+  z-index:9999;
 }
 #adminPanel button{
   padding:8px 12px;
@@ -117,11 +117,9 @@ canvas{
 
 /* ===== HEADER TEMPORADA ICONOS PEGADOS ===== */
 .season-box {
-  max-width: 250px;   /* ancho máximo del select */
-  position: relative;  /* para los botones absolutos */
+  max-width: 250px;
+  position: relative;
 }
-
-/* Select ocupa todo el contenedor */
 .season-box select {
   width: 100%;
   padding:10px;
@@ -132,19 +130,17 @@ canvas{
   font-size:1rem;
   cursor:pointer;
 }
-
-/* Botón añadir temporada */
 .season-box .btn-add {
   position: absolute;
   top:50%;
-  right:36px;       /* separa un poco del borde */
+  right:36px;
   transform: translateY(-50%);
   width:28px;
   height:28px;
   padding:0;
   border-radius:50%;
   border:none;
-  background:#22c55e; /* verde */
+  background:#22c55e;
   color:#fff;
   font-size:1.2rem;
   cursor:pointer;
@@ -152,19 +148,17 @@ canvas{
   align-items:center;
   justify-content:center;
 }
-
-/* Botón borrar temporada */
 .season-box .btn-delete {
   position: absolute;
   top:50%;
-  right:4px;       /* pegado al borde derecho */
+  right:4px;
   transform: translateY(-50%);
   width:28px;
   height:28px;
   padding:0;
   border-radius:50%;
   border:none;
-  background:#ef4444; /* rojo */
+  background:#ef4444;
   color:#fff;
   font-size:1rem;
   cursor:pointer;
@@ -172,22 +166,22 @@ canvas{
   align-items:center;
   justify-content:center;
 }
-
-.season-box button:hover {
-  opacity:0.8;
-}
-
-/* Responsive */
+.season-box button:hover { opacity:0.8; }
 @media(max-width:600px){
   .season-box {
     max-width:100%;
   }
-  .season-box .btn-add,
+
+  .season-box .btn-add {
+    right: 44px; /* separa el botón + */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   .season-box .btn-delete {
-    right:auto;
-    top:50%;
-    transform: translateY(-50%) translateX(100%);
-    margin-left:6px;
+    right: 8px; /* botón ❌ más a la derecha */
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
@@ -195,15 +189,13 @@ canvas{
 /* ===== DATOS GENERALES Y NUEVA RECOGIDA ===== */
 .card-dual {
   display: flex;
-  gap: 20px;       /* espacio entre las dos tarjetas */
-  flex-wrap: wrap; /* se apilan en móvil */
+  gap: 20px;
+  flex-wrap: wrap;
 }
-
 .card-dual .card {
-  flex: 1 1 48%;   /* casi la mitad cada una */
+  flex: 1 1 48%;
   min-width: 220px;
 }
-
 @media(max-width:600px){
   .card-dual {
     flex-direction: column;
@@ -213,20 +205,15 @@ canvas{
     flex: 1 1 100%;
   }
 }
-
-
-
 </style>
 </head>
 <body>
 
-<!-- Panel de admin arriba a la derecha -->
 <div id="adminPanel">
   <button id="btnLogout">Cerrar sesión</button>
   <button id="btnAdmin">Panel Admin</button>
 </div>
 
-<!-- Header con temporada -->
 <header>
   <div class="season-container">
     <div class="season-box" style="position: relative;">
@@ -237,8 +224,6 @@ canvas{
   </div>
 </header>
 
-
-<!-- Nav -->
 <nav>
   <button class="active" onclick="showDatos(this)">Datos</button>
   <button onclick="showCalendario(this)">Calendario</button>
@@ -249,12 +234,10 @@ canvas{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-import {
-  getFirestore, doc, setDoc, getDoc, onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-// Config Firebase
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAM4pMCb1rPcZ_q-ncOMp4C8p9VTrt-qLc",
   authDomain: "sacos-pellet.firebaseapp.com",
@@ -275,6 +258,16 @@ const seasonSelect = document.getElementById("seasonSelect");
 let data = {};
 let currentSeason = "";
 
+// ================= FUNCIONES AUXILIARES =================
+function getCurrentSeasonData() {
+  if (!currentSeason || !data[currentSeason]) {
+    const seasons = Object.keys(data);
+    if (seasons.length === 0) return null;
+    currentSeason = seasons[0];
+  }
+  return data[currentSeason];
+}
+
 // ================= LOGOUT =================
 document.getElementById("btnLogout").onclick = async ()=>{
   await signOut(auth);
@@ -288,8 +281,9 @@ document.getElementById("btnAdmin").onclick = ()=>{
 
 // ================= RENDER DATOS =================
 function updateDatos() {
-  const p = data[currentSeason];
+  const p = getCurrentSeasonData();
   if(!p) return;
+
   const resumenDiv = document.getElementById("resumenSacos");
   const pickupsDiv = document.getElementById("listPickups");
   if(!resumenDiv || !pickupsDiv) return;
@@ -310,14 +304,11 @@ function updateDatos() {
 }
 
 function renderDatos(){
-  const p = data[currentSeason];
-  if(!p) return;   // ⬅️ CLAVE
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
   content.innerHTML = `
-
-    <!-- Resumen sacos -->
     <div class="card" id="resumenSacos"></div>
-
-    <!-- Contenedor lateral con Datos generales y Nueva recogida -->
     <div class="card-dual">
       <div class="card">
         <h3>Datos generales</h3>
@@ -325,7 +316,6 @@ function renderDatos(){
         <input id="duracion" type="number" step="0.01" value="${p.duracion}">
         <button class="primary" onclick="saveGeneral()">Guardar</button>
       </div>
-
       <div class="card">
         <h3>Nueva recogida</h3>
         <input id="fecha" type="date">
@@ -333,42 +323,46 @@ function renderDatos(){
         <button class="primary" onclick="addPickup()">Añadir</button>
       </div>
     </div>
-
-    <!-- Lista de pickups -->
     <div class="card" id="listPickups"></div>
-
-    <!-- Botón exportar Excel -->
     <div class="card">
       <button onclick="exportExcel()">📤 Exportar a Excel</button>
     </div>
   `;
-  
+
   updateDatos();
 }
 
-
-
 // ================= FUNCIONES =================
 async function saveGeneral() {
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
   const sacosInput = document.getElementById("sacos");
   const duracionInput = document.getElementById("duracion");
-  data[currentSeason].sacos = Number(sacosInput.value);
-  data[currentSeason].duracion = Number(duracionInput.value);
+  p.sacos = Number(sacosInput.value);
+  p.duracion = Number(duracionInput.value);
   await setDoc(datosRef, data);
   updateDatos();
 }
 
 async function addPickup() {
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
   const fechaInput = document.getElementById("fecha");
   const cantidadInput = document.getElementById("cantidad");
   if(!fechaInput.value || !cantidadInput.value) return alert("Datos incompletos");
-  data[currentSeason].pickups.push({ fecha: fechaInput.value, sacos: Number(cantidadInput.value) });
+
+  p.pickups.push({ fecha: fechaInput.value, sacos: Number(cantidadInput.value) });
   await setDoc(datosRef, data);
   updateDatos();
 }
 
 async function deletePickup(i){
-  data[currentSeason].pickups.splice(i,1);
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
+  p.pickups.splice(i,1);
   await setDoc(datosRef, data);
   updateDatos();
 }
@@ -387,7 +381,7 @@ async function addSeason(){
 async function deleteSeason(){
   if(!confirm("¿Borrar temporada completa?")) return;
   delete data[currentSeason];
-  currentSeason = Object.keys(data)[0];
+  currentSeason = Object.keys(data)[0] || "";
   await setDoc(datosRef, data);
   seasonSelect.innerHTML = Object.keys(data).map(s=>`<option>${s}</option>`).join("");
   seasonSelect.value = currentSeason;
@@ -396,8 +390,9 @@ async function deleteSeason(){
 
 // ================= CALENDARIO =================
 function showCalendario(btn){
-  const p = data[currentSeason];
-  if(!p) return;   // ⬅️ ESTA LÍNEA ES LA CLAVE
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
   setActive(btn);
   content.innerHTML=`<div id="calendar"></div>`;
   const calEl = document.getElementById("calendar");
@@ -433,8 +428,9 @@ function showCalendario(btn){
 
 // ================= GRÁFICA =================
 function showGrafica(btn){
-  const p = data[currentSeason];
+  const p = getCurrentSeasonData();
   if(!p) return;
+
   setActive(btn);
   content.innerHTML=`<canvas id="chart"></canvas>`;
   let restantes = p.sacos;
@@ -468,7 +464,7 @@ function showDatos(btn){ setActive(btn); renderDatos(); }
 onSnapshot(datosRef,(docSnap)=>{
   if(!docSnap.exists()) return;
   data = docSnap.data();
-  updateDatos();
+  renderDatos();
 });
 
 // ================= INICIO =================
@@ -476,23 +472,26 @@ async function initApp(){
   const docSnap = await getDoc(datosRef);
   if(docSnap.exists()) data = docSnap.data();
   else { data = { "Invierno 2025-2026": { sacos:120,duracion:1.33,pickups:[] } }; await setDoc(datosRef,data); }
-  currentSeason = Object.keys(data)[0];
+  currentSeason = Object.keys(data)[0] || "";
   seasonSelect.innerHTML = Object.keys(data).map(s=>`<option>${s}</option>`).join("");
   seasonSelect.value = currentSeason;
   renderDatos();
 }
+
 seasonSelect.onchange = ()=>{
   currentSeason = seasonSelect.value;
   renderDatos();
 };
+
 initApp();
 
 // ================= EXCEL =================
 function exportExcel(){
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
   const rows=[["Temporada","Fecha","Sacos"]];
-  data[currentSeason].pickups.forEach(p=>{
-    rows.push([currentSeason,p.fecha,p.sacos]);
-  });
+  p.pickups.forEach(pick=>rows.push([currentSeason,pick.fecha,pick.sacos]));
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(rows);
   XLSX.utils.book_append_sheet(wb,ws,"Datos");
