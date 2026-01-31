@@ -24,9 +24,12 @@ header{
   color:#fff;
   padding:10px;
   display:flex;
-  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
   gap:6px;
+  position:relative;
 }
+
 nav{
   display:flex;
   background:#1f2937;
@@ -93,32 +96,9 @@ canvas{
 .yellow-event{ background:#facc15!important; color:#000!important; }
 .pickup-event{ background:#60a5fa!important; color:#000!important; }
 
-/* ===== PANEL ADMIN ===== */
-#adminPanel{
-  position:absolute;
-  top:10px;
-  right:10px;
-  display:flex;
-  gap:8px;
-  z-index:9999;
-}
-#adminPanel button{
-  padding:8px 12px;
-  font-size:0.9rem;
-  border-radius:8px;
-  background:#2c2c2c;
-  border:none;
-  color:#fff;
-  cursor:pointer;
-}
-#adminPanel button:hover{
-  background:#2563eb;
-}
-
 /* ===== HEADER TEMPORADA ICONOS PEGADOS ===== */
 .season-box {
   max-width: 250px;
-  position: relative;
 }
 .season-box select {
   width: 100%;
@@ -130,61 +110,6 @@ canvas{
   font-size:1rem;
   cursor:pointer;
 }
-.season-box .btn-add {
-  position: absolute;
-  top:50%;
-  right:36px;
-  transform: translateY(-50%);
-  width:28px;
-  height:28px;
-  padding:0;
-  border-radius:50%;
-  border:none;
-  background:#22c55e;
-  color:#fff;
-  font-size:1.2rem;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.season-box .btn-delete {
-  position: absolute;
-  top:50%;
-  right:4px;
-  transform: translateY(-50%);
-  width:28px;
-  height:28px;
-  padding:0;
-  border-radius:50%;
-  border:none;
-  background:#ef4444;
-  color:#fff;
-  font-size:1rem;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.season-box button:hover { opacity:0.8; }
-@media(max-width:600px){
-  .season-box {
-    max-width:100%;
-  }
-
-  .season-box .btn-add {
-    right: 44px; /* separa el botón + */
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .season-box .btn-delete {
-    right: 8px; /* botón ❌ más a la derecha */
-    top: 50%;
-    transform: translateY(-50%);
-  }
-}
-
 
 /* ===== DATOS GENERALES Y NUEVA RECOGIDA ===== */
 .card-dual {
@@ -205,23 +130,212 @@ canvas{
     flex: 1 1 100%;
   }
 }
+/* ===== MENU HAMBURGUESA ===== */
+.menu-btn {
+  width: auto;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #1e1e1e;
+  border-radius: 10px;
+  min-width: 160px;
+  padding: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.5);
+  display: none;
+  z-index: 9999;
+}
+
+.menu-dropdown.show {
+  display: block;
+}
+
+.menu-dropdown div {
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #333;
+}
+
+.menu-dropdown div:last-child {
+  border-bottom: none;
+}
+
+.menu-dropdown div:hover {
+  background: #2c2c2c;
+}
+
+.menu-item{
+  padding:10px;
+  cursor:pointer;
+  border-radius:6px;
+}
+.menu-item:hover{
+  background:#2c2c2c;
+}
+
+.submenu{
+  display:none;
+  margin-left:10px;
+  margin-top:6px;
+  border-left:2px solid #2563eb;
+  padding-left:8px;
+}
+
+.submenu.show{
+  display:block;
+}
+
+.submenu div{
+  padding:8px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.submenu div:hover{
+  background:#2c2c2c;
+}
+
+.submenu-action{
+  font-weight:600;
+}
+
+.submenu-action.danger{
+  color:#ef4444;
+}
+
+/* ===== DATOS GENERALES COMPACTOS ===== */
+.card-datos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 350px;
+  margin-bottom: 12px;
+}
+
+.card-datos input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.card-datos button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+/* ===== NUEVA RECOGIDA COMPACTA ===== */
+.card-recogida {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 350px;
+  margin-bottom: 12px;
+}
+
+.card-recogida input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.card-recogida button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+/* Días de lunes a viernes: blanco y texto negro */
+.fc .weekday {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Fines de semana: gris claro y texto negro */
+.fc .weekend-day {
+  background-color: #d1d5db !important;
+  color: #000000 !important;
+}
+
+/* Encabezados de días de la semana (Lun, Mar, ...) en negro */
+.fc .fc-col-header-cell-cushion {
+  color: #000000 !important;
+  font-weight: 600;
+}
+
+/* Números de semana */
+.fc .fc-week-number {
+  background-color: #f3f4f6 !important;
+  color: #000000;
+  font-weight: 600;
+}
+
+/* Día actual */
+.fc .fc-day-today {
+  background-color: #fca5a5 !important;
+  color: #000000 !important;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+/* ===== SACOS EN CASA ===== */
+.card-casa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 350px; 
+  margin-bottom: 12px;
+}
+
+.card-casa input {
+  flex: 1;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.card-casa button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 1.2rem;
+}
 </style>
 </head>
 <body>
 
-<div id="adminPanel">
-  <button id="btnLogout">Cerrar sesión</button>
-  <button id="btnAdmin">Panel Admin</button>
-</div>
+<header style="position:relative; display:flex; justify-content:space-between; align-items:center; padding:10px; background:#1f2937; color:#fff;">
 
-<header>
+  <!-- TEMPORADA A LA IZQUIERDA -->
   <div class="season-container">
-    <div class="season-box" style="position: relative;">
-      <select id="seasonSelect"></select>
-      <button class="btn-add" onclick="addSeason()">+</button>
-      <button class="btn-delete" onclick="deleteSeason()">❌</button>
+    <div class="season-box">
+      <select id="seasonSelect" style="cursor:pointer;"></select>
     </div>
   </div>
+
+  <!-- BOTÓN MENÚ HAMBURGUESA A LA DERECHA -->
+  <button class="menu-btn" id="menuBtn" style="font-size:1.5rem; background:#2c2c2c; border:none; border-radius:8px; padding:8px 12px; color:#fff; cursor:pointer;">
+    ☰
+  </button>
+
+  <!-- DROPDOWN DEL MENÚ -->
+  <div class="menu-dropdown" id="menuDropdown" style="position:absolute; top:50px; right:0; background:#1e1e1e; border-radius:10px; min-width:220px; padding:8px; box-shadow:0 6px 20px rgba(0,0,0,.5); display:none; z-index:999;">
+    <div onclick="openUser()" style="padding:6px; cursor:pointer;">👤 Usuario</div>
+    <div class="menu-item" onclick="toggleSeasonMenu(event)" style="padding:6px; cursor:pointer;">
+      📦 Temporadas ▾
+    </div>
+
+    <div id="seasonSubmenu" class="submenu" style="display:none; padding-left:10px; margin-top:4px;">
+      <div id="seasonMenuList"></div>
+      <hr style="border-color:#333">
+      <div class="submenu-action" style="padding:6px; cursor:pointer;" onclick="addSeason()">➕ Añadir temporada</div>
+      <div class="submenu-action danger" style="padding:6px; cursor:pointer; color:#ef4444;" onclick="deleteSeason()">❌ Eliminar temporada</div>
+    </div>
+
+    <div onclick="openAdmin()" style="padding:6px; cursor:pointer;">🛠 Panel del administrador</div>
+    <div onclick="logout()" style="padding:6px; cursor:pointer;">🚪 Cerrar sesión</div>
+  </div>
+
 </header>
 
 <nav>
@@ -237,15 +351,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebas
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyAM4pMCb1rPcZ_q-ncOMp4C8p9VTrt-qLc",
-  authDomain: "sacos-pellet.firebaseapp.com",
-  projectId: "sacos-pellet",
-  storageBucket: "sacos-pellet.firebasestorage.app",
-  messagingSenderId: "215063841201",
-  appId: "1:215063841201:web:c36979a5ac466d3e061590"
-};
+// --- Firebase config ---
+const firebaseConfig = { apiKey: "AIzaSyAM4pMCb1rPcZ_q-ncOMp4C8p9VTrt-qLc", authDomain: "sacos-pellet.firebaseapp.com", projectId: "sacos-pellet", storageBucket: "sacos-pellet.firebasestorage.app", messagingSenderId: "215063841201", appId: "1:215063841201:web:c36979a5ac466d3e061590" };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -268,17 +375,6 @@ function getCurrentSeasonData() {
   return data[currentSeason];
 }
 
-// ================= LOGOUT =================
-document.getElementById("btnLogout").onclick = async ()=>{
-  await signOut(auth);
-  location.href = "index.html";
-};
-
-// ================= PANEL ADMIN =================
-document.getElementById("btnAdmin").onclick = ()=>{
-  alert("Aquí irá el panel de gestión de usuarios");
-};
-
 // ================= RENDER DATOS =================
 function updateDatos() {
   const p = getCurrentSeasonData();
@@ -291,49 +387,103 @@ function updateDatos() {
   const hoy = new Date(); hoy.setHours(0,0,0,0);
   const consumidos = p.pickups.filter(r=>new Date(r.fecha)<=hoy).reduce((a,b)=>a+b.sacos,0);
   const restantes = Math.max(p.sacos - consumidos,0);
-  const dias = Math.round(restantes*p.duracion);
+  const totalDisponible = restantes + (p.sacosCasa || 0);
+  const dias = Math.round(totalDisponible * p.duracion);
 
   resumenDiv.innerHTML = `
-    <p>🟦 Sacos iniciales: <strong>${p.sacos}</strong></p>
+    <p>🟦 Sacos iniciales en almacén: <strong>${p.sacos}</strong></p>
     <p>🔴 Consumidos: <strong>${consumidos}</strong></p>
     <p>🟢 En almacén: <strong>${restantes}</strong></p>
+    <p>🏠 En casa: <strong>${p.sacosCasa || 0}</strong></p>
+    <p>📦 Total disponible: <strong>${totalDisponible}</strong></p>
     <p>📅 Duración estimada: <strong>${dias} días</strong></p>
   `;
 
   pickupsDiv.innerHTML = p.pickups.map((r,i)=>`${r.fecha} → ${r.sacos} sacos <button onclick="deletePickup(${i})">❌</button><br>`).join("") || "Sin recogidas";
 }
 
-function renderDatos(){
+function renderDatos() {
   const p = getCurrentSeasonData();
-  if(!p) return;
+  if (!p) return;
 
   content.innerHTML = `
     <div class="card" id="resumenSacos"></div>
     <div class="card-dual">
       <div class="card">
-        <h3>Datos generales</h3>
-        <input id="sacos" type="number" value="${p.sacos}">
-        <input id="duracion" type="number" step="0.01" value="${p.duracion}">
-        <button class="primary" onclick="saveGeneral()">Guardar</button>
-      </div>
+      <h3>Datos generales</h3>
+      <div class="card-datos">
+    <input id="sacos" type="number" value="${p.sacos}">
+    <input id="duracion" type="number" step="0.01" value="${p.duracion}">
+    <button class="primary" onclick="saveGeneral()">💾</button>
+  </div>
+</div>
+
       <div class="card">
-        <h3>Nueva recogida</h3>
-        <input id="fecha" type="date">
-        <input id="cantidad" type="number" placeholder="Sacos">
-        <button class="primary" onclick="addPickup()">Añadir</button>
-      </div>
+  <h3>Nueva recogida</h3>
+  <div class="card-recogida">
+    <input id="fecha" type="date">
+    <input id="cantidad" type="number" placeholder="Sacos">
+    <button class="primary" onclick="addPickup()">➕</button>
+  </div>
     </div>
-    <div class="card" id="listPickups"></div>
+
+    <div class="card">
+  <h3>Sacos en casa</h3>
+  <div class="card-casa">
+    <button onclick="updateCasa(-1)">-</button>
+    <input id="sacosCasa" type="number" value="${p.sacosCasa || 0}" readonly>
+    <button onclick="updateCasa(1)">+</button>
+  </div>
+</div>
+
+    <!-- BOTÓN PARA VER RECOGIDAS -->
+    <div class="card">
+      <button id="togglePickups" class="primary">👁️ Ver recogidas</button>
+      <div id="listPickups" style="display:none; max-height:300px; overflow-y:auto; margin-top:8px;"></div>
+    </div>
+
     <div class="card">
       <button onclick="exportExcel()">📤 Exportar a Excel</button>
     </div>
   `;
 
   updateDatos();
+
+  // Evento para mostrar/ocultar recogidas
+  const toggleBtn = document.getElementById("togglePickups");
+  const pickupsDiv = document.getElementById("listPickups");
+
+  toggleBtn.onclick = () => {
+    if (pickupsDiv.style.display === "none") {
+      pickupsDiv.style.display = "block";
+      toggleBtn.textContent = "🔽 Ocultar recogidas";
+    } else {
+      pickupsDiv.style.display = "none";
+      toggleBtn.textContent = "👁️ Ver recogidas";
+    }
+  };
 }
 
+// ================= SACOS CASA =================
+function updateCasa(delta){
+  const p = getCurrentSeasonData();
+  if(!p) return;
+
+  if(p.sacosCasa === undefined) p.sacosCasa = 0;
+
+  p.sacosCasa = Math.max(0, p.sacosCasa + delta);
+
+  const casaInput = document.getElementById("sacosCasa");
+  if(casaInput) casaInput.value = p.sacosCasa;
+
+  saveGeneral();
+}
+
+// ¡HACEMOS LA FUNCIÓN GLOBAL PARA LOS BOTONES + Y -!
+window.updateCasa = updateCasa;
+
 // ================= FUNCIONES =================
-async function saveGeneral() {
+async function saveGeneral(){
   const p = getCurrentSeasonData();
   if(!p) return;
 
@@ -341,6 +491,8 @@ async function saveGeneral() {
   const duracionInput = document.getElementById("duracion");
   p.sacos = Number(sacosInput.value);
   p.duracion = Number(duracionInput.value);
+  p.sacosCasa = p.sacosCasa || 0;
+
   await setDoc(datosRef, data);
   updateDatos();
 }
@@ -396,33 +548,65 @@ function showCalendario(btn){
   setActive(btn);
   content.innerHTML=`<div id="calendar"></div>`;
   const calEl = document.getElementById("calendar");
-  const calendar = new FullCalendar.Calendar(calEl,{
-    locale:"es",
-    initialView:"dayGridMonth",
-    height:"auto"
+
+  const calendar = new FullCalendar.Calendar(calEl, {
+    locale: "es",
+    initialView: "dayGridMonth",
+    firstDay: 1,
+    height: "auto",
+    dayCellClassNames: function(arg) {
+      if(arg.date.getDay() === 0 || arg.date.getDay() === 6){
+        return ['weekend-day'];
+      } else {
+        return ['weekday'];
+      }
+    }
   });
 
   if(p.pickups.length){
     p.pickups.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
     let primera = new Date(p.pickups[0].fecha);
     let ultima = new Date(p.pickups[p.pickups.length-1].fecha);
+
     let f = new Date(primera);
-    while(f<=ultima){
-      calendar.addEvent({start:f.toISOString().split("T")[0], allDay:true, classNames:["yellow-event"]});
+    while(f <= ultima){
+      calendar.addEvent({
+        start: f.toISOString().split("T")[0],
+        allDay: true,
+        classNames: ["yellow-event"]
+      });
       f.setDate(f.getDate()+1);
     }
+
     p.pickups.forEach(r=>{
-      calendar.addEvent({start:r.fecha,title:`-${r.sacos}`,allDay:true,classNames:["pickup-event"]});
+      calendar.addEvent({
+        start: r.fecha,
+        title: `-${r.sacos}`,
+        allDay: true,
+        classNames: ["pickup-event"]
+      });
     });
-    let consumidos = p.pickups.reduce((a,b)=>a+b.sacos,0);
-    let sacosRestantes = Math.max(p.sacos-consumidos,0);
-    let fechaEstimada = new Date(ultima); fechaEstimada.setDate(fechaEstimada.getDate()+1);
-    let diasEstimados = Math.ceil(sacosRestantes*p.duracion);
-    for(let i=0;i<diasEstimados;i++){
-      calendar.addEvent({start:fechaEstimada.toISOString().split("T")[0], allDay:true, classNames:["green-event"]});
-      fechaEstimada.setDate(fechaEstimada.getDate()+1);
-    }
   }
+
+  // ===== AJUSTE: usar SACOS EN CASA para calcular días verdes =====
+  let consumidos = p.pickups.reduce((a,b)=>a+b.sacos,0);
+  let restantes = Math.max(p.sacos - consumidos,0);
+  let totalDisponible = restantes + (p.sacosCasa || 0);
+  let diasEstimados = Math.ceil(totalDisponible * p.duracion);
+
+  // Fecha de inicio de días verdes
+  let fechaInicioVerde = p.pickups.length ? new Date(p.pickups[p.pickups.length-1].fecha) : new Date();
+  fechaInicioVerde.setDate(fechaInicioVerde.getDate()+1);
+
+  for(let i=0;i<diasEstimados;i++){
+    calendar.addEvent({
+      start: fechaInicioVerde.toISOString().split("T")[0],
+      allDay: true,
+      classNames: ["green-event"]
+    });
+    fechaInicioVerde.setDate(fechaInicioVerde.getDate()+1);
+  }
+
   calendar.render();
 }
 
@@ -478,10 +662,7 @@ async function initApp(){
   renderDatos();
 }
 
-seasonSelect.onchange = ()=>{
-  currentSeason = seasonSelect.value;
-  renderDatos();
-};
+seasonSelect.onchange = ()=>{ currentSeason = seasonSelect.value; renderDatos(); };
 
 initApp();
 
@@ -498,7 +679,11 @@ function exportExcel(){
   XLSX.writeFile(wb,"sacos.xlsx");
 }
 
-// ================= EXPONER FUNCIONES =================
+// ================= USUARIO =================
+async function logout(){ await signOut(auth); location.href = "index.html"; }
+function openAdmin(){ alert("Aquí irá el panel de gestión de usuarios"); }
+function openUser(){ const user = auth.currentUser; if(!user){ alert("No hay usuario autenticado"); return; } alert(`Usuario logueado: ${user.email}`); }
+
 window.addPickup = addPickup;
 window.deletePickup = deletePickup;
 window.saveGeneral = saveGeneral;
@@ -507,8 +692,55 @@ window.deleteSeason = deleteSeason;
 window.showDatos = showDatos;
 window.showCalendario = showCalendario;
 window.showGrafica = showGrafica;
-
+window.logout = logout;
+window.openAdmin = openAdmin;
+window.openUser = openUser;
 </script>
+
+<script>
+const menuBtn = document.getElementById("menuBtn");
+const menuDropdown = document.getElementById("menuDropdown");
+const seasonSubmenu = document.getElementById("seasonSubmenu");
+const seasonMenuList = document.getElementById("seasonMenuList");
+const seasonSelect = document.getElementById("seasonSelect");
+
+// === ABRIR / CERRAR MENÚ PRINCIPAL ===
+menuBtn.onclick = e => {
+  e.stopPropagation();
+  menuDropdown.style.display = menuDropdown.style.display === "block" ? "none" : "block";
+};
+
+// === ABRIR / CERRAR SUBMENÚ TEMPORADAS ===
+function toggleSeasonMenu(e){
+  e.stopPropagation();
+  seasonSubmenu.style.display = seasonSubmenu.style.display === "block" ? "none" : "block";
+  renderSeasonMenu();
+}
+
+// === RENDERIZAR TEMPORADAS EN SUBMENÚ ===
+function renderSeasonMenu(){
+  seasonMenuList.innerHTML = [...seasonSelect.options].map(o => `
+    <div style="padding:6px; cursor:pointer;" onclick="selectSeasonFromMenu('${o.value}')">
+      ${o.value}${o.value === seasonSelect.value ? " ✔" : ""}
+    </div>
+  `).join('');
+}
+
+// === SELECCIONAR TEMPORADA DESDE SUBMENÚ ===
+function selectSeasonFromMenu(season){
+  seasonSelect.value = season;
+  seasonSelect.dispatchEvent(new Event("change"));
+  seasonSubmenu.style.display = "none";
+  menuDropdown.style.display = "none";
+}
+
+// === CERRAR MENÚS AL HACER CLICK FUERA ===
+document.addEventListener("click", ()=>{
+  menuDropdown.style.display = "none";
+  seasonSubmenu.style.display = "none";
+});
+</script>
+
 </body>
 </html>
 
