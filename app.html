@@ -19,40 +19,68 @@ body{
   color:#f0f0f0;
   overflow-x:hidden;
 }
+
 header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
   background:#1f2937;
   color:#fff;
-  padding:10px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:6px;
-  position:relative;
+  padding:0 12px;
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
 nav{
-  display:flex;
-  background:#1f2937;
-  border-bottom:1px solid #333;
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  background: #1f2937;
+  border-bottom: 1px solid #333;
+  z-index: 999;
 }
+
 nav button{
   flex:1;
-  padding:14px;
   border:none;
   background:none;
-  font-weight:600;
-  color:#ccc;
-  font-size:1rem;
+  color:#9ca3af;
+  font-size:0.75rem;
   cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  transition: background 0.2s;
 }
+
 nav button.active{
-  border-bottom:3px solid #2563eb;
-  color:#fff;
+  color:#60a5fa;
 }
+
+nav button span{
+  font-size:0.7rem;
+}
+
+nav button:hover{
+  background:#111827;
+}
+
 #content{
   padding:12px;
+  padding-top:110px;
   overflow-y:auto;
 }
+
 .card{
   background:#1e1e1e;
   border-radius:12px;
@@ -130,11 +158,9 @@ canvas{
     flex: 1 1 100%;
   }
 }
-/* ===== MENU HAMBURGUESA ===== */
-.menu-btn {
-  width: auto;
-}
 
+/* ===== MENU HAMBURGUESA ===== */
+.menu-btn { width:auto; }
 .menu-dropdown {
   position: absolute;
   top: 50px;
@@ -145,203 +171,79 @@ canvas{
   padding: 6px;
   box-shadow: 0 6px 20px rgba(0,0,0,.5);
   display: none;
-  z-index: 9999;
+  z-index: 2000;
 }
+.menu-dropdown.show { display:block; }
+.menu-dropdown div { padding:12px; cursor:pointer; border-bottom:1px solid #333; }
+.menu-dropdown div:last-child { border-bottom:none; }
+.menu-dropdown div:hover{ background:#2c2c2c; }
 
-.menu-dropdown.show {
-  display: block;
-}
+.menu-item{ padding:10px; cursor:pointer; border-radius:6px; }
+.menu-item:hover{ background:#2c2c2c; }
 
-.menu-dropdown div {
-  padding: 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #333;
-}
+.submenu{ display:none; margin-left:10px; margin-top:6px; border-left:2px solid #2563eb; padding-left:8px; }
+.submenu.show{ display:block; }
+.submenu div{ padding:8px; border-radius:6px; cursor:pointer; }
+.submenu div:hover{ background:#2c2c2c; }
+.submenu-action{ font-weight:600; }
+.submenu-action.danger{ color:#ef4444; }
 
-.menu-dropdown div:last-child {
-  border-bottom: none;
-}
-
-.menu-dropdown div:hover {
-  background: #2c2c2c;
-}
-
-.menu-item{
-  padding:10px;
-  cursor:pointer;
-  border-radius:6px;
-}
-.menu-item:hover{
-  background:#2c2c2c;
-}
-
-.submenu{
-  display:none;
-  margin-left:10px;
-  margin-top:6px;
-  border-left:2px solid #2563eb;
-  padding-left:8px;
-}
-
-.submenu.show{
-  display:block;
-}
-
-.submenu div{
-  padding:8px;
-  border-radius:6px;
-  cursor:pointer;
-}
-.submenu div:hover{
-  background:#2c2c2c;
-}
-
-.submenu-action{
-  font-weight:600;
-}
-
-.submenu-action.danger{
-  color:#ef4444;
-}
-
-/* ===== DATOS GENERALES COMPACTOS ===== */
-.card-datos {
+/* ===== DATOS COMPACTOS ===== */
+.card-datos, .card-recogida, .card-casa {
   display: flex;
   align-items: center;
-  gap: 8px;
-  max-width: 350px;
-  margin-bottom: 12px;
+  gap:8px;
+  max-width:350px;
+  margin-bottom:12px;
 }
-
-.card-datos input {
-  flex: 1;
-  margin-bottom: 0;
+.card-datos input, .card-recogida input, .card-casa input {
+  flex:1; margin-bottom:0; text-align:center;
 }
-
-.card-datos button {
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  font-size: 1.2rem;
-}
-
-/* ===== NUEVA RECOGIDA COMPACTA ===== */
-.card-recogida {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 350px;
-  margin-bottom: 12px;
-}
-
-.card-recogida input {
-  flex: 1;
-  margin-bottom: 0;
-}
-
-.card-recogida button {
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  font-size: 1.2rem;
-}
+.card-datos button, .card-recogida button, .card-casa button { width:48px; height:48px; padding:0; font-size:1.2rem; }
 
 /* Días de lunes a viernes: blanco y texto negro */
-.fc .weekday {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-}
-
+.fc .weekday{ background-color: #ffffff !important; color:#000000 !important; }
 /* Fines de semana: gris claro y texto negro */
-.fc .weekend-day {
-  background-color: #d1d5db !important;
-  color: #000000 !important;
-}
-
-/* Encabezados de días de la semana (Lun, Mar, ...) en negro */
-.fc .fc-col-header-cell-cushion {
-  color: #000000 !important;
-  font-weight: 600;
-}
-
+.fc .weekend-day{ background-color: #d1d5db !important; color:#000000 !important; }
+/* Encabezados de días de la semana */
+.fc .fc-col-header-cell-cushion{ color:#000000 !important; font-weight:600; }
 /* Números de semana */
-.fc .fc-week-number {
-  background-color: #f3f4f6 !important;
-  color: #000000;
-  font-weight: 600;
-}
-
+.fc .fc-week-number{ background-color:#f3f4f6 !important; color:#000000; font-weight:600; }
 /* Día actual */
-.fc .fc-day-today {
-  background-color: #fca5a5 !important;
-  color: #000000 !important;
-  font-weight: 600;
-  border-radius: 4px;
-}
-
-/* ===== SACOS EN CASA ===== */
-.card-casa {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 350px; 
-  margin-bottom: 12px;
-}
-
-.card-casa input {
-  flex: 1;
-  margin-bottom: 0;
-  text-align: center;
-}
-
-.card-casa button {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  font-size: 1.2rem;
-}
+.fc .fc-day-today{ border-radius:4px; font-weight:600; }
 </style>
 </head>
 <body>
 
-<header style="position:relative; display:flex; justify-content:space-between; align-items:center; padding:10px; background:#1f2937; color:#fff;">
-
-  <!-- TEMPORADA A LA IZQUIERDA -->
+<header>
   <div class="season-container">
     <div class="season-box">
       <select id="seasonSelect" style="cursor:pointer;"></select>
     </div>
   </div>
 
-  <!-- BOTÓN MENÚ HAMBURGUESA A LA DERECHA -->
   <button class="menu-btn" id="menuBtn" style="font-size:1.5rem; background:#2c2c2c; border:none; border-radius:8px; padding:8px 12px; color:#fff; cursor:pointer;">
     ☰
   </button>
 
-  <!-- DROPDOWN DEL MENÚ -->
-  <div class="menu-dropdown" id="menuDropdown" style="position:absolute; top:50px; right:0; background:#1e1e1e; border-radius:10px; min-width:220px; padding:8px; box-shadow:0 6px 20px rgba(0,0,0,.5); display:none; z-index:999;">
-    <div onclick="openUser()" style="padding:6px; cursor:pointer;">👤 Usuario</div>
-    <div class="menu-item" onclick="toggleSeasonMenu(event)" style="padding:6px; cursor:pointer;">
-      📦 Temporadas ▾
-    </div>
-
-    <div id="seasonSubmenu" class="submenu" style="display:none; padding-left:10px; margin-top:4px;">
+  <div class="menu-dropdown" id="menuDropdown">
+    <div onclick="openUser()">👤 Usuario</div>
+    <div class="menu-item" onclick="toggleSeasonMenu(event)">📦 Temporadas ▾</div>
+    <div id="seasonSubmenu" class="submenu">
       <div id="seasonMenuList"></div>
       <hr style="border-color:#333">
-      <div class="submenu-action" style="padding:6px; cursor:pointer;" onclick="addSeason()">➕ Añadir temporada</div>
-      <div class="submenu-action danger" style="padding:6px; cursor:pointer; color:#ef4444;" onclick="deleteSeason()">❌ Eliminar temporada</div>
+      <div class="submenu-action" onclick="addSeason()">➕ Añadir temporada</div>
+      <div class="submenu-action danger" onclick="deleteSeason()">❌ Eliminar temporada</div>
     </div>
-
-    <div onclick="openAdmin()" style="padding:6px; cursor:pointer;">🛠 Panel del administrador</div>
-    <div onclick="logout()" style="padding:6px; cursor:pointer;">🚪 Cerrar sesión</div>
+    <div onclick="openAdmin()">🛠 Panel del administrador</div>
+    <div onclick="logout()">🚪 Cerrar sesión</div>
   </div>
-
 </header>
 
 <nav>
-  <button class="active" onclick="showDatos(this)">Datos</button>
-  <button onclick="showCalendario(this)">Calendario</button>
-  <button onclick="showGrafica(this)">Gráfica</button>
+  <button class="active" onclick="showDatos(this)">🗂️<span>Datos</span></button>
+  <button onclick="showCalendario(this)">🗓️<span>Calendario</span></button>
+  <button onclick="showGrafica(this)">📊<span>Gráfica</span></button>
 </nav>
 
 <div id="content"></div>
@@ -351,9 +253,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebas
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-// --- Firebase config ---
 const firebaseConfig = { apiKey: "AIzaSyAM4pMCb1rPcZ_q-ncOMp4C8p9VTrt-qLc", authDomain: "sacos-pellet.firebaseapp.com", projectId: "sacos-pellet", storageBucket: "sacos-pellet.firebasestorage.app", messagingSenderId: "215063841201", appId: "1:215063841201:web:c36979a5ac466d3e061590" };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -365,78 +265,79 @@ const seasonSelect = document.getElementById("seasonSelect");
 let data = {};
 let currentSeason = "";
 
-// ================= FUNCIONES AUXILIARES =================
-function getCurrentSeasonData() {
-  if (!currentSeason || !data[currentSeason]) {
-    const seasons = Object.keys(data);
-    if (seasons.length === 0) return null;
-    currentSeason = seasons[0];
-  }
-  return data[currentSeason];
-}
+// ----------------- AUX -----------------
+function getCurrentSeasonData(){ if(!currentSeason || !data[currentSeason]) currentSeason=Object.keys(data)[0]; return data[currentSeason]; }
 
-// ================= RENDER DATOS =================
-function updateDatos() {
+// ----------------- RENDER DATOS -----------------
+function updateDatos(){
   const p = getCurrentSeasonData();
   if(!p) return;
 
-  const resumenDiv = document.getElementById("resumenSacos");
-  const pickupsDiv = document.getElementById("listPickups");
-  if(!resumenDiv || !pickupsDiv) return;
-
   const hoy = new Date(); hoy.setHours(0,0,0,0);
-  const consumidos = p.pickups.filter(r=>new Date(r.fecha)<=hoy).reduce((a,b)=>a+b.sacos,0);
-  const restantes = Math.max(p.sacos - consumidos,0);
-  const totalDisponible = restantes + (p.sacosCasa || 0);
-  const dias = Math.round(totalDisponible * p.duracion);
 
-  resumenDiv.innerHTML = `
-    <p>🟦 Sacos iniciales en almacén: <strong>${p.sacos}</strong></p>
-    <p>🔴 Consumidos: <strong>${consumidos}</strong></p>
-    <p>🟢 En almacén: <strong>${restantes}</strong></p>
-    <p>🏠 En casa: <strong>${p.sacosCasa || 0}</strong></p>
-    <p>📦 Total disponible: <strong>${totalDisponible}</strong></p>
-    <p>📅 Duración estimada: <strong>${dias} días</strong></p>
-  `;
+  // PICKUPS HASTA HOY PARA CÁLCULOS
+  const pickupsHastaHoy = (p.pickups || []).filter(r => new Date(r.fecha) <= hoy).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  const totalRecogido = pickupsHastaHoy.reduce((a,b)=>a+b.sacos,0);
+  const consumidos = Math.max(totalRecogido-(p.sacosCasa||0),0);
+  const restantesAlmacen = Math.max(p.sacos-totalRecogido,0);
+  const totalDisponible = restantesAlmacen + (p.sacosCasa||0);
 
-  pickupsDiv.innerHTML = p.pickups.map((r,i)=>`${r.fecha} → ${r.sacos} sacos <button onclick="deletePickup(${i})">❌</button><br>`).join("") || "Sin recogidas";
+  let diasEstimados = 0, mediaDiaria = 0;
+  if(pickupsHastaHoy.length > 0){
+    const primeraFecha = new Date(pickupsHastaHoy[0].fecha); primeraFecha.setHours(0,0,0,0);
+    const diasTranscurridos = Math.max(1, Math.round((hoy - primeraFecha)/(1000*60*60*24)));
+    mediaDiaria = consumidos / diasTranscurridos;
+    diasEstimados = mediaDiaria > 0 ? Math.round(totalDisponible / mediaDiaria) : 0;
+  }
+
+  // RESUMEN
+  const resumenDiv = document.getElementById("resumenSacos");
+  if(resumenDiv){
+    resumenDiv.innerHTML = `
+      <p>🟦 Sacos iniciales en almacén: <strong>${p.sacos}</strong></p>
+      <p>🔴 Consumidos: <strong>${consumidos}</strong></p>
+      <p>🟢 En almacén: <strong>${restantesAlmacen}</strong></p>
+      <p>🏠 En casa: <strong>${p.sacosCasa||0}</strong></p>
+      <p>📦 Total disponible: <strong>${totalDisponible}</strong></p>
+      <p>📅 Duración estimada: <strong>${diasEstimados} días</strong></p>
+      <p>⚡ Consumo medio diario: <strong>${mediaDiaria.toFixed(2)} sacos/día</strong></p>
+    `;
+  }
+
+  // LISTADO DE TODAS LAS RECOGIDAS (PASADAS Y FUTURAS)
+  const pickupsDiv = document.getElementById("listPickups");
+  if(pickupsDiv){
+    const pickupsOrdenadas = (p.pickups || []).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+    pickupsDiv.innerHTML = pickupsOrdenadas.map((r,i)=>`${r.fecha} → ${r.sacos} sacos <button onclick="deletePickup(${i})">❌</button><br>`).join("") || "Sin recogidas";
+  }
 }
 
-function renderDatos() {
-  const p = getCurrentSeasonData();
-  if (!p) return;
+
+function renderDatos(){
+  const p=getCurrentSeasonData();
+  if(!p) return;
 
   content.innerHTML = `
     <div class="card" id="resumenSacos"></div>
-    <div class="card-dual">
-      <div class="card">
-      <h3>Datos generales</h3>
-      <div class="card-datos">
-    <input id="sacos" type="number" value="${p.sacos}">
-    <input id="duracion" type="number" step="0.01" value="${p.duracion}">
-    <button class="primary" onclick="saveGeneral()">💾</button>
-  </div>
-</div>
 
-      <div class="card">
-  <h3>Nueva recogida</h3>
-  <div class="card-recogida">
-    <input id="fecha" type="date">
-    <input id="cantidad" type="number" placeholder="Sacos">
-    <button class="primary" onclick="addPickup()">➕</button>
-  </div>
+    <div class="card">
+      <h3>Nueva recogida</h3>
+      <div class="card-recogida">
+        <input id="fecha" type="date">
+        <input id="cantidad" type="number" placeholder="Sacos">
+        <button class="primary" onclick="addPickup()">➕</button>
+      </div>
     </div>
 
     <div class="card">
-  <h3>Sacos en casa</h3>
-  <div class="card-casa">
-    <button onclick="updateCasa(-1)">-</button>
-    <input id="sacosCasa" type="number" value="${p.sacosCasa || 0}" readonly>
-    <button onclick="updateCasa(1)">+</button>
-  </div>
-</div>
+      <h3>Sacos en casa</h3>
+      <div class="card-casa">
+        <button onclick="updateCasa(-1)">-</button>
+        <input id="sacosCasa" type="number" value="${p.sacosCasa||0}" readonly>
+        <button onclick="updateCasa(1)">+</button>
+      </div>
+    </div>
 
-    <!-- BOTÓN PARA VER RECOGIDAS -->
     <div class="card">
       <button id="togglePickups" class="primary">👁️ Ver recogidas</button>
       <div id="listPickups" style="display:none; max-height:300px; overflow-y:auto; margin-top:8px;"></div>
@@ -449,298 +350,229 @@ function renderDatos() {
 
   updateDatos();
 
-  // Evento para mostrar/ocultar recogidas
-  const toggleBtn = document.getElementById("togglePickups");
-  const pickupsDiv = document.getElementById("listPickups");
-
-  toggleBtn.onclick = () => {
-    if (pickupsDiv.style.display === "none") {
-      pickupsDiv.style.display = "block";
-      toggleBtn.textContent = "🔽 Ocultar recogidas";
-    } else {
-      pickupsDiv.style.display = "none";
-      toggleBtn.textContent = "👁️ Ver recogidas";
-    }
+  const toggleBtn=document.getElementById("togglePickups");
+  const pickupsDiv=document.getElementById("listPickups");
+  toggleBtn.onclick=()=>{ 
+    if(pickupsDiv.style.display==="none"){ pickupsDiv.style.display="block"; toggleBtn.textContent="🔽 Ocultar recogidas"; } 
+    else{ pickupsDiv.style.display="none"; toggleBtn.textContent="👁️ Ver recogidas"; }
   };
 }
 
-// ================= SACOS CASA =================
+// ----------------- SACOS CASA -----------------
 function updateCasa(delta){
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
-  if(p.sacosCasa === undefined) p.sacosCasa = 0;
-
-  p.sacosCasa = Math.max(0, p.sacosCasa + delta);
-
-  const casaInput = document.getElementById("sacosCasa");
-  if(casaInput) casaInput.value = p.sacosCasa;
-
+  const p=getCurrentSeasonData(); if(!p) return;
+  if(p.sacosCasa===undefined) p.sacosCasa=0;
+  p.sacosCasa=Math.max(0,p.sacosCasa+delta);
+  const casaInput=document.getElementById("sacosCasa");
+  if(casaInput) casaInput.value=p.sacosCasa;
   saveGeneral();
+  updateDatos();
 }
+window.updateCasa=updateCasa;
 
-// ¡HACEMOS LA FUNCIÓN GLOBAL PARA LOS BOTONES + Y -!
-window.updateCasa = updateCasa;
-
-// ================= FUNCIONES =================
+// ----------------- FUNCIONES -----------------
 async function saveGeneral(){
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
-  const sacosInput = document.getElementById("sacos");
-  const duracionInput = document.getElementById("duracion");
-  p.sacos = Number(sacosInput.value);
-  p.duracion = Number(duracionInput.value);
-  p.sacosCasa = p.sacosCasa || 0;
-
+  const p=getCurrentSeasonData(); if(!p) return;
   await setDoc(datosRef, data);
   updateDatos();
 }
 
-async function addPickup() {
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
-  const fechaInput = document.getElementById("fecha");
-  const cantidadInput = document.getElementById("cantidad");
+async function addPickup(){
+  const p=getCurrentSeasonData(); if(!p) return;
+  const fechaInput=document.getElementById("fecha");
+  const cantidadInput=document.getElementById("cantidad");
   if(!fechaInput.value || !cantidadInput.value) return alert("Datos incompletos");
-
-  p.pickups.push({ fecha: fechaInput.value, sacos: Number(cantidadInput.value) });
-  await setDoc(datosRef, data);
+  if(!p.pickups) p.pickups=[];
+  p.pickups.push({ fecha: fechaInput.value, sacos:Number(cantidadInput.value) });
+  await setDoc(datosRef,data);
   updateDatos();
 }
-
 async function deletePickup(i){
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
+  const p=getCurrentSeasonData(); if(!p) return;
   p.pickups.splice(i,1);
-  await setDoc(datosRef, data);
+  await setDoc(datosRef,data);
   updateDatos();
 }
-
 async function addSeason(){
-  const name = prompt("Nombre de la temporada");
-  if(!name || data[name]) return;
-  data[name] = { sacos:0, duracion:1, pickups:[] };
-  currentSeason = name;
-  await setDoc(datosRef, data);
-  seasonSelect.innerHTML = Object.keys(data).map(s=>`<option>${s}</option>`).join("");
-  seasonSelect.value = currentSeason;
+  const name=prompt("Nombre de la temporada");
+  if(!name||data[name]) return;
+  data[name]={sacos:0,duracion:1,pickups:[]};
+  currentSeason=name;
+  await setDoc(datosRef,data);
+  seasonSelect.innerHTML=Object.keys(data).map(s=>`<option>${s}</option>`).join("");
+  seasonSelect.value=currentSeason;
   renderDatos();
 }
-
 async function deleteSeason(){
   if(!confirm("¿Borrar temporada completa?")) return;
   delete data[currentSeason];
-  currentSeason = Object.keys(data)[0] || "";
-  await setDoc(datosRef, data);
-  seasonSelect.innerHTML = Object.keys(data).map(s=>`<option>${s}</option>`).join("");
-  seasonSelect.value = currentSeason;
+  currentSeason=Object.keys(data)[0]||"";
+  await setDoc(datosRef,data);
+  seasonSelect.innerHTML=Object.keys(data).map(s=>`<option>${s}</option>`).join("");
+  seasonSelect.value=currentSeason;
   renderDatos();
 }
 
-// ================= CALENDARIO =================
+// ----------------- CALENDARIO -----------------
 function showCalendario(btn){
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
+  const p=getCurrentSeasonData(); if(!p) return;
   setActive(btn);
   content.innerHTML=`<div id="calendar"></div>`;
-  const calEl = document.getElementById("calendar");
+  const calEl=document.getElementById("calendar");
 
-  const calendar = new FullCalendar.Calendar(calEl, {
-    locale: "es",
-    initialView: "dayGridMonth",
-    firstDay: 1,
-    height: "auto",
-    dayCellClassNames: function(arg) {
-      if(arg.date.getDay() === 0 || arg.date.getDay() === 6){
-        return ['weekend-day'];
-      } else {
-        return ['weekday'];
-      }
+  const calendar=new FullCalendar.Calendar(calEl,{
+    locale:"es",
+    initialView:"dayGridMonth",
+    firstDay:1,
+    height:"auto",
+    dayCellClassNames:function(arg){
+      if(arg.date.getDay()===0||arg.date.getDay()===6) return ['weekend-day'];
+      return ['weekday'];
     }
   });
 
-  if(p.pickups.length){
-    p.pickups.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-    let primera = new Date(p.pickups[0].fecha);
-    let ultima = new Date(p.pickups[p.pickups.length-1].fecha);
+  const hoy=new Date(); hoy.setHours(0,0,0,0);
+  const pickupsOrdenadas=(p.pickups||[]).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
 
-    let f = new Date(primera);
-    while(f <= ultima){
-      calendar.addEvent({
-        start: f.toISOString().split("T")[0],
-        allDay: true,
-        classNames: ["yellow-event"]
-      });
-      f.setDate(f.getDate()+1);
+  // ===== DÍAS AMARILLOS =====
+  if(pickupsOrdenadas.length>0){
+    let fecha=new Date(pickupsOrdenadas[0].fecha); fecha.setHours(0,0,0,0);
+    const ultimaFecha=hoy;
+    while(fecha<=ultimaFecha){
+      calendar.addEvent({ start:fecha.toISOString().split("T")[0], allDay:true, classNames:["yellow-event"] });
+      fecha.setDate(fecha.getDate()+1);
     }
-
-    p.pickups.forEach(r=>{
-      calendar.addEvent({
-        start: r.fecha,
-        title: `-${r.sacos}`,
-        allDay: true,
-        classNames: ["pickup-event"]
-      });
-    });
   }
 
-  // ===== AJUSTE: usar SACOS EN CASA para calcular días verdes =====
-  let consumidos = p.pickups.reduce((a,b)=>a+b.sacos,0);
-  let restantes = Math.max(p.sacos - consumidos,0);
-  let totalDisponible = restantes + (p.sacosCasa || 0);
-  let diasEstimados = Math.ceil(totalDisponible * p.duracion);
+  // ===== PICKUPS AZULES =====
+  pickupsOrdenadas.forEach(r=>{
+    calendar.addEvent({ start:r.fecha, title:`-${r.sacos}`, allDay:true, classNames:["pickup-event"] });
+  });
 
-  // Fecha de inicio de días verdes
-  let fechaInicioVerde = p.pickups.length ? new Date(p.pickups[p.pickups.length-1].fecha) : new Date();
-  fechaInicioVerde.setDate(fechaInicioVerde.getDate()+1);
+  // ===== DÍAS VERDES =====
+  const pickupsHastaHoy=pickupsOrdenadas.filter(r=>new Date(r.fecha)<=hoy);
+  const totalRecogido=pickupsHastaHoy.reduce((a,b)=>a+b.sacos,0);
+  const consumidos=Math.max(totalRecogido-(p.sacosCasa||0),0);
+  const restantesAlmacen=Math.max(p.sacos-totalRecogido,0);
+  const totalDisponible=restantesAlmacen+(p.sacosCasa||0);
 
+  let mediaDiaria=0;
+  if(pickupsHastaHoy.length>0){
+    const primeraFecha=new Date(pickupsHastaHoy[0].fecha); primeraFecha.setHours(0,0,0,0);
+    const diasTranscurridos=Math.max(1,Math.round((hoy-primeraFecha)/(1000*60*60*24)));
+    mediaDiaria=consumidos/diasTranscurridos;
+  }
+  const diasEstimados=mediaDiaria>0 ? Math.round(totalDisponible/mediaDiaria) : 0;
+
+  let fechaVerde=new Date(hoy); fechaVerde.setDate(fechaVerde.getDate()+1);
   for(let i=0;i<diasEstimados;i++){
-    calendar.addEvent({
-      start: fechaInicioVerde.toISOString().split("T")[0],
-      allDay: true,
-      classNames: ["green-event"]
-    });
-    fechaInicioVerde.setDate(fechaInicioVerde.getDate()+1);
+    calendar.addEvent({ start:fechaVerde.toISOString().split("T")[0], allDay:true, classNames:["green-event"] });
+    fechaVerde.setDate(fechaVerde.getDate()+1);
   }
 
   calendar.render();
 }
 
-// ================= GRÁFICA =================
+// ----------------- GRÁFICA -----------------
 function showGrafica(btn){
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
+  const p=getCurrentSeasonData(); if(!p) return;
   setActive(btn);
   content.innerHTML=`<canvas id="chart"></canvas>`;
-  let restantes = p.sacos;
-  const labels=[], values=[];
-  p.pickups.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha)).forEach(r=>{
-    restantes -= r.sacos;
-    labels.push(r.fecha);
-    values.push(restantes);
+
+  const consumidosPorMes={};
+  (p.pickups||[]).forEach(r=>{
+    const fecha=new Date(r.fecha);
+    const mes=fecha.toLocaleString("es-ES",{month:"short"});
+    const label=`${mes} ${fecha.getFullYear()}`;
+    if(!consumidosPorMes[label]) consumidosPorMes[label]=0;
+    consumidosPorMes[label]+=r.sacos;
   });
+
+  const labels=Object.keys(consumidosPorMes).sort((a,b)=>{
+    const [mesA,añoA]=a.split(" ");
+    const [mesB,añoB]=b.split(" ");
+    const dateA=new Date(`${mesA} 1, ${añoA}`);
+    const dateB=new Date(`${mesB} 1, ${añoB}`);
+    return dateA-dateB;
+  });
+
+  const values=labels.map(l=>consumidosPorMes[l]);
+
   new Chart(document.getElementById("chart"),{
-    type:"line",
-    data:{labels,datasets:[{label:"Sacos restantes",data:values,tension:.3,color:"#fff",borderColor:"#2563eb"}]},
+    type:"bar",
+    data:{ labels, datasets:[{label:"Sacos consumidos", data:values, backgroundColor:"#2563eb", borderColor:"#60a5fa", borderWidth:1}] },
     options:{
-      plugins:{legend:{labels:{color:"#fff"}}},
+      plugins:{ legend:{labels:{color:"#fff", font:{size:14}}}, tooltip:{enabled:true} },
       scales:{
-        x:{ticks:{color:"#fff"},grid:{color:"#333"}},
-        y:{ticks:{color:"#fff"},grid:{color:"#333"}}
+        x:{ ticks:{color:"#fff", font:{size:12}}, grid:{color:"#333"} },
+        y:{ ticks:{color:"#fff", font:{size:12}, beginAtZero:true}, grid:{color:"#333"} }
       }
     }
   });
 }
 
-// ================= NAV =================
-function setActive(btn){
-  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-}
+// ----------------- NAV -----------------
+function setActive(btn){ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
 function showDatos(btn){ setActive(btn); renderDatos(); }
 
-// ================= FIRESTORE SNAPSHOT =================
-onSnapshot(datosRef,(docSnap)=>{
-  if(!docSnap.exists()) return;
-  data = docSnap.data();
-  renderDatos();
-});
+// ----------------- FIRESTORE SNAPSHOT -----------------
+onSnapshot(datosRef,(docSnap)=>{ if(!docSnap.exists()) return; data=docSnap.data(); renderDatos(); });
 
-// ================= INICIO =================
+// ----------------- INICIO -----------------
 async function initApp(){
-  const docSnap = await getDoc(datosRef);
-  if(docSnap.exists()) data = docSnap.data();
-  else { data = { "Invierno 2025-2026": { sacos:120,duracion:1.33,pickups:[] } }; await setDoc(datosRef,data); }
-  currentSeason = Object.keys(data)[0] || "";
-  seasonSelect.innerHTML = Object.keys(data).map(s=>`<option>${s}</option>`).join("");
-  seasonSelect.value = currentSeason;
+  const docSnap=await getDoc(datosRef);
+  if(docSnap.exists()) data=docSnap.data();
+  else{ data={"Invierno 2025-2026":{sacos:120,duracion:1.33,pickups:[]}}; await setDoc(datosRef,data); }
+  currentSeason=Object.keys(data)[0]||"";
+  seasonSelect.innerHTML=Object.keys(data).map(s=>`<option>${s}</option>`).join("");
+  seasonSelect.value=currentSeason;
   renderDatos();
 }
-
-seasonSelect.onchange = ()=>{ currentSeason = seasonSelect.value; renderDatos(); };
-
+seasonSelect.onchange=()=>{ currentSeason=seasonSelect.value; renderDatos(); };
 initApp();
 
-// ================= EXCEL =================
+// ----------------- EXCEL -----------------
 function exportExcel(){
-  const p = getCurrentSeasonData();
-  if(!p) return;
-
+  const p=getCurrentSeasonData(); if(!p) return;
   const rows=[["Temporada","Fecha","Sacos"]];
-  p.pickups.forEach(pick=>rows.push([currentSeason,pick.fecha,pick.sacos]));
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet(rows);
+  (p.pickups||[]).forEach(pick=>rows.push([currentSeason,pick.fecha,pick.sacos]));
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet(rows);
   XLSX.utils.book_append_sheet(wb,ws,"Datos");
   XLSX.writeFile(wb,"sacos.xlsx");
 }
 
-// ================= USUARIO =================
-async function logout(){ await signOut(auth); location.href = "index.html"; }
+// ----------------- USUARIO -----------------
+async function logout(){ await signOut(auth); location.href="index.html"; }
 function openAdmin(){ alert("Aquí irá el panel de gestión de usuarios"); }
-function openUser(){ const user = auth.currentUser; if(!user){ alert("No hay usuario autenticado"); return; } alert(`Usuario logueado: ${user.email}`); }
+function openUser(){ const user=auth.currentUser; if(!user){ alert("No hay usuario autenticado"); return; } alert(`Usuario logueado: ${user.email}`); }
 
-window.addPickup = addPickup;
-window.deletePickup = deletePickup;
-window.saveGeneral = saveGeneral;
-window.addSeason = addSeason;
-window.deleteSeason = deleteSeason;
-window.showDatos = showDatos;
-window.showCalendario = showCalendario;
-window.showGrafica = showGrafica;
-window.logout = logout;
-window.openAdmin = openAdmin;
-window.openUser = openUser;
+window.addPickup=addPickup;
+window.deletePickup=deletePickup;
+window.saveGeneral=saveGeneral;
+window.addSeason=addSeason;
+window.deleteSeason=deleteSeason;
+window.showDatos=showDatos;
+window.showCalendario=showCalendario;
+window.showGrafica=showGrafica;
+window.logout=logout;
+window.openAdmin=openAdmin;
+window.openUser=openUser;
 </script>
 
 <script>
-const menuBtn = document.getElementById("menuBtn");
-const menuDropdown = document.getElementById("menuDropdown");
-const seasonSubmenu = document.getElementById("seasonSubmenu");
-const seasonMenuList = document.getElementById("seasonMenuList");
-const seasonSelect = document.getElementById("seasonSelect");
+const menuBtn=document.getElementById("menuBtn");
+const menuDropdown=document.getElementById("menuDropdown");
+const seasonSubmenu=document.getElementById("seasonSubmenu");
+const seasonMenuList=document.getElementById("seasonMenuList");
+const seasonSelect=document.getElementById("seasonSelect");
 
-// === ABRIR / CERRAR MENÚ PRINCIPAL ===
-menuBtn.onclick = e => {
-  e.stopPropagation();
-  menuDropdown.style.display = menuDropdown.style.display === "block" ? "none" : "block";
-};
-
-// === ABRIR / CERRAR SUBMENÚ TEMPORADAS ===
-function toggleSeasonMenu(e){
-  e.stopPropagation();
-  seasonSubmenu.style.display = seasonSubmenu.style.display === "block" ? "none" : "block";
-  renderSeasonMenu();
-}
-
-// === RENDERIZAR TEMPORADAS EN SUBMENÚ ===
-function renderSeasonMenu(){
-  seasonMenuList.innerHTML = [...seasonSelect.options].map(o => `
-    <div style="padding:6px; cursor:pointer;" onclick="selectSeasonFromMenu('${o.value}')">
-      ${o.value}${o.value === seasonSelect.value ? " ✔" : ""}
-    </div>
-  `).join('');
-}
-
-// === SELECCIONAR TEMPORADA DESDE SUBMENÚ ===
-function selectSeasonFromMenu(season){
-  seasonSelect.value = season;
-  seasonSelect.dispatchEvent(new Event("change"));
-  seasonSubmenu.style.display = "none";
-  menuDropdown.style.display = "none";
-}
-
-// === CERRAR MENÚS AL HACER CLICK FUERA ===
-document.addEventListener("click", ()=>{
-  menuDropdown.style.display = "none";
-  seasonSubmenu.style.display = "none";
-});
+menuBtn.onclick=e=>{ e.stopPropagation(); menuDropdown.style.display=menuDropdown.style.display==="block"?"none":"block"; };
+function toggleSeasonMenu(e){ e.stopPropagation(); seasonSubmenu.style.display=seasonSubmenu.style.display==="block"?"none":"block"; renderSeasonMenu(); }
+function renderSeasonMenu(){ seasonMenuList.innerHTML=[...seasonSelect.options].map(o=>`<div style="padding:6px; cursor:pointer;" onclick="selectSeasonFromMenu('${o.value}')">${o.value}${o.value===seasonSelect.value?" ✔":""}</div>`).join(''); }
+function selectSeasonFromMenu(season){ seasonSelect.value=season; seasonSelect.dispatchEvent(new Event("change")); seasonSubmenu.style.display="none"; menuDropdown.style.display="none"; }
+document.addEventListener("click",()=>{ menuDropdown.style.display="none"; seasonSubmenu.style.display="none"; });
 </script>
 
 </body>
 </html>
-
