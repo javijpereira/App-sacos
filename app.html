@@ -124,6 +124,33 @@ canvas{
 .yellow-event{ background:#facc15!important; color:#000!important; }
 .pickup-event{ background:#60a5fa!important; color:#000!important; }
 
+/* Círculos de estado en el número del día */
+.fc .day-circle .fc-daygrid-day-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 3px;
+  padding: 0;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+.fc .day-circle-green .fc-daygrid-day-number {
+  background: #22c55e !important;
+  color: #052e16 !important;
+}
+.fc .day-circle-brown .fc-daygrid-day-number {
+  background: #8b5a2b !important;
+  color: #ffffff !important;
+}
+.fc .day-circle-red .fc-daygrid-day-number {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
 /* ===== HEADER TEMPORADA ICONOS PEGADOS ===== */
 .season-box {
   max-width: 250px;
@@ -269,49 +296,144 @@ let currentSeason = "";
 function getCurrentSeasonData(){ if(!currentSeason || !data[currentSeason]) currentSeason=Object.keys(data)[0]; return data[currentSeason]; }
 
 // ----------------- RENDER DATOS -----------------
-function updateDatos(){
-  const p = getCurrentSeasonData();
-  if(!p) return;
 
-  const hoy = new Date(); hoy.setHours(0,0,0,0);
 
-  // PICKUPS HASTA HOY PARA CÁLCULOS
-  const pickupsHastaHoy = (p.pickups || []).filter(r => new Date(r.fecha) <= hoy).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-  const totalRecogido = pickupsHastaHoy.reduce((a,b)=>a+b.sacos,0);
-  const consumidos = Math.max(totalRecogido-(p.sacosCasa||0),0);
-  const restantesAlmacen = Math.max(p.sacos-totalRecogido,0);
-  const totalDisponible = restantesAlmacen + (p.sacosCasa||0);
+function calcularConsumo(p) {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
 
-  let diasEstimados = 0, mediaDiaria = 0;
-  if(pickupsHastaHoy.length > 0){
-    const primeraFecha = new Date(pickupsHastaHoy[0].fecha); primeraFecha.setHours(0,0,0,0);
-    const diasTranscurridos = Math.max(1, Math.round((hoy - primeraFecha)/(1000*60*60*24)));
-    mediaDiaria = consumidos / diasTranscurridos;
-    diasEstimados = mediaDiaria > 0 ? Math.round(totalDisponible / mediaDiaria) : 0;
+  const recogidas = (p.pickups || [])
+    .filter(r => {
+      const fecha = new Date(r.fecha + "T00:00:00");
+      return !isNaN(fecha.getTime()) && fecha <= hoy;
+    })
+    .sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+  const sacosIniciales = Math.max(0, Number(p.sacos) || 0);
+  const sacosCasa = Math.max(0, Number(p.sacosCasa) || 0);
+
+  const totalRecogido = recogidas.reduce(
+    (total, r) => total + Math.max(0, Number(r.sacos) || 0),
+    0
+  );
+
+  const consumidos = Math.max(0, totalRecogido - sacosCasa);
+  const restantesAlmacen = Math.max(0, sacosIniciales - totalRecogido);
+  const totalDisponible = restantesAlmacen + sacosCasa;
+
+  let mediaDiaria = 0;
+  let diasEstimados = 0;
+  let diasPeriodo = 0;
+  let fechaFinPeriodo = null;
+
+  if (recogidas.length > 0) {
+    const primeraFecha = new Date(
+      recogidas[0].fecha + "T00:00:00"
+    );
+
+    // Si quedan sacos, el periodo llega hasta hoy.
+    fechaFinPeriodo = new Date(hoy);
+
+    // Si el usuario confirmó el día exacto de agotamiento, usarlo
+    // como final del periodo para que la media no siga contando días posteriores.
+    if (p.fechaStockCero) {
+      const fechaConfirmada = new Date(p.fechaStockCero + "T00:00:00");
+      if (!isNaN(fechaConfirmada.getTime())) fechaFinPeriodo = fechaConfirmada;
+    } else if (totalDisponible <= 0 && sacosIniciales > 0) {
+      // Antes de confirmar, usar una fecha provisional basada en las recogidas.
+      let acumulado = 0;
+      for (const recogida of recogidas) {
+        acumulado += Math.max(0, Number(recogida.sacos) || 0);
+        if (acumulado >= sacosIniciales) {
+          fechaFinPeriodo = new Date(recogida.fecha + "T00:00:00");
+          break;
+        }
+      }
+    }
+
+    // Días naturales del periodo, contando ambos extremos.
+    diasPeriodo = Math.max(
+      1,
+      Math.floor((fechaFinPeriodo - primeraFecha) / 86400000) + 1
+    );
+
+    mediaDiaria = consumidos / diasPeriodo;
+
+    // Si no quedan sacos, no continuar estimando.
+    diasEstimados =
+      totalDisponible > 0 && mediaDiaria > 0
+        ? Math.ceil(totalDisponible / mediaDiaria)
+        : 0;
   }
 
-  // RESUMEN
+  return {
+    totalRecogido,
+    consumidos,
+    restantesAlmacen,
+    totalDisponible,
+    mediaDiaria,
+    diasEstimados,
+    fechaFinPeriodo,
+    diasPeriodo
+  };
+}
+
+function updateDatos() {
+  const p = getCurrentSeasonData();
+  if (!p) return;
+
+  const {
+    consumidos,
+    restantesAlmacen,
+    totalDisponible,
+    mediaDiaria,
+    diasEstimados
+  } = calcularConsumo(p);
+
   const resumenDiv = document.getElementById("resumenSacos");
-  if(resumenDiv){
+
+  if (resumenDiv) {
     resumenDiv.innerHTML = `
-      <p>🟦 Sacos iniciales en almacén: <strong>${p.sacos}</strong></p>
-      <p>🔴 Consumidos: <strong>${consumidos}</strong></p>
-      <p>🟢 En almacén: <strong>${restantesAlmacen}</strong></p>
-      <p>🏠 En casa: <strong>${p.sacosCasa||0}</strong></p>
-      <p>📦 Total disponible: <strong>${totalDisponible}</strong></p>
-      <p>📅 Duración estimada: <strong>${diasEstimados} días</strong></p>
-      <p>⚡ Consumo medio diario: <strong>${mediaDiaria.toFixed(2)} sacos/día</strong></p>
+      <p>🟦 Sacos iniciales en almacén:
+        <strong>${p.sacos}</strong></p>
+      <p>🔴 Consumidos:
+        <strong>${consumidos}</strong></p>
+      <p>🟢 En almacén:
+        <strong>${restantesAlmacen}</strong></p>
+      <p>🏠 En casa:
+        <strong>${p.sacosCasa || 0}</strong></p>
+      <p>📦 Total disponible:
+        <strong>${totalDisponible}</strong></p>
+      <p>📅 Duración estimada:
+        <strong>${totalDisponible > 0 && mediaDiaria > 0
+          ? diasEstimados + " días"
+          : "Sin estimación"}</strong></p>
+      <p>⚡ Consumo medio diario:
+        <strong>${mediaDiaria.toFixed(2)} sacos/día</strong></p>
+      ${totalDisponible <= 0 && Number(p.sacos) > 0 && (p.pickups || []).length && !p.fechaStockCero ? `
+        <div style="margin-top:14px;padding:12px;border:1px solid #f59e0b;border-radius:10px;background:#292015;">
+          <strong>⚠️ ¿Qué día te quedaste exactamente sin sacos?</strong>
+          <p style="margin:8px 0;">Confirma la fecha para detener el cálculo ese día y ajustar la media de consumo.</p>
+          <input id="fechaStockCero" type="date" max="${new Date().toLocaleDateString('en-CA')}" value="${(p.pickups || []).map(r=>r.fecha).filter(Boolean).sort().slice(-1)[0] || new Date().toLocaleDateString('en-CA')}" style="width:100%;box-sizing:border-box;">
+          <button class="primary" onclick="confirmarFechaStockCero()">Confirmar fecha de agotamiento</button>
+        </div>` : p.fechaStockCero ? `
+        <p>📍 Stock agotado confirmado el: <strong>${p.fechaStockCero}</strong>
+        <button onclick="cambiarFechaStockCero()" style="width:auto;padding:5px 9px;margin-left:8px;">Cambiar</button></p>` : ''}
     `;
   }
 
-  // LISTADO DE TODAS LAS RECOGIDAS (PASADAS Y FUTURAS)
   const pickupsDiv = document.getElementById("listPickups");
-  if(pickupsDiv){
-    const pickupsOrdenadas = (p.pickups || []).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-    pickupsDiv.innerHTML = pickupsOrdenadas.map((r,i)=>`${r.fecha} → ${r.sacos} sacos <button onclick="deletePickup(${i})">❌</button><br>`).join("") || "Sin recogidas";
+
+  if (pickupsDiv) {
+    const ordenadas = [...(p.pickups || [])]
+      .sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+    pickupsDiv.innerHTML = ordenadas.map((r, i) =>
+      `${r.fecha} → ${r.sacos} sacos
+      <button onclick="deletePickup(${i})">❌</button><br>`
+    ).join("") || "Sin recogidas";
   }
 }
-
 
 function renderDatos(){
   const p=getCurrentSeasonData();
@@ -319,6 +441,17 @@ function renderDatos(){
 
   content.innerHTML = `
     <div class="card" id="resumenSacos"></div>
+
+    <div class="card">
+      <h3>Sacos en almacén</h3>
+      <div class="card-datos">
+        <input id="sacosAlmacen"
+               type="number"
+               min="0"
+               value="${p.sacos || 0}">
+        <button class="primary" onclick="saveSacosAlmacen()">💾</button>
+      </div>
+    </div>
 
     <div class="card">
       <h3>Nueva recogida</h3>
@@ -340,7 +473,9 @@ function renderDatos(){
 
     <div class="card">
       <button id="togglePickups" class="primary">👁️ Ver recogidas</button>
-      <div id="listPickups" style="display:none; max-height:300px; overflow-y:auto; margin-top:8px;"></div>
+      <div id="listPickups"
+           style="display:none; max-height:300px; overflow-y:auto; margin-top:8px;">
+      </div>
     </div>
 
     <div class="card">
@@ -352,9 +487,15 @@ function renderDatos(){
 
   const toggleBtn=document.getElementById("togglePickups");
   const pickupsDiv=document.getElementById("listPickups");
-  toggleBtn.onclick=()=>{ 
-    if(pickupsDiv.style.display==="none"){ pickupsDiv.style.display="block"; toggleBtn.textContent="🔽 Ocultar recogidas"; } 
-    else{ pickupsDiv.style.display="none"; toggleBtn.textContent="👁️ Ver recogidas"; }
+
+  toggleBtn.onclick=()=>{
+    if(pickupsDiv.style.display==="none"){
+      pickupsDiv.style.display="block";
+      toggleBtn.textContent="🔽 Ocultar recogidas";
+    }else{
+      pickupsDiv.style.display="none";
+      toggleBtn.textContent="👁️ Ver recogidas";
+    }
   };
 }
 
@@ -377,6 +518,61 @@ async function saveGeneral(){
   updateDatos();
 }
 
+async function confirmarFechaStockCero(){
+  const p = getCurrentSeasonData();
+  const campo = document.getElementById("fechaStockCero");
+  if (!p || !campo || !campo.value) {
+    alert("Selecciona la fecha exacta en la que te quedaste sin sacos.");
+    return;
+  }
+  const primera = [...(p.pickups || [])].filter(r => r.fecha).map(r => r.fecha).sort()[0];
+  if (primera && campo.value < primera) {
+    alert("La fecha de agotamiento no puede ser anterior a la primera recogida.");
+    return;
+  }
+  p.fechaStockCero = campo.value;
+  await setDoc(datosRef, data);
+  updateDatos();
+  alert("Fecha de agotamiento guardada. El cálculo de consumo se detendrá en ese día.");
+}
+
+async function cambiarFechaStockCero(){
+  const p = getCurrentSeasonData();
+  if (!p) return;
+  const nueva = prompt("Introduce la nueva fecha de agotamiento (AAAA-MM-DD):", p.fechaStockCero || "");
+  if (nueva === null) return;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(nueva) || isNaN(new Date(nueva + "T00:00:00").getTime())) {
+    alert("La fecha debe tener el formato AAAA-MM-DD.");
+    return;
+  }
+  p.fechaStockCero = nueva;
+  await setDoc(datosRef, data);
+  updateDatos();
+}
+window.confirmarFechaStockCero = confirmarFechaStockCero;
+window.cambiarFechaStockCero = cambiarFechaStockCero;
+
+async function saveSacosAlmacen(){
+  const p = getCurrentSeasonData();
+
+  if(!p) return;
+
+  const valor = Number(
+    document.getElementById("sacosAlmacen").value
+  );
+
+  if(isNaN(valor) || valor < 0){
+    alert("Introduce una cantidad válida");
+    return;
+  }
+
+  p.sacos = valor;
+
+  await setDoc(datosRef, data);
+
+  updateDatos();
+}
+
 async function addPickup(){
   const p=getCurrentSeasonData(); if(!p) return;
   const fechaInput=document.getElementById("fecha");
@@ -394,22 +590,50 @@ async function deletePickup(i){
   updateDatos();
 }
 async function addSeason(){
-  const name=prompt("Nombre de la temporada");
-  if(!name||data[name]) return;
-  data[name]={sacos:0,duracion:1,pickups:[]};
-  currentSeason=name;
-  await setDoc(datosRef,data);
-  seasonSelect.innerHTML=Object.keys(data).map(s=>`<option>${s}</option>`).join("");
-  seasonSelect.value=currentSeason;
+
+  const name = prompt("Nombre de la temporada");
+
+  if(!name || data[name]) return;
+
+  const sacosIniciales = Number(
+    prompt("¿Cuántos sacos habrá en el almacén?")
+  );
+
+  data[name] = {
+    sacos: isNaN(sacosIniciales) ? 0 : sacosIniciales,
+    duracion: 1,
+    pickups: [],
+    sacosCasa: 0
+  };
+
+  currentSeason = name;
+
+  await setDoc(datosRef, data);
+
+  seasonSelect.innerHTML = Object.keys(data)
+    .map(s => `<option>${s}</option>`)
+    .join("");
+
+  seasonSelect.value = currentSeason;
+
   renderDatos();
 }
+
 async function deleteSeason(){
   if(!confirm("¿Borrar temporada completa?")) return;
+
   delete data[currentSeason];
-  currentSeason=Object.keys(data)[0]||"";
+
+  currentSeason = Object.keys(data)[0] || "";
+
   await setDoc(datosRef,data);
-  seasonSelect.innerHTML=Object.keys(data).map(s=>`<option>${s}</option>`).join("");
-  seasonSelect.value=currentSeason;
+
+  seasonSelect.innerHTML = Object.keys(data)
+    .map(s => `<option>${s}</option>`)
+    .join("");
+
+  seasonSelect.value = currentSeason;
+
   renderDatos();
 }
 
@@ -420,55 +644,89 @@ function showCalendario(btn){
   content.innerHTML=`<div id="calendar"></div>`;
   const calEl=document.getElementById("calendar");
 
+  const hoy=new Date();
+  hoy.setHours(0,0,0,0);
+  const fechaClave = fecha => {
+    const d = new Date(fecha);
+    d.setHours(0,0,0,0);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  };
+
+  const pickupsOrdenadas=[...(p.pickups||[])]
+    .filter(r => r.fecha && !isNaN(new Date(r.fecha+"T00:00:00").getTime()))
+    .sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const calculo=calcularConsumo(p);
+  const primeraRecogida=pickupsOrdenadas.find(r => new Date(r.fecha+"T00:00:00") <= hoy);
+  const primeraFecha=primeraRecogida ? new Date(primeraRecogida.fecha+"T00:00:00") : null;
+
+  // Si se agotó el stock, encontrar la fecha en la que se agotó.
+  // No se colorea ese día ni ninguno posterior.
+  let fechaAgotamiento=null;
+  if (p.fechaStockCero) {
+    fechaAgotamiento = new Date(p.fechaStockCero + "T00:00:00");
+  } else if(calculo.totalDisponible<=0 && Number(p.sacos)>0){
+    let acumulado=0;
+    for(const r of pickupsOrdenadas){
+      const fecha=new Date(r.fecha+"T00:00:00");
+      if(fecha>hoy) continue;
+      acumulado += Math.max(0, Number(r.sacos)||0);
+      if(acumulado >= Number(p.sacos)){
+        fechaAgotamiento=fecha;
+        break;
+      }
+    }
+  }
+
+  // Calcular el color de cada día al crear la casilla. Así FullCalendar
+  // conserva los círculos al avanzar y retroceder entre meses.
+  function clasesCirculo(fechaEntrada){
+    const fecha = new Date(fechaEntrada);
+    fecha.setHours(0,0,0,0);
+
+    // No marcar el día de agotamiento ni ninguno posterior.
+    if(fechaAgotamiento && fecha >= fechaAgotamiento) return [];
+
+    if(fechaClave(fecha) === fechaClave(hoy) && calculo.totalDisponible > 0){
+      return ['day-circle','day-circle-red'];
+    }
+
+    if(primeraFecha && fecha >= primeraFecha && fecha < hoy){
+      return ['day-circle','day-circle-brown'];
+    }
+
+    if(calculo.totalDisponible > 0 && calculo.diasEstimados > 0 && fecha > hoy){
+      const fechaFin = new Date(hoy);
+      fechaFin.setDate(fechaFin.getDate() + calculo.diasEstimados);
+      if(fecha <= fechaFin) return ['day-circle','day-circle-green'];
+    }
+
+    return [];
+  }
+
   const calendar=new FullCalendar.Calendar(calEl,{
     locale:"es",
     initialView:"dayGridMonth",
     firstDay:1,
     height:"auto",
     dayCellClassNames:function(arg){
-      if(arg.date.getDay()===0||arg.date.getDay()===6) return ['weekend-day'];
-      return ['weekday'];
+      const clases = (arg.date.getDay()===0 || arg.date.getDay()===6)
+        ? ['weekend-day'] : ['weekday'];
+      return clases.concat(clasesCirculo(arg.date));
     }
   });
 
-  const hoy=new Date(); hoy.setHours(0,0,0,0);
-  const pickupsOrdenadas=(p.pickups||[]).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
-
-  // ===== DÍAS AMARILLOS =====
-  if(pickupsOrdenadas.length>0){
-    let fecha=new Date(pickupsOrdenadas[0].fecha); fecha.setHours(0,0,0,0);
-    const ultimaFecha=hoy;
-    while(fecha<=ultimaFecha){
-      calendar.addEvent({ start:fecha.toISOString().split("T")[0], allDay:true, classNames:["yellow-event"] });
-      fecha.setDate(fecha.getDate()+1);
-    }
-  }
-
-  // ===== PICKUPS AZULES =====
-  pickupsOrdenadas.forEach(r=>{
-    calendar.addEvent({ start:r.fecha, title:`-${r.sacos}`, allDay:true, classNames:["pickup-event"] });
+  // Mostrar cada recogida en el calendario con su cantidad de sacos.
+  // Estas marcas azules son independientes de los círculos de los días.
+  pickupsOrdenadas.forEach(recogida => {
+    const cantidad = Math.max(0, Number(recogida.sacos) || 0);
+    calendar.addEvent({
+      start: recogida.fecha,
+      allDay: true,
+      title: `-${cantidad} sacos`,
+      classNames: ["pickup-event"],
+      display: "block"
+    });
   });
-
-  // ===== DÍAS VERDES =====
-  const pickupsHastaHoy=pickupsOrdenadas.filter(r=>new Date(r.fecha)<=hoy);
-  const totalRecogido=pickupsHastaHoy.reduce((a,b)=>a+b.sacos,0);
-  const consumidos=Math.max(totalRecogido-(p.sacosCasa||0),0);
-  const restantesAlmacen=Math.max(p.sacos-totalRecogido,0);
-  const totalDisponible=restantesAlmacen+(p.sacosCasa||0);
-
-  let mediaDiaria=0;
-  if(pickupsHastaHoy.length>0){
-    const primeraFecha=new Date(pickupsHastaHoy[0].fecha); primeraFecha.setHours(0,0,0,0);
-    const diasTranscurridos=Math.max(1,Math.round((hoy-primeraFecha)/(1000*60*60*24)));
-    mediaDiaria=consumidos/diasTranscurridos;
-  }
-  const diasEstimados=mediaDiaria>0 ? Math.round(totalDisponible/mediaDiaria) : 0;
-
-  let fechaVerde=new Date(hoy); fechaVerde.setDate(fechaVerde.getDate()+1);
-  for(let i=0;i<diasEstimados;i++){
-    calendar.addEvent({ start:fechaVerde.toISOString().split("T")[0], allDay:true, classNames:["green-event"] });
-    fechaVerde.setDate(fechaVerde.getDate()+1);
-  }
 
   calendar.render();
 }
@@ -550,6 +808,7 @@ function openUser(){ const user=auth.currentUser; if(!user){ alert("No hay usuar
 window.addPickup=addPickup;
 window.deletePickup=deletePickup;
 window.saveGeneral=saveGeneral;
+window.saveSacosAlmacen=saveSacosAlmacen;
 window.addSeason=addSeason;
 window.deleteSeason=deleteSeason;
 window.showDatos=showDatos;
