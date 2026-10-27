@@ -104,6 +104,21 @@ button.primary{
   font-weight:600;
 }
 
+
+/* Inicio y recogidas */
+#homeSummary p { margin:10px 0; display:flex; justify-content:space-between; gap:12px; }
+#homeSummary strong { text-align:right; }
+.fab-pickup { position:fixed; left:18px; bottom:18px; z-index:1200; width:58px; height:58px; border-radius:50%; padding:0; margin:0; font-size:2rem; box-shadow:0 5px 18px rgba(0,0,0,.45); }
+#pickupPanel { position:fixed; left:14px; right:14px; bottom:88px; z-index:1199; max-width:520px; background:#1e1e1e; border:1px solid #374151; border-radius:14px; padding:16px; box-shadow:0 8px 28px rgba(0,0,0,.55); display:none; }
+#pickupPanel.show { display:block; }
+#pickupPanel .pickup-fields { display:flex; gap:8px; align-items:center; }
+#pickupPanel input { min-width:0; }
+@media(min-width:700px){ #pickupPanel { left:18px; right:auto; width:420px; } }
+.metric { background:#252525; border-radius:10px; padding:12px; margin:8px 0; }
+.metric small { display:block; color:#9ca3af; margin-bottom:5px; }
+.metric strong { font-size:1.25rem; }
+nav button span { font-size:.7rem; }
+
 /* ===== CALENDARIO Y GRÁFICA ===== */
 #calendar{
   width:100%;
@@ -238,6 +253,82 @@ canvas{
 .fc .fc-week-number{ background-color:#f3f4f6 !important; color:#000000; font-weight:600; }
 /* Día actual */
 .fc .fc-day-today{ border-radius:4px; font-weight:600; }
+
+/* ===== CALENDARIO ADAPTABLE A MÓVIL ===== */
+#calendar .fc .fc-header-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 4px 4px 14px;
+}
+#calendar .fc .fc-toolbar-chunk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+#calendar .fc .fc-toolbar-title {
+  color: #f3f4f6;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  white-space: normal;
+}
+#calendar .fc .fc-button {
+  width: auto;
+  min-height: 38px;
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: .9rem;
+}
+#calendar .fc .fc-button-group {
+  display: inline-flex;
+  gap: 5px;
+}
+@media (max-width: 520px) {
+  #calendar { padding: 8px 5px; }
+  #calendar .fc .fc-header-toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 8px;
+    margin: 2px 2px 12px;
+  }
+  /* El título del mes y año ocupa una fila completa. */
+  #calendar .fc .fc-toolbar-chunk:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-content: center;
+    text-align: center;
+  }
+  #calendar .fc .fc-toolbar-chunk:nth-child(1) {
+    grid-column: 1;
+    grid-row: 2;
+    justify-content: flex-start;
+  }
+  #calendar .fc .fc-toolbar-chunk:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: flex-end;
+  }
+  #calendar .fc .fc-toolbar-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  #calendar .fc .fc-button {
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: .85rem;
+  }
+  #calendar .fc .fc-col-header-cell-cushion {
+    font-size: .78rem;
+    padding: 5px 1px;
+  }
+  #calendar .fc .fc-daygrid-day-number {
+    font-size: .8rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -268,7 +359,8 @@ canvas{
 </header>
 
 <nav>
-  <button class="active" onclick="showDatos(this)">🗂️<span>Datos</span></button>
+  <button class="active" onclick="showInicio(this)">🏠<span>Inicio</span></button>
+  <button onclick="showDatos(this)">📋<span>Datos</span></button>
   <button onclick="showCalendario(this)">🗓️<span>Calendario</span></button>
   <button onclick="showGrafica(this)">📊<span>Gráfica</span></button>
 </nav>
@@ -430,74 +522,102 @@ function updateDatos() {
 
     pickupsDiv.innerHTML = ordenadas.map((r, i) =>
       `${r.fecha} → ${r.sacos} sacos
-      <button onclick="deletePickup(${i})">❌</button><br>`
+      <button onclick="deletePickupByDate('${r.fecha}',${r.sacos})">❌</button><br>`
     ).join("") || "Sin recogidas";
   }
 }
 
+function renderInicio(){
+  const p=getCurrentSeasonData();
+  if(!p) return;
+  const c=calcularConsumo(p);
+  content.innerHTML=`
+    <div class="card" id="homeSummary">
+      <h3 style="margin-top:0">📦 Resumen general</h3>
+      <p><span>🟦 Sacos iniciales</span><strong>${Number(p.sacos)||0}</strong></p>
+      <p><span>🔴 Sacos consumidos</span><strong>${c.consumidos}</strong></p>
+      <p><span>🟢 Sacos en almacén</span><strong>${c.restantesAlmacen}</strong></p>
+      <p><span>📦 Total disponible</span><strong>${c.totalDisponible}</strong></p>
+      <p><span>⚡ Consumo medio diario</span><strong>${c.mediaDiaria.toFixed(2)} sacos/día</strong></p>
+      <p><span>📅 Duración estimada</span><strong>${c.totalDisponible>0 && c.mediaDiaria>0 ? c.diasEstimados+" días" : "Sin estimación"}</strong></p>
+      ${c.totalDisponible<=0 && Number(p.sacos)>0 && (p.pickups||[]).length && !p.fechaStockCero ? `
+        <div style="margin-top:14px;padding:12px;border:1px solid #f59e0b;border-radius:10px;background:#292015;">
+          <strong>⚠️ ¿Qué día te quedaste exactamente sin sacos?</strong>
+          <p style="display:block">Confirma la fecha para ajustar la media de consumo.</p>
+          <input id="fechaStockCero" type="date" max="${new Date().toLocaleDateString('en-CA')}" value="${(p.pickups||[]).map(r=>r.fecha).filter(Boolean).sort().slice(-1)[0]||new Date().toLocaleDateString('en-CA')}">
+          <button class="primary" onclick="confirmarFechaStockCero()">Confirmar fecha de agotamiento</button>
+        </div>` : p.fechaStockCero ? `<p style="display:block">📍 Stock agotado confirmado el: <strong>${p.fechaStockCero}</strong> <button onclick="cambiarFechaStockCero()" style="width:auto;padding:5px 9px;">Cambiar</button></p>` : ''}
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">🏠 Sacos en casa</h3>
+      <div class="card-casa" style="max-width:100%">
+        <button onclick="updateCasa(-1)">−</button>
+        <input id="sacosCasa" type="number" value="${p.sacosCasa||0}" readonly>
+        <button class="primary" onclick="updateCasa(1)">+</button>
+      </div>
+    </div>
+    <div id="pickupPanel">
+      <h3 style="margin-top:0">➕ Añadir recogida</h3>
+      <div class="pickup-fields">
+        <input id="fecha" type="date" aria-label="Fecha de recogida">
+        <input id="cantidad" type="number" min="1" placeholder="Sacos" aria-label="Cantidad de sacos">
+      </div>
+      <button class="primary" onclick="addPickup()">Guardar recogida</button>
+      <button onclick="togglePickupPanel(false)">Cancelar</button>
+    </div>
+    <button class="primary fab-pickup" aria-label="Añadir recogida" title="Añadir recogida" onclick="togglePickupPanel()">＋</button>
+  `;
+}
 function renderDatos(){
   const p=getCurrentSeasonData();
   if(!p) return;
-
-  content.innerHTML = `
-    <div class="card" id="resumenSacos"></div>
-
+  const c=calcularConsumo(p);
+  const precio=Math.max(0,Number(p.precioSaco)||0);
+  const costeAnual=(Math.max(0,Number(p.sacos)||0))*precio;
+  const costeDiario=c.mediaDiaria*precio;
+  content.innerHTML=`
     <div class="card">
-      <h3>Sacos en almacén</h3>
-      <div class="card-datos">
-        <input id="sacosAlmacen"
-               type="number"
-               min="0"
-               value="${p.sacos || 0}">
+      <h3 style="margin-top:0">📦 Sacos en almacén</h3>
+      <p style="color:#9ca3af">Cantidad inicial de sacos de esta temporada.</p>
+      <div class="card-datos" style="max-width:100%">
+        <input id="sacosAlmacen" type="number" min="0" value="${p.sacos||0}">
         <button class="primary" onclick="saveSacosAlmacen()">💾</button>
       </div>
     </div>
-
     <div class="card">
-      <h3>Nueva recogida</h3>
-      <div class="card-recogida">
-        <input id="fecha" type="date">
-        <input id="cantidad" type="number" placeholder="Sacos">
-        <button class="primary" onclick="addPickup()">➕</button>
+      <h3 style="margin-top:0">💶 Costes</h3>
+      <label for="precioSaco">Precio por saco (€)</label>
+      <div class="card-datos" style="max-width:100%; margin-top:8px">
+        <input id="precioSaco" type="number" min="0" step="0.01" placeholder="Ej. 5,50" value="${p.precioSaco??''}">
+        <button class="primary" onclick="savePrecioSaco()">💾</button>
       </div>
+      <div class="metric"><small>Coste anual estimado de los sacos iniciales</small><strong>${costeAnual.toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong></div>
+      <div class="metric"><small>Coste diario estimado según el consumo medio</small><strong>${costeDiario.toLocaleString('es-ES',{style:'currency',currency:'EUR'})} / día</strong></div>
+      <p style="color:#9ca3af;font-size:.85rem">El coste diario se actualiza al cambiar la media de consumo. El coste anual mostrado se calcula con los sacos iniciales de la temporada y el precio por saco.</p>
     </div>
-
     <div class="card">
-      <h3>Sacos en casa</h3>
-      <div class="card-casa">
-        <button onclick="updateCasa(-1)">-</button>
-        <input id="sacosCasa" type="number" value="${p.sacosCasa||0}" readonly>
-        <button onclick="updateCasa(1)">+</button>
-      </div>
-    </div>
-
-    <div class="card">
+      <h3 style="margin-top:0">🧾 Recogidas registradas</h3>
       <button id="togglePickups" class="primary">👁️ Ver recogidas</button>
-      <div id="listPickups"
-           style="display:none; max-height:300px; overflow-y:auto; margin-top:8px;">
-      </div>
+      <div id="listPickups" style="display:none;max-height:300px;overflow-y:auto;margin-top:8px"></div>
     </div>
-
-    <div class="card">
-      <button onclick="exportExcel()">📤 Exportar a Excel</button>
-    </div>
+    <div class="card"><button onclick="exportExcel()">📤 Exportar a Excel</button></div>
   `;
-
   updateDatos();
-
   const toggleBtn=document.getElementById("togglePickups");
   const pickupsDiv=document.getElementById("listPickups");
-
   toggleBtn.onclick=()=>{
-    if(pickupsDiv.style.display==="none"){
-      pickupsDiv.style.display="block";
-      toggleBtn.textContent="🔽 Ocultar recogidas";
-    }else{
-      pickupsDiv.style.display="none";
-      toggleBtn.textContent="👁️ Ver recogidas";
-    }
+    const visible=pickupsDiv.style.display!=="none";
+    pickupsDiv.style.display=visible?"none":"block";
+    toggleBtn.textContent=visible?"👁️ Ver recogidas":"🔽 Ocultar recogidas";
   };
 }
+function togglePickupPanel(force){
+  const panel=document.getElementById("pickupPanel");
+  if(!panel) return;
+  const show=typeof force==="boolean"?force:!panel.classList.contains("show");
+  panel.classList.toggle("show",show);
+}
+window.togglePickupPanel=togglePickupPanel;
 
 // ----------------- SACOS CASA -----------------
 function updateCasa(delta){
@@ -507,7 +627,7 @@ function updateCasa(delta){
   const casaInput=document.getElementById("sacosCasa");
   if(casaInput) casaInput.value=p.sacosCasa;
   saveGeneral();
-  updateDatos();
+  renderInicio();
 }
 window.updateCasa=updateCasa;
 
@@ -577,11 +697,24 @@ async function addPickup(){
   const p=getCurrentSeasonData(); if(!p) return;
   const fechaInput=document.getElementById("fecha");
   const cantidadInput=document.getElementById("cantidad");
-  if(!fechaInput.value || !cantidadInput.value) return alert("Datos incompletos");
+  if(!fechaInput?.value || !cantidadInput?.value || Number(cantidadInput.value)<=0) return alert("Introduce una fecha y una cantidad válida de sacos.");
   if(!p.pickups) p.pickups=[];
   p.pickups.push({ fecha: fechaInput.value, sacos:Number(cantidadInput.value) });
   await setDoc(datosRef,data);
-  updateDatos();
+  renderInicio();
+}
+async function deletePickupByDate(fecha,sacos){
+  const p=getCurrentSeasonData(); if(!p) return;
+  const i=(p.pickups||[]).findIndex(r=>r.fecha===fecha && Number(r.sacos)===Number(sacos));
+  if(i>=0){p.pickups.splice(i,1); await setDoc(datosRef,data); renderDatos();}
+}
+async function savePrecioSaco(){
+  const p=getCurrentSeasonData(); if(!p) return;
+  const valor=Number(document.getElementById("precioSaco").value);
+  if(!Number.isFinite(valor)||valor<0){alert("Introduce un precio válido.");return;}
+  p.precioSaco=valor;
+  await setDoc(datosRef,data);
+  renderDatos();
 }
 async function deletePickup(i){
   const p=getCurrentSeasonData(); if(!p) return;
@@ -708,6 +841,14 @@ function showCalendario(btn){
     initialView:"dayGridMonth",
     firstDay:1,
     height:"auto",
+    headerToolbar:{
+      left:"prev,next",
+      center:"title",
+      right:"today"
+    },
+    buttonText:{
+      today:"Hoy"
+    },
     dayCellClassNames:function(arg){
       const clases = (arg.date.getDay()===0 || arg.date.getDay()===6)
         ? ['weekend-day'] : ['weekday'];
@@ -732,49 +873,98 @@ function showCalendario(btn){
 }
 
 // ----------------- GRÁFICA -----------------
-function showGrafica(btn){
+let tipoGraficaActual = "sacos";
+let graficaInstancia = null;
+function showGrafica(btn, tipo = "sacos"){
   const p=getCurrentSeasonData(); if(!p) return;
   setActive(btn);
-  content.innerHTML=`<canvas id="chart"></canvas>`;
+  tipoGraficaActual = tipo;
+  content.innerHTML=`
+    <div class="card">
+      <h3 style="margin-top:0">📊 Estadísticas de consumo</h3>
+      <div class="chart-switch" style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btnGraficaSacos" class="${tipo === "sacos" ? "primary" : ""}" style="flex:1;min-width:135px" onclick="cambiarGrafica('sacos')">📦 Sacos recogidos</button>
+        <button id="btnGraficaEuros" class="${tipo === "euros" ? "primary" : ""}" style="flex:1;min-width:135px" onclick="cambiarGrafica('euros')">💶 Coste mensual</button>
+        <button id="btnGraficaDiario" class="${tipo === "diario" ? "primary" : ""}" style="flex:1;min-width:135px" onclick="cambiarGrafica('diario')">📅 Coste diario medio</button>
+      </div>
+      <p id="descripcionGrafica" style="color:#9ca3af;font-size:.9rem;margin:4px 0 14px"></p>
+      <div style="position:relative;width:100%;height:340px"><canvas id="chart"></canvas></div>
+    </div>`;
 
-  const consumidosPorMes={};
+  const porMes = {};
   (p.pickups||[]).forEach(r=>{
-    const fecha=new Date(r.fecha);
-    const mes=fecha.toLocaleString("es-ES",{month:"short"});
-    const label=`${mes} ${fecha.getFullYear()}`;
-    if(!consumidosPorMes[label]) consumidosPorMes[label]=0;
-    consumidosPorMes[label]+=r.sacos;
+    if(!r.fecha) return;
+    // Las fechas se guardan como AAAA-MM-DD; se separan para evitar desfases de zona horaria.
+    const partes = r.fecha.split("-").map(Number);
+    if(partes.length !== 3 || !partes[0] || !partes[1]) return;
+    const clave = `${partes[0]}-${String(partes[1]).padStart(2,"0")}`;
+    if(!porMes[clave]) porMes[clave] = 0;
+    porMes[clave] += Math.max(0, Number(r.sacos)||0);
   });
 
-  const labels=Object.keys(consumidosPorMes).sort((a,b)=>{
-    const [mesA,añoA]=a.split(" ");
-    const [mesB,añoB]=b.split(" ");
-    const dateA=new Date(`${mesA} 1, ${añoA}`);
-    const dateB=new Date(`${mesB} 1, ${añoB}`);
-    return dateA-dateB;
+  const claves = Object.keys(porMes).sort();
+  const nombresMes = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  const labels = claves.map(clave=>{
+    const [anio, mes] = clave.split("-").map(Number);
+    return `${nombresMes[mes-1]} ${anio}`;
   });
+  const sacos = claves.map(clave=>porMes[clave]);
+  const precio = Math.max(0, Number(p.precioSaco)||0);
+  const euros = sacos.map(cantidad=>cantidad*precio);
+  // Coste diario medio: coste estimado del mes dividido entre todos los días naturales de ese mes.
+  const costesDiarios = claves.map((clave,i)=>{
+    const [anio,mes] = clave.split("-").map(Number);
+    const diasDelMes = new Date(anio, mes, 0).getDate();
+    return diasDelMes ? euros[i] / diasDelMes : 0;
+  });
+  const valores = tipo === "euros" ? euros : tipo === "diario" ? costesDiarios : sacos;
+  const esCoste = tipo === "euros" || tipo === "diario";
+  const colores = ["#60a5fa","#34d399","#fbbf24","#f87171","#c084fc","#fb923c","#2dd4bf","#f472b6","#a3e635","#818cf8","#e879f9","#facc15"];
+  document.getElementById("descripcionGrafica").textContent = tipo === "euros"
+    ? `Coste estimado total de las recogidas de cada mes: sacos recogidos × ${precio.toLocaleString("es-ES",{style:"currency",currency:"EUR"})} por saco.`
+    : tipo === "diario"
+      ? `Media diaria estimada: coste mensual dividido entre los días naturales de cada mes (28–31 días).`
+      : "Número total de sacos registrados en las recogidas de cada mes.";
 
-  const values=labels.map(l=>consumidosPorMes[l]);
-
-  new Chart(document.getElementById("chart"),{
+  if(graficaInstancia){ graficaInstancia.destroy(); graficaInstancia = null; }
+  graficaInstancia = new Chart(document.getElementById("chart"),{
     type:"bar",
-    data:{ labels, datasets:[{label:"Sacos consumidos", data:values, backgroundColor:"#2563eb", borderColor:"#60a5fa", borderWidth:1}] },
+    data:{ labels, datasets:[{
+      label: tipo === "euros" ? "Coste mensual estimado (€)" : tipo === "diario" ? "Coste diario medio (€ / día)" : "Sacos recogidos",
+      data:valores,
+      backgroundColor:labels.map((_,i)=>colores[i % colores.length]),
+      borderColor:labels.map((_,i)=>colores[i % colores.length]),
+      borderWidth:1,
+      borderRadius:5
+    }] },
     options:{
-      plugins:{ legend:{labels:{color:"#fff", font:{size:14}}}, tooltip:{enabled:true} },
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{color:"#fff",font:{size:14}}},
+        tooltip:{callbacks:{label:context=> esCoste
+          ? ` ${context.parsed.y.toLocaleString("es-ES",{style:"currency",currency:"EUR"})}${tipo === "diario" ? " / día" : ""}`
+          : ` ${context.parsed.y} sacos`}}
+      },
       scales:{
-        x:{ ticks:{color:"#fff", font:{size:12}}, grid:{color:"#333"} },
-        y:{ ticks:{color:"#fff", font:{size:12}, beginAtZero:true}, grid:{color:"#333"} }
+        x:{ticks:{color:"#fff",font:{size:12}},grid:{color:"#333"}},
+        y:{beginAtZero:true,ticks:{color:"#fff",callback:value=>esCoste ? `${value} €` : value},grid:{color:"#333"}}
       }
     }
   });
 }
+function cambiarGrafica(tipo){
+  tipoGraficaActual = tipo;
+  showGrafica(document.querySelector('nav button.active'), tipo);
+}
 
 // ----------------- NAV -----------------
-function setActive(btn){ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+function setActive(btn){ if(btn){document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active")); btn.classList.add("active");} }
+function showInicio(btn){ setActive(btn); renderInicio(); }
 function showDatos(btn){ setActive(btn); renderDatos(); }
 
 // ----------------- FIRESTORE SNAPSHOT -----------------
-onSnapshot(datosRef,(docSnap)=>{ if(!docSnap.exists()) return; data=docSnap.data(); renderDatos(); });
+onSnapshot(datosRef,(docSnap)=>{ if(!docSnap.exists()) return; data=docSnap.data(); if(document.querySelector("nav button.active")?.textContent.includes("Datos")) renderDatos(); else if(document.querySelector("nav button.active")?.textContent.includes("Calendario")) showCalendario(document.querySelector("nav button.active")); else if(document.querySelector("nav button.active")?.textContent.includes("Gráfica")) showGrafica(document.querySelector("nav button.active")); else renderInicio(); });
 
 // ----------------- INICIO -----------------
 async function initApp(){
@@ -784,9 +974,9 @@ async function initApp(){
   currentSeason=Object.keys(data)[0]||"";
   seasonSelect.innerHTML=Object.keys(data).map(s=>`<option>${s}</option>`).join("");
   seasonSelect.value=currentSeason;
-  renderDatos();
+  renderInicio();
 }
-seasonSelect.onchange=()=>{ currentSeason=seasonSelect.value; renderDatos(); };
+seasonSelect.onchange=()=>{ currentSeason=seasonSelect.value; renderInicio(); };
 initApp();
 
 // ----------------- EXCEL -----------------
@@ -806,14 +996,18 @@ function openAdmin(){ alert("Aquí irá el panel de gestión de usuarios"); }
 function openUser(){ const user=auth.currentUser; if(!user){ alert("No hay usuario autenticado"); return; } alert(`Usuario logueado: ${user.email}`); }
 
 window.addPickup=addPickup;
+window.deletePickupByDate=deletePickupByDate;
+window.savePrecioSaco=savePrecioSaco;
 window.deletePickup=deletePickup;
 window.saveGeneral=saveGeneral;
 window.saveSacosAlmacen=saveSacosAlmacen;
 window.addSeason=addSeason;
 window.deleteSeason=deleteSeason;
+window.showInicio=showInicio;
 window.showDatos=showDatos;
 window.showCalendario=showCalendario;
 window.showGrafica=showGrafica;
+window.cambiarGrafica=cambiarGrafica;
 window.logout=logout;
 window.openAdmin=openAdmin;
 window.openUser=openUser;
@@ -835,3 +1029,4 @@ document.addEventListener("click",()=>{ menuDropdown.style.display="none"; seaso
 
 </body>
 </html>
+
