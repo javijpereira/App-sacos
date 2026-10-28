@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#121c2b">
 <title>Control de Sacos - Oscuro</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/main.min.css">
@@ -18,6 +19,30 @@ body{
   background:#121212;
   color:#f0f0f0;
   overflow-x:hidden;
+  --page-bg:#121212;
+  --header-bg:#1f2937;
+  --card-bg:#1e1e1e;
+  --input-bg:#2c2c2c;
+  --text-color:#f0f0f0;
+  --muted-color:#9ca3af;
+  --border-color:#333;
+  --hover-bg:#2c2c2c;
+  --metric-bg:#252525;
+  --shadow-color:rgba(0,0,0,.35);
+}
+body.light-mode{
+  background:#f3f4f6;
+  color:#1f2937;
+  --page-bg:#f3f4f6;
+  --header-bg:#ffffff;
+  --card-bg:#ffffff;
+  --input-bg:#e5e7eb;
+  --text-color:#1f2937;
+  --muted-color:#6b7280;
+  --border-color:#d1d5db;
+  --hover-bg:#e5e7eb;
+  --metric-bg:#f9fafb;
+  --shadow-color:rgba(0,0,0,.10);
 }
 
 header{
@@ -26,8 +51,8 @@ header{
   left: 0;
   width: 100%;
   height: 50px;
-  background:#1f2937;
-  color:#fff;
+  background:var(--header-bg);
+  color:var(--text-color);
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -44,7 +69,7 @@ nav{
   height: 50px;
   display: flex;
   background: #1f2937;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--border-color);
   z-index: 999;
 }
 
@@ -52,7 +77,7 @@ nav button{
   flex:1;
   border:none;
   background:none;
-  color:#9ca3af;
+  color:var(--muted-color);
   font-size:0.75rem;
   cursor:pointer;
   display:flex;
@@ -82,11 +107,11 @@ nav button:hover{
 }
 
 .card{
-  background:#1e1e1e;
+  background:var(--card-bg);
   border-radius:12px;
   padding:15px;
   margin-bottom:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.5);
+  box-shadow:0 2px 6px var(--shadow-color);
 }
 input, button{
   width:100%;
@@ -94,13 +119,13 @@ input, button{
   margin-bottom:8px;
   border-radius:8px;
   border:none;
-  background:#2c2c2c;
-  color:#fff;
+  background:var(--input-bg);
+  color:var(--text-color);
   font-size:1rem;
 }
 button.primary{
   background:#2563eb;
-  color:#fff;
+  color:var(--text-color);
   font-weight:600;
 }
 
@@ -108,14 +133,14 @@ button.primary{
 /* Inicio y recogidas */
 #homeSummary p { margin:10px 0; display:flex; justify-content:space-between; gap:12px; }
 #homeSummary strong { text-align:right; }
-.fab-pickup { position:fixed; left:18px; bottom:18px; z-index:1200; width:58px; height:58px; border-radius:50%; padding:0; margin:0; font-size:2rem; box-shadow:0 5px 18px rgba(0,0,0,.45); }
-#pickupPanel { position:fixed; left:14px; right:14px; bottom:88px; z-index:1199; max-width:520px; background:#1e1e1e; border:1px solid #374151; border-radius:14px; padding:16px; box-shadow:0 8px 28px rgba(0,0,0,.55); display:none; }
+.fab-pickup { position:fixed; right:18px; left:auto; bottom:18px; z-index:1200; width:58px; height:58px; border-radius:50%; padding:0; margin:0; font-size:2rem; box-shadow:0 5px 18px rgba(0,0,0,.45); }
+#pickupPanel { position:fixed; left:auto; right:14px; bottom:88px; z-index:1199; max-width:520px; background:var(--card-bg); border:1px solid var(--border-color); border-radius:14px; padding:16px; box-shadow:0 8px 28px var(--shadow-color); display:none; }
 #pickupPanel.show { display:block; }
 #pickupPanel .pickup-fields { display:flex; gap:8px; align-items:center; }
 #pickupPanel input { min-width:0; }
-@media(min-width:700px){ #pickupPanel { left:18px; right:auto; width:420px; } }
-.metric { background:#252525; border-radius:10px; padding:12px; margin:8px 0; }
-.metric small { display:block; color:#9ca3af; margin-bottom:5px; }
+@media(min-width:700px){ #pickupPanel { left:auto; right:18px; width:420px; } }
+.metric { background:var(--metric-bg); border-radius:10px; padding:12px; margin:8px 0; }
+.metric small { display:block; color:var(--muted-color); margin-bottom:5px; }
 .metric strong { font-size:1.25rem; }
 nav button span { font-size:.7rem; }
 
@@ -124,7 +149,7 @@ nav button span { font-size:.7rem; }
   width:100%;
   max-width:100%;
   margin:auto;
-  background:#1e1e1e;
+  background:var(--card-bg);
   border-radius:12px;
   padding:6px;
 }
@@ -175,8 +200,8 @@ canvas{
   padding:10px;
   border-radius:8px;
   border:none;
-  background:#2c2c2c;
-  color:#fff;
+  background:var(--input-bg);
+  color:var(--text-color);
   font-size:1rem;
   cursor:pointer;
 }
@@ -216,17 +241,17 @@ canvas{
   z-index: 2000;
 }
 .menu-dropdown.show { display:block; }
-.menu-dropdown div { padding:12px; cursor:pointer; border-bottom:1px solid #333; }
+.menu-dropdown div { padding:12px; cursor:pointer; border-bottom:1px solid var(--border-color); }
 .menu-dropdown div:last-child { border-bottom:none; }
-.menu-dropdown div:hover{ background:#2c2c2c; }
+.menu-dropdown div:hover{ background:var(--input-bg); }
 
 .menu-item{ padding:10px; cursor:pointer; border-radius:6px; }
-.menu-item:hover{ background:#2c2c2c; }
+.menu-item:hover{ background:var(--input-bg); }
 
 .submenu{ display:none; margin-left:10px; margin-top:6px; border-left:2px solid #2563eb; padding-left:8px; }
 .submenu.show{ display:block; }
 .submenu div{ padding:8px; border-radius:6px; cursor:pointer; }
-.submenu div:hover{ background:#2c2c2c; }
+.submenu div:hover{ background:var(--input-bg); }
 .submenu-action{ font-weight:600; }
 .submenu-action.danger{ color:#ef4444; }
 
@@ -253,6 +278,48 @@ canvas{
 .fc .fc-week-number{ background-color:#f3f4f6 !important; color:#000000; font-weight:600; }
 /* Día actual */
 .fc .fc-day-today{ border-radius:4px; font-weight:600; }
+
+
+/* ===== GASTOS ANUALES ===== */
+#gastosSection .expense-total { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+#gastosSection .expense-total .metric { margin:0; }
+#gastosSection .expense-row { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-color); }
+#gastosSection .expense-row:last-child { border-bottom:0; }
+#gastosSection .expense-row small { display:block; color:var(--muted-color); margin-top:3px; }
+#gastosSection .expense-row button { width:auto; margin:0; padding:8px 10px; }
+#gastosSection .pie-wrap { position:relative; width:100%; max-width:460px; height:340px; margin:auto; }
+@media(max-width:420px){ #gastosSection .expense-total { grid-template-columns:1fr; } #gastosSection .pie-wrap { height:300px; } }
+/* ===== TEMA CLARO ===== */
+body.light-mode header,
+body.light-mode nav { background:var(--header-bg); color:var(--text-color); }
+body.light-mode nav button { color:#6b7280; }
+body.light-mode nav button.active { color:#2563eb; }
+body.light-mode nav button:hover,
+body.light-mode .menu-item:hover,
+body.light-mode .menu-dropdown div:hover,
+body.light-mode .submenu div:hover { background:var(--hover-bg); }
+body.light-mode .menu-dropdown { border:1px solid var(--border-color); box-shadow:0 6px 20px var(--shadow-color); }
+body.light-mode .menu-dropdown div,
+body.light-mode .submenu { border-color:var(--border-color); }
+body.light-mode #calendar { background:var(--card-bg); }
+body.light-mode #calendar .fc .fc-toolbar-title { color:#1f2937; }
+body.light-mode #calendar .fc .fc-button { background:#e5e7eb; border-color:#d1d5db; color:#1f2937; }
+body.light-mode #calendar .fc .fc-button-primary:not(:disabled).fc-button-active,
+body.light-mode #calendar .fc .fc-button-primary:focus { background:#2563eb; border-color:#2563eb; color:#fff; }
+body.light-mode .fc .fc-daygrid-day { background:#fff; }
+body.light-mode .fc .fc-daygrid-day-frame { background:#fff; }
+body.light-mode .fc .fc-scrollgrid,
+body.light-mode .fc td,
+body.light-mode .fc th { border-color:#d1d5db; }
+body.light-mode .fc .fc-col-header-cell { background:#e5e7eb; }
+body.light-mode .fc .fc-col-header-cell-cushion { color:#1f2937 !important; }
+body.light-mode canvas { filter:none; }
+body.light-mode #pickupPanel { background:#fff; }
+body.light-mode .metric { background:#f9fafb; }
+body.light-mode input,
+body.light-mode button:not(.primary),
+body.light-mode .season-box select { color:#1f2937; }
+body.light-mode input::placeholder { color:#6b7280; }
 
 /* ===== CALENDARIO ADAPTABLE A MÓVIL ===== */
 #calendar .fc .fc-header-toolbar {
@@ -329,6 +396,10 @@ canvas{
     font-size: .8rem;
   }
 }
+/* Botón general del área de clientes de Repsol */
+.repsol-link{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;box-sizing:border-box;margin-top:14px;padding:12px 16px;border-radius:12px;background:#fff;color:#202020;text-decoration:none;font-weight:700;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.repsol-link:active{transform:scale(.99)}
+.repsol-mark{width:34px;height:34px;flex:0 0 34px}
 </style>
 </head>
 <body>
@@ -340,7 +411,7 @@ canvas{
     </div>
   </div>
 
-  <button class="menu-btn" id="menuBtn" style="font-size:1.5rem; background:#2c2c2c; border:none; border-radius:8px; padding:8px 12px; color:#fff; cursor:pointer;">
+  <button class="menu-btn" id="menuBtn" style="font-size:1.5rem; background:var(--input-bg); border:none; border-radius:8px; padding:8px 12px; color:var(--text-color); cursor:pointer;">
     ☰
   </button>
 
@@ -354,6 +425,8 @@ canvas{
       <div class="submenu-action danger" onclick="deleteSeason()">❌ Eliminar temporada</div>
     </div>
     <div onclick="openAdmin()">🛠 Panel del administrador</div>
+    <div onclick="openGastos()">💶 Gastos anuales</div>
+    <div onclick="openConfiguracion()">⚙️ Configuración</div>
     <div onclick="logout()">🚪 Cerrar sesión</div>
   </div>
 </header>
@@ -593,7 +666,7 @@ function renderDatos(){
       </div>
       <div class="metric"><small>Coste anual estimado de los sacos iniciales</small><strong>${costeAnual.toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong></div>
       <div class="metric"><small>Coste diario estimado según el consumo medio</small><strong>${costeDiario.toLocaleString('es-ES',{style:'currency',currency:'EUR'})} / día</strong></div>
-      <p style="color:#9ca3af;font-size:.85rem">El coste diario se actualiza al cambiar la media de consumo. El coste anual mostrado se calcula con los sacos iniciales de la temporada y el precio por saco.</p>
+      <p style="color:var(--muted-color);font-size:.85rem">El coste diario se actualiza al cambiar la media de consumo. El coste anual mostrado se calcula con los sacos iniciales de la temporada y el precio por saco.</p>
     </div>
     <div class="card">
       <h3 style="margin-top:0">🧾 Recogidas registradas</h3>
@@ -887,7 +960,7 @@ function showGrafica(btn, tipo = "sacos"){
         <button id="btnGraficaEuros" class="${tipo === "euros" ? "primary" : ""}" style="flex:1;min-width:135px" onclick="cambiarGrafica('euros')">💶 Coste mensual</button>
         <button id="btnGraficaDiario" class="${tipo === "diario" ? "primary" : ""}" style="flex:1;min-width:135px" onclick="cambiarGrafica('diario')">📅 Coste diario medio</button>
       </div>
-      <p id="descripcionGrafica" style="color:#9ca3af;font-size:.9rem;margin:4px 0 14px"></p>
+      <p id="descripcionGrafica" style="color:var(--muted-color);font-size:.9rem;margin:4px 0 14px"></p>
       <div style="position:relative;width:100%;height:340px"><canvas id="chart"></canvas></div>
     </div>`;
 
@@ -958,13 +1031,203 @@ function cambiarGrafica(tipo){
   showGrafica(document.querySelector('nav button.active'), tipo);
 }
 
+
+// ----------------- NAVEGACIÓN POR DESLIZAMIENTO EN MÓVIL -----------------
+let touchStartX = 0, touchStartY = 0;
+const navButtons = () => [...document.querySelectorAll('nav button')];
+content.addEventListener('touchstart', e => {
+  if (!e.touches || e.touches.length !== 1) return;
+  const target = e.target;
+  if (target.closest('input,textarea,select,button,a,#calendar,.fc,canvas')) return;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, {passive:true});
+content.addEventListener('touchend', e => {
+  if (!touchStartX || !e.changedTouches?.length) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  touchStartX = 0; touchStartY = 0;
+  if (Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+  const buttons = navButtons();
+  const activeIndex = Math.max(0, buttons.findIndex(b => b.classList.contains('active')));
+  const nextIndex = Math.min(buttons.length - 1, Math.max(0, activeIndex + (dx < 0 ? 1 : -1)));
+  if (nextIndex === activeIndex) return;
+  buttons[nextIndex].click();
+}, {passive:true});
+
+// ----------------- GASTOS ANUALES -----------------
+function datosGastosTemporada() {
+  const p = getCurrentSeasonData();
+  if (!p) return null;
+  if (!p.gastosLuz) p.gastosLuz = {};
+  return p;
+}
+function euros(n) { return (Number(n)||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'}); }
+
+function openGastos() {
+  const p = datosGastosTemporada();
+  if (!p) return;
+  const anioActual = new Date().getFullYear();
+  const opcionesAnio = Array.from({length:8},(_,i)=>anioActual-5+i);
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  content.innerHTML = `
+    <div id="gastosSection">
+      <div class="card">
+        <h3 style="margin-top:0">💶 Gastos de calefacción y luz</h3>
+        <label for="gastosAnio">Año que quieres consultar</label>
+        <select id="gastosAnio" style="width:100%;padding:12px;border-radius:8px;background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);margin:8px 0 14px">
+          ${opcionesAnio.map(a=>`<option value="${a}" ${a===anioActual?'selected':''}>${a}</option>`).join('')}
+        </select>
+        <a href="https://areacliente.repsolluzygas.com/login" target="_blank" rel="noopener noreferrer" class="repsol-link" aria-label="Abrir área de clientes de Repsol">
+          <svg class="repsol-mark" viewBox="0 0 48 48" role="img" aria-label="Repsol"><circle cx="24" cy="24" r="23" fill="#fff"/><path d="M9 15c6-7 16-8 24-3 3 2 5 5 6 8-7-4-14-4-20 0-4 2-7 5-9 9-4-4-4-10-1-14z" fill="#e94b35"/><path d="M10 29c5-8 13-12 22-10 3 1 6 3 8 6-8-1-14 1-19 6-3 3-5 6-6 9-5-2-8-6-5-11z" fill="#f28c28"/><path d="M18 36c5-5 11-7 18-5-4 7-12 11-20 8z" fill="#1877b9"/></svg>
+          <span>Ver facturas en Repsol</span><span aria-hidden="true">↗</span>
+        </a>
+        <p style="font-size:.8rem;color:var(--muted-color);margin-bottom:0">El botón abre el área de clientes de Repsol. Inicia sesión allí para consultar las facturas.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">📅 Desglose de gastos mes a mes</h3>
+        <p style="color:var(--muted-color);font-size:.85rem;margin-top:0">Pellets calculados según las recogidas de cada mes y el precio por saco; la luz corresponde al importe que hayas guardado.</p>
+        <div id="detalleGastosMes"></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">💡 Registrar gasto de luz</h3>
+        <label for="mesFactura">Mes de la factura</label>
+        <input id="mesFactura" type="month" value="${anioActual}-${String(new Date().getMonth()+1).padStart(2,'0')}" style="width:100%;box-sizing:border-box">
+        <label for="importeLuz">Importe de la factura (€)</label>
+        <input id="importeLuz" type="number" min="0" step="0.01" placeholder="Ej. 68,50" style="width:100%;box-sizing:border-box">
+        <button class="primary" onclick="guardarGastoLuz()">💾 Guardar gasto de luz</button>
+        <p style="font-size:.8rem;color:var(--muted-color);margin-bottom:0">Solo se guarda el importe mensual en MiPellets. Para ver la factura completa, utiliza el botón de Repsol.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">🧾 Resumen del gasto anual</h3>
+        <div class="expense-total">
+          <div class="metric"><small>🔥 Pellets en el año</small><strong id="totalPellets">0,00 €</strong></div>
+          <div class="metric"><small>💡 Luz en el año</small><strong id="totalLuz">0,00 €</strong></div>
+        </div>
+        <div class="metric" style="margin-top:10px"><small>💶 Gasto anual total</small><strong id="totalGastos">0,00 €</strong></div>
+        <h4 style="margin-bottom:6px">Distribución anual por mes y tipo de gasto</h4>
+        <div class="pie-wrap"><canvas id="gastosPie"></canvas></div>
+      </div>
+    </div>`;
+  document.getElementById('gastosAnio').addEventListener('change', pintarGraficaGastos);
+  pintarGraficaGastos();
+}
+function calcularGastosMensuales(anio) {
+  const p = getCurrentSeasonData();
+  const salida = {};
+  const precio = Math.max(0, Number(p?.precioSaco)||0);
+  (p?.pickups||[]).forEach(r => {
+    if (!r.fecha || !r.fecha.startsWith(String(anio)+'-')) return;
+    const mes = r.fecha.slice(0,7);
+    salida[mes] ||= {pellets:0,luz:0};
+    salida[mes].pellets += Math.max(0,Number(r.sacos)||0) * precio;
+  });
+  Object.entries(p?.gastosLuz||{}).forEach(([mes, dato]) => {
+    if (!mes.startsWith(String(anio)+'-')) return;
+    salida[mes] ||= {pellets:0,luz:0};
+    salida[mes].luz = Math.max(0,Number(dato.importe)||0);
+  });
+  return salida;
+}
+function pintarGraficaGastos() {
+  const p = getCurrentSeasonData();
+  const anio = Number(document.getElementById('gastosAnio')?.value || new Date().getFullYear());
+  if (!p || !document.getElementById('gastosPie')) return;
+  const gastos = calcularGastosMensuales(anio);
+  const nombresMes = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const claves = Array.from({length:12},(_,i)=>`${anio}-${String(i+1).padStart(2,'0')}`);
+  const labels = [], valores = [], colores = [];
+  claves.forEach(clave => {
+    const mesNum = Number(clave.slice(5,7))-1;
+    const nombre = nombresMes[mesNum] || clave;
+    const dato = gastos[clave] || {pellets:0,luz:0};
+    if (dato.pellets > 0) { labels.push('Pellets · '+nombre); valores.push(dato.pellets); colores.push('#d97706'); }
+    if (dato.luz > 0) { labels.push('Luz · '+nombre); valores.push(dato.luz); colores.push('#3b82f6'); }
+  });
+  const totalPellets = claves.reduce((a,k)=>a+(gastos[k]?.pellets||0),0);
+  const totalLuz = claves.reduce((a,k)=>a+(gastos[k]?.luz||0),0);
+  document.getElementById('totalPellets').textContent = euros(totalPellets);
+  document.getElementById('totalLuz').textContent = euros(totalLuz);
+  document.getElementById('totalGastos').textContent = euros(totalPellets+totalLuz);
+  if (window.gastosPieInstancia) { window.gastosPieInstancia.destroy(); window.gastosPieInstancia=null; }
+  window.gastosPieInstancia = new Chart(document.getElementById('gastosPie'), {
+    type:'pie',
+    data:{labels,datasets:[{data:valores,backgroundColor:colores,borderColor:document.body.classList.contains('light-mode')?'#fff':'#1e1e1e',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{
+      legend:{position:'bottom',labels:{color:document.body.classList.contains('light-mode')?'#1f2937':'#f0f0f0',padding:12}},
+      tooltip:{callbacks:{label:c=>` ${c.label}: ${euros(c.parsed)}`}}
+    }}
+  });
+  const detalle = document.getElementById('detalleGastosMes');
+  detalle.innerHTML = claves.map(clave=>{
+    const mesNum=Number(clave.slice(5,7))-1;
+    const dato=gastos[clave]||{pellets:0,luz:0};
+    const total=dato.pellets+dato.luz;
+    return `<div class="expense-row"><div><strong>${nombresMes[mesNum][0].toUpperCase()+nombresMes[mesNum].slice(1)}</strong><small>🔥 Pellets: ${euros(dato.pellets)} · 💡 Luz: ${euros(dato.luz)}</small></div><div style="text-align:right"><strong>${euros(total)}</strong><small>Total del mes</small></div></div>`;
+  }).join('');
+}
+async function guardarGastoLuz() {
+  const p = datosGastosTemporada();
+  const mes = document.getElementById('mesFactura')?.value;
+  const importeRaw = document.getElementById('importeLuz')?.value;
+  const importe = Number(importeRaw);
+  if (!p || !mes || importeRaw === '' || !Number.isFinite(importe) || importe < 0) {
+    alert('Selecciona el mes e introduce un importe de luz válido.'); return;
+  }
+  const datoAnterior = p.gastosLuz[mes] || {};
+  const dato = { ...datoAnterior, importe };
+  try {
+    p.gastosLuz[mes] = dato;
+    await setDoc(datosRef,data);
+    alert('Gasto de luz guardado.');
+    openGastos();
+  } catch(e) {
+    console.error('Error guardando gasto de luz:', e);
+    alert('No se pudo guardar el gasto de luz. ' + (e?.message || 'Error desconocido'));
+  }
+}
+window.openGastos=openGastos;
+window.guardarGastoLuz=guardarGastoLuz;
+
+// ----------------- CONFIGURACIÓN Y TEMA -----------------
+const THEME_KEY = "mipellets-theme";
+
+function aplicarTema(tema) {
+  const claro = tema === "claro";
+  document.body.classList.toggle("light-mode", claro);
+  localStorage.setItem(THEME_KEY, claro ? "claro" : "oscuro");
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.content = claro ? "#ffffff" : "#121c2b";
+}
+
+function openConfiguracion() {
+  const temaActual = localStorage.getItem(THEME_KEY) || "oscuro";
+  content.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0">⚙️ Configuración</h3>
+      <p style="color:var(--muted-color)">Personaliza la apariencia de MiPellets.</p>
+      <div class="metric" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <strong>🌗 Apariencia</strong>
+          <p style="margin:6px 0 0;color:var(--muted-color)">Elige entre modo oscuro y modo claro.</p>
+        </div>
+        <select id="themeSelect" aria-label="Tema de la aplicación" style="width:auto;max-width:145px;margin:0;padding:10px;border-radius:8px;background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color)">
+          <option value="oscuro" ${temaActual === "oscuro" ? "selected" : ""}>🌙 Oscuro</option>
+          <option value="claro" ${temaActual === "claro" ? "selected" : ""}>☀️ Claro</option>
+        </select>
+      </div>
+      <p style="font-size:.85rem;color:var(--muted-color)">La preferencia se guarda en este dispositivo y se mantiene al volver a abrir la aplicación.</p>
+    </div>`;
+  document.getElementById("themeSelect").addEventListener("change", e => aplicarTema(e.target.value));
+}
+
 // ----------------- NAV -----------------
 function setActive(btn){ if(btn){document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active")); btn.classList.add("active");} }
 function showInicio(btn){ setActive(btn); renderInicio(); }
 function showDatos(btn){ setActive(btn); renderDatos(); }
 
 // ----------------- FIRESTORE SNAPSHOT -----------------
-onSnapshot(datosRef,(docSnap)=>{ if(!docSnap.exists()) return; data=docSnap.data(); if(document.querySelector("nav button.active")?.textContent.includes("Datos")) renderDatos(); else if(document.querySelector("nav button.active")?.textContent.includes("Calendario")) showCalendario(document.querySelector("nav button.active")); else if(document.querySelector("nav button.active")?.textContent.includes("Gráfica")) showGrafica(document.querySelector("nav button.active")); else renderInicio(); });
+onSnapshot(datosRef,(docSnap)=>{ if(!docSnap.exists()) return; data=docSnap.data(); if(document.getElementById("gastosSection")) openGastos(); else if(document.querySelector("nav button.active")?.textContent.includes("Datos")) renderDatos(); else if(document.querySelector("nav button.active")?.textContent.includes("Calendario")) showCalendario(document.querySelector("nav button.active")); else if(document.querySelector("nav button.active")?.textContent.includes("Gráfica")) showGrafica(document.querySelector("nav button.active")); else renderInicio(); });
 
 // ----------------- INICIO -----------------
 async function initApp(){
@@ -1011,6 +1274,7 @@ window.cambiarGrafica=cambiarGrafica;
 window.logout=logout;
 window.openAdmin=openAdmin;
 window.openUser=openUser;
+window.openConfiguracion=openConfiguracion;
 </script>
 
 <script>
@@ -1019,6 +1283,12 @@ const menuDropdown=document.getElementById("menuDropdown");
 const seasonSubmenu=document.getElementById("seasonSubmenu");
 const seasonMenuList=document.getElementById("seasonMenuList");
 const seasonSelect=document.getElementById("seasonSelect");
+
+// Restaurar la apariencia elegida en este dispositivo.
+const temaGuardado = localStorage.getItem("mipellets-theme") || "oscuro";
+document.body.classList.toggle("light-mode", temaGuardado === "claro");
+const metaTheme = document.querySelector('meta[name="theme-color"]');
+if (metaTheme) metaTheme.content = temaGuardado === "claro" ? "#ffffff" : "#121c2b";
 
 menuBtn.onclick=e=>{ e.stopPropagation(); menuDropdown.style.display=menuDropdown.style.display==="block"?"none":"block"; };
 function toggleSeasonMenu(e){ e.stopPropagation(); seasonSubmenu.style.display=seasonSubmenu.style.display==="block"?"none":"block"; renderSeasonMenu(); }
