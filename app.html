@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#121c2b">
-<title>Control de Sacos - Oscuro</title>
+<title>MiPellets · Control de pellet</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/main.min.css">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
@@ -400,6 +400,496 @@ body.light-mode input::placeholder { color:#6b7280; }
 .repsol-link{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;box-sizing:border-box;margin-top:14px;padding:12px 16px;border-radius:12px;background:#fff;color:#202020;text-decoration:none;font-weight:700;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .repsol-link:active{transform:scale(.99)}
 .repsol-mark{width:34px;height:34px;flex:0 0 34px}
+
+/* ===== MiPellets: rediseño visual inspirado en la referencia Waylet ===== */
+:root { color-scheme: dark; }
+* { -webkit-tap-highlight-color: transparent; }
+html { min-height:100%; background:var(--page-bg); }
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing:.1px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(37,99,235,.15), transparent 38%),
+    var(--page-bg);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+body.light-mode {
+  color-scheme:light;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(37,99,235,.09), transparent 38%),
+    var(--page-bg);
+}
+header {
+  height:66px;
+  padding:0 12px;
+  gap:8px;
+  background:color-mix(in srgb, var(--header-bg) 91%, #0b1220 9%);
+  border-bottom:1px solid var(--border-color);
+  box-shadow:0 5px 22px rgba(0,0,0,.13);
+  backdrop-filter:blur(18px);
+}
+header::before {
+  content:"🔥 MiPellets";
+  display:block;
+  flex:0 0 auto;
+  color:var(--text-color);
+  font-size:1.02rem;
+  font-weight:850;
+  letter-spacing:-.55px;
+  white-space:nowrap;
+}
+.season-container { flex:1; min-width:0; display:flex; justify-content:flex-end; }
+.season-box { min-width:0; max-width:100%; }
+.season-box select, #seasonSelect {
+  max-width:100%;
+  min-width:0;
+  min-height:40px;
+  padding:9px 28px 9px 10px;
+  border:1px solid var(--border-color);
+  border-radius:14px;
+  background:var(--input-bg);
+  color:var(--text-color);
+  font-size:.78rem;
+  font-weight:750;
+  outline:none;
+}
+.menu-btn {
+  flex:0 0 42px;
+  width:42px !important;
+  min-width:42px;
+  min-height:42px;
+  padding:8px !important;
+  margin:0 !important;
+  border-radius:14px !important;
+  background:var(--input-bg) !important;
+  border:1px solid var(--border-color) !important;
+  box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+.menu-dropdown {
+  top:60px;
+  right:10px;
+  width:min(290px, calc(100vw - 20px));
+  padding:8px;
+  border:1px solid var(--border-color);
+  border-radius:19px;
+  background:var(--card-bg);
+  box-shadow:0 18px 45px rgba(0,0,0,.3);
+  overflow:hidden;
+}
+.menu-dropdown div { border-radius:12px; padding:12px 13px; }
+nav {
+  top:auto;
+  bottom:0;
+  left:0;
+  height:calc(73px + env(safe-area-inset-bottom));
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+  box-sizing:border-box;
+  background:color-mix(in srgb, var(--header-bg) 94%, #080d17 6%);
+  border-top:1px solid var(--border-color);
+  border-bottom:0;
+  box-shadow:0 -8px 30px rgba(0,0,0,.20);
+  backdrop-filter:blur(18px);
+  z-index:1500;
+}
+nav button {
+  position:relative;
+  flex:1;
+  width:auto !important;
+  min-width:0;
+  margin:0 3px !important;
+  padding:7px 3px !important;
+  border-radius:16px;
+  color:var(--muted-color);
+  font-size:1.16rem;
+  font-weight:650;
+  gap:4px;
+  transition:background .18s ease,color .18s ease,transform .18s ease;
+}
+nav button span { font-size:.68rem; letter-spacing:0; }
+nav button.active {
+  color:#fff;
+  background:linear-gradient(135deg,#2563eb,#1684f8);
+  box-shadow:0 5px 16px rgba(37,99,235,.30);
+}
+nav button:hover { background:var(--hover-bg); }
+nav button.active:hover { background:linear-gradient(135deg,#2563eb,#1684f8); }
+#content {
+  padding:14px 13px calc(101px + env(safe-area-inset-bottom));
+  padding-top:80px;
+  overflow-y:visible;
+  max-width:900px;
+  margin:0 auto;
+  box-sizing:border-box;
+}
+.card {
+  position:relative;
+  background:var(--card-bg);
+  border:1px solid color-mix(in srgb, var(--border-color) 78%, transparent);
+  border-radius:23px;
+  padding:17px;
+  margin-bottom:14px;
+  box-shadow:0 8px 25px rgba(0,0,0,.12);
+}
+.card h2,.card h3,#content h2,#content h3 {
+  letter-spacing:-.4px;
+  font-weight:800;
+}
+.card h3 { font-size:1.02rem; }
+#homeSummary {
+  overflow:hidden;
+  border:1px solid rgba(96,165,250,.22);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(37,99,235,.20), transparent 46%),
+    var(--card-bg);
+}
+#homeSummary::after {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:4px;
+  height:100%;
+  background:linear-gradient(#ff9b35,#2563eb);
+}
+#homeSummary h3 {
+  font-size:1.12rem;
+  margin-bottom:16px;
+}
+#homeSummary p {
+  align-items:center;
+  padding:10px 11px;
+  margin:7px 0;
+  border-radius:13px;
+  background:color-mix(in srgb, var(--metric-bg) 88%, transparent);
+  border:1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
+}
+#homeSummary p span { font-size:.86rem; }
+#homeSummary p strong {
+  color:var(--text-color);
+  font-size:1.02rem;
+  font-weight:850;
+  white-space:nowrap;
+}
+.metric {
+  background:linear-gradient(145deg,var(--metric-bg),color-mix(in srgb, var(--metric-bg) 87%, #2563eb 13%));
+  border:1px solid color-mix(in srgb, var(--border-color) 76%, transparent);
+  border-radius:17px;
+  padding:14px;
+  margin:8px 0;
+}
+.metric small { font-size:.77rem; line-height:1.35; }
+.metric strong { font-size:1.3rem; letter-spacing:-.5px; }
+#content button:not(nav button):not(.menu-btn) {
+  border-radius:13px;
+  font-weight:700;
+}
+#content button.primary {
+  background:linear-gradient(135deg,#2563eb,#1684f8);
+  color:#fff;
+  box-shadow:0 5px 14px rgba(37,99,235,.19);
+}
+input,select,textarea {
+  border-radius:13px !important;
+  min-height:44px;
+  box-sizing:border-box;
+}
+input:focus,select:focus,textarea:focus {
+  outline:2px solid rgba(59,130,246,.55);
+  outline-offset:1px;
+}
+.card-datos,.card-casa {
+  gap:9px;
+  align-items:center;
+}
+.card-datos input,.card-casa input {
+  min-width:0;
+  border:1px solid var(--border-color);
+}
+.card-casa button {
+  width:48px !important;
+  min-width:48px;
+  min-height:48px;
+  margin:0 !important;
+  border-radius:16px !important;
+  font-size:1.35rem;
+}
+.card-casa input {
+  text-align:center;
+  font-size:1.4rem;
+  font-weight:850;
+  background:var(--metric-bg);
+}
+.fab-pickup {
+  right:17px !important;
+  left:auto !important;
+  bottom:calc(88px + env(safe-area-inset-bottom)) !important;
+  width:60px !important;
+  height:60px !important;
+  min-width:60px;
+  padding:0 !important;
+  margin:0 !important;
+  border-radius:21px !important;
+  background:linear-gradient(145deg,#ffab45,#f97316) !important;
+  color:#fff !important;
+  border:0 !important;
+  box-shadow:0 10px 25px rgba(249,115,22,.38) !important;
+  font-size:2rem !important;
+}
+#pickupPanel {
+  border-radius:21px;
+  border:1px solid var(--border-color);
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+#pickupPanel .pickup-fields { flex-wrap:wrap; }
+#pickupPanel .pickup-fields input { flex:1 1 120px; }
+.repsol-link {
+  min-height:60px;
+  border-radius:17px;
+  box-shadow:0 5px 16px rgba(0,0,0,.10);
+}
+.expense-total { gap:10px; }
+#calendar {
+  padding:7px;
+  border:1px solid var(--border-color);
+  border-radius:19px;
+  overflow:hidden;
+}
+#calendar .fc .fc-toolbar-title { font-weight:850; letter-spacing:-.4px; }
+#calendar .fc .fc-button { border-radius:11px; box-shadow:none; }
+#calendar .fc .fc-daygrid-day-frame { min-height:56px; }
+#calendar .fc .fc-daygrid-day-number { padding:5px; }
+#calendar .fc .fc-col-header-cell-cushion { padding:7px 2px; }
+#calendar .fc-theme-standard td,#calendar .fc-theme-standard th { border-color:var(--border-color); }
+#calendar .fc .fc-day-today { background:rgba(239,68,68,.08); }
+canvas { max-width:100% !important; }
+body.light-mode header,body.light-mode nav { background:rgba(255,255,255,.94); }
+body.light-mode .card { box-shadow:0 8px 24px rgba(15,23,42,.055); }
+body.light-mode #homeSummary { background:radial-gradient(ellipse at 100% 0%,rgba(37,99,235,.09),transparent 46%),var(--card-bg); }
+body.light-mode nav button.active { color:#fff; }
+@media (min-width:700px) {
+  header { padding:0 max(18px,calc((100vw - 860px)/2)); }
+  #content { padding-left:20px;padding-right:20px;padding-top:82px; }
+  .fab-pickup { right:max(24px,calc((100vw - 860px)/2)) !important; }
+  nav { justify-content:center; }
+  nav button { max-width:180px; }
+}
+@media (max-width:390px) {
+  header { padding:0 8px; gap:5px; }
+  header::before { font-size:.94rem; }
+  .season-box select,#seasonSelect { font-size:.71rem; padding-left:8px; }
+  #content { padding-left:10px;padding-right:10px; }
+  .card { padding:14px;border-radius:19px; }
+  nav button { margin:0 2px !important; }
+  nav button span { font-size:.64rem; }
+  #homeSummary p { padding:9px 8px; }
+  #homeSummary p span { font-size:.79rem; }
+  #homeSummary p strong { font-size:.95rem; }
+}
+
+
+/* Refinamiento de estructura: distribución más próxima a la maqueta de referencia */
+.screen-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:8px 2px 18px}
+.screen-heading h2{font-size:1.55rem;letter-spacing:-.04em;margin:3px 0 4px;font-weight:800}
+.screen-heading p{margin:0;color:var(--muted-color);font-size:.9rem}
+.eyebrow{font-size:.68rem;letter-spacing:.15em;font-weight:800;color:#7daeff}
+.heading-icon{width:48px;height:48px;flex:0 0 48px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,#253d5d,#17283d);font-size:1.35rem;border:1px solid #314b69}
+.home-hero{padding:19px!important;overflow:hidden;position:relative}
+.hero-title,.section-title{display:flex;align-items:center;gap:12px}
+.hero-icon,.section-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:14px;background:#1c3450;font-size:1.15rem}
+.hero-title h3,.section-title h3{margin:0!important;font-size:1rem;font-weight:800}
+.hero-title small,.section-title p{display:block;color:var(--muted-color);font-size:.78rem;margin:4px 0 0}
+.summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0 12px}
+.summary-item{position:relative;min-width:0;background:rgba(255,255,255,.035);border:1px solid rgba(150,180,220,.1);border-radius:16px;padding:13px 12px;display:flex;flex-direction:column;gap:6px}
+.summary-item small{color:var(--muted-color);font-size:.76rem}
+.summary-item strong{font-size:1.48rem;letter-spacing:-.04em}
+.summary-symbol{font-size:1rem;font-weight:900;width:28px;height:28px;border-radius:9px;display:grid;place-items:center}
+.summary-symbol.blue{background:#1c3c60;color:#76b8ff}.summary-symbol.orange{background:#49301c;color:#ffb36a}.summary-symbol.green{background:#1b4035;color:#6de0b0}.summary-symbol.violet{background:#33284e;color:#c6a4ff}
+.available-total{display:flex;align-items:center;justify-content:space-between;padding:15px 2px;border-top:1px solid rgba(150,180,220,.14);border-bottom:1px solid rgba(150,180,220,.14)}
+.available-total div{display:flex;flex-direction:column;gap:4px}.available-total div small{font-weight:800;font-size:.94rem}.available-total div span{font-size:.75rem;color:var(--muted-color)}
+.available-total>strong{font-size:1.85rem;letter-spacing:-.05em;color:#8fc1ff}.available-total>strong small{font-size:.8rem;letter-spacing:0;color:var(--muted-color)}
+.estimate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.estimate-item{display:flex;gap:9px;align-items:flex-start;padding:12px 10px;border-radius:14px;background:#172537;border:1px solid #263b52;min-width:0}
+.estimate-item>span{font-size:1.15rem}.estimate-item div{display:flex;flex-direction:column;gap:5px;min-width:0}.estimate-item small{font-size:.69rem;color:#a9b8c9;line-height:1.35}.estimate-item strong{font-size:.94rem;overflow-wrap:anywhere}.estimate-item em{font-size:.68rem;font-style:normal;color:#a9b8c9;font-weight:500}
+.home-house-card{padding:17px!important}.house-icon{background:#1a3d3b;color:#7de0cf}.home-counter{margin-top:15px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.home-counter button{width:46px!important;height:46px;min-width:46px;border-radius:15px!important;font-size:1.45rem;padding:0!important}
+.counter-value{flex:1;text-align:center;display:flex;flex-direction:column;gap:1px}.counter-value input{font-size:1.7rem!important;font-weight:800;text-align:center;background:transparent!important;border:0!important;padding:0!important}.counter-value small{font-size:.7rem;color:var(--muted-color)}
+.stock-alert{margin-top:15px;padding:13px;border:1px solid #795421;border-radius:14px;background:#2c2419}.stock-alert p{display:block!important;color:#c6b8a3;font-size:.82rem}.stock-alert input{margin:8px 0}.stock-confirmed{display:block!important;font-size:.8rem;color:var(--muted-color)}
+.stock-confirmed button{width:auto;padding:6px 10px}
+.data-stock-card,.data-price-card,.pickups-data-card{padding:18px!important}
+.stock-icon{background:#1d3957}.money-icon{background:#42321e;color:#ffd08a}.pickup-list-icon{background:#26364c}
+.input-action-row{position:relative;display:flex;align-items:center;gap:9px;margin-top:16px}
+.input-action-row input{flex:1;min-width:0;font-size:1.15rem!important;font-weight:750}
+.input-suffix{color:var(--muted-color);font-size:.76rem;white-space:nowrap}
+.save-round{width:42px!important;height:42px;min-width:42px;border-radius:14px!important;padding:0!important;font-size:1.15rem}
+.section-heading-inline{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:22px 3px 12px}
+.section-heading-inline h3{font-size:1.05rem;margin:0}.section-heading-inline small{font-size:.7rem;color:var(--muted-color);text-align:right}
+.cost-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.cost-summary-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px 14px;border-radius:19px;border:1px solid rgba(150,180,220,.14);background:linear-gradient(145deg,#1a2b40,#151e2c);min-width:0}
+.cost-card-icon{width:34px;height:34px;border-radius:11px;background:#263d58;display:grid;place-items:center}
+.cost-summary-card small{font-size:.75rem;color:#b4c2d2;line-height:1.35}.cost-summary-card strong{font-size:1.3rem;letter-spacing:-.04em;overflow-wrap:anywhere}.cost-summary-card>span:last-child{font-size:.7rem;color:var(--muted-color)}
+.daily-cost{background:linear-gradient(145deg,#263025,#18251f)}.daily-cost .cost-card-icon{background:#30452e}
+.helper-note{font-size:.76rem;line-height:1.5;color:var(--muted-color);margin:12px 3px 20px}
+.secondary-action{width:100%;border:1px solid #344b65!important;background:#1a2b40!important;color:#d9e8fa!important;border-radius:14px!important;padding:13px 15px!important;font-weight:750}
+.export-wrap{margin:14px 0 5px}
+#pickupPanel .section-title{margin-bottom:16px}
+#pickupPanel .pickup-fields label{display:flex;flex-direction:column;gap:7px;font-size:.77rem;color:var(--muted-color);margin-bottom:10px}
+#pickupPanel .pickup-fields input{width:100%}
+@media(max-width:380px){.home-hero{padding:14px!important}.summary-grid,.estimate-grid,.cost-summary-grid{gap:8px}.summary-item{padding:11px 9px}.estimate-item{padding:10px 8px}.cost-summary-card{padding:13px 11px}.cost-summary-card strong{font-size:1.12rem}.screen-heading h2{font-size:1.4rem}}
+
+
+/* Navegación inferior: iconografía de línea coherente y estados táctiles */
+nav.app-bottom-nav{height:76px;left:0;right:0;top:auto;bottom:0;padding:8px 10px max(8px,env(safe-area-inset-bottom));gap:5px;align-items:center;justify-content:space-around;background:rgba(12,21,34,.94);border-top:1px solid rgba(131,164,205,.18);border-bottom:0;box-shadow:0 -12px 35px rgba(0,0,0,.22);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+nav.app-bottom-nav button{height:56px;min-width:0;flex:1;border-radius:17px;color:#899bb1;gap:4px;font-size:.72rem;font-weight:650;padding:6px 2px;transition:background .18s ease,color .18s ease,transform .18s ease}
+nav.app-bottom-nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s ease}
+nav.app-bottom-nav button span{font-size:.68rem;letter-spacing:.01em}
+nav.app-bottom-nav button.active{color:#f5f9ff;background:linear-gradient(135deg,#244a70,#1b3450);box-shadow:inset 0 0 0 1px rgba(122,178,238,.2)}
+nav.app-bottom-nav button.active svg{color:#ffad54;transform:translateY(-1px)}
+nav.app-bottom-nav button:active{transform:scale(.96)}
+#content{padding-bottom:104px!important}
+/* Fondo atmosférico: brillo azul frío y resplandor cálido inspirado en una estufa */
+body:not(.light-mode){background-color:#0c1522;background-image:radial-gradient(ellipse at 82% 6%,rgba(46,100,153,.20) 0%,rgba(24,47,74,.08) 24%,transparent 48%),radial-gradient(ellipse at 8% 35%,rgba(218,111,38,.09) 0%,transparent 32%),linear-gradient(180deg,#0e1928 0%,#101a29 48%,#0b1420 100%);background-attachment:fixed}
+body:not(.light-mode)::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.24;background-image:radial-gradient(circle at 88% 18%,rgba(255,174,84,.15) 0 2px,transparent 3px),radial-gradient(circle at 83% 22%,rgba(255,174,84,.10) 0 1px,transparent 2px),radial-gradient(circle at 91% 25%,rgba(115,172,226,.12) 0 2px,transparent 3px);background-size:130px 150px,90px 110px,170px 190px}
+body:not(.light-mode) #content>.screen-heading .heading-icon{box-shadow:0 8px 28px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.05)}
+.expense-row-total{min-width:95px}
+.edit-light-btn{display:block;margin:7px 0 0 auto;padding:6px 8px!important;border-radius:9px!important;border:1px solid #375a7c!important;background:#1a3047!important;color:#a9d2ff!important;font-size:.69rem!important;white-space:nowrap}
+@media(min-width:700px){nav.app-bottom-nav{left:50%;right:auto;width:min(560px,100%);transform:translateX(-50%);border:1px solid rgba(131,164,205,.18);border-bottom:0;border-radius:22px 22px 0 0}}
+body.light-mode nav.app-bottom-nav{background:rgba(248,250,253,.96);border-color:#d9e2ed;box-shadow:0 -10px 28px rgba(24,42,65,.10)}
+body.light-mode nav.app-bottom-nav button{color:#66758a}
+body.light-mode nav.app-bottom-nav button.active{background:linear-gradient(135deg,#e5effb,#dce9f8);color:#183957}
+body.light-mode .edit-light-btn{background:#eaf3ff!important;color:#24517d!important;border-color:#c7dcef!important}
+
+
+
+/* Calendario v5: cuadrícula mensual de tarjetas independientes */
+.calendar-card{
+  padding:15px 12px 13px!important;
+  overflow:hidden;
+  border:1px solid rgba(130,164,204,.17)!important;
+  background:linear-gradient(160deg,rgba(25,42,62,.97),rgba(15,27,42,.98))!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.035);
+}
+#calendar{
+  --fc-border-color:transparent;
+  --fc-page-bg-color:transparent;
+  --fc-neutral-bg-color:transparent;
+  --fc-today-bg-color:transparent;
+  font-size:.86rem;
+}
+#calendar .fc-toolbar{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:7px;
+  margin:1px 0 15px!important;
+}
+#calendar .fc-toolbar-chunk{display:flex;align-items:center;gap:5px}
+#calendar .fc-toolbar-chunk:nth-child(2){grid-column:2;grid-row:1}
+#calendar .fc-toolbar-chunk:first-child{grid-column:1;grid-row:1}
+#calendar .fc-toolbar-chunk:last-child{grid-column:3;grid-row:1;justify-content:flex-end}
+#calendar .fc-toolbar-title{
+  font-size:1.03rem!important;font-weight:850;letter-spacing:-.035em;
+  color:#f0f6ff;text-transform:capitalize;
+}
+#calendar .fc-button{
+  border:1px solid rgba(132,164,202,.2)!important;
+  background:rgba(39,59,82,.8)!important;color:#d9e8f8!important;
+  border-radius:12px!important;box-shadow:none!important;
+  padding:7px 9px!important;font-size:.73rem!important;font-weight:750!important;
+  text-transform:none!important;transition:background .15s ease,transform .15s ease;
+}
+#calendar .fc-button:hover{background:#304c6a!important}
+#calendar .fc-button:active{transform:scale(.95)}
+#calendar .fc-button:focus{box-shadow:0 0 0 2px rgba(100,165,240,.18)!important}
+#calendar .fc-col-header{margin-bottom:5px}
+#calendar .fc-col-header-cell{padding:5px 0 9px;border:0!important}
+#calendar .fc-col-header-cell-cushion{
+  color:#8da7c4;font-size:.65rem;font-weight:850;text-decoration:none;
+  text-transform:uppercase;letter-spacing:.075em;
+}
+#calendar .fc-scrollgrid,#calendar .fc-scrollgrid table{border:0!important}
+#calendar .fc-scrollgrid-section>td{border:0!important}
+#calendar .fc-daygrid-body{border:0!important}
+#calendar .fc-daygrid-day{border:0!important;padding:3px 2px!important}
+#calendar .fc-daygrid-day-frame{
+  min-height:76px;padding:5px 3px 4px;
+  border:1px solid rgba(131,164,205,.12);
+  border-radius:14px;
+  margin:0;
+  background:linear-gradient(145deg,rgba(37,56,78,.72),rgba(23,39,57,.76));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  transition:border-color .16s ease,background .16s ease,transform .16s ease;
+}
+#calendar .fc-daygrid-day-number{
+  display:flex;align-items:center;justify-content:center;
+  float:none;width:29px;height:29px;margin:0 auto 5px;padding:0;
+  border-radius:10px;text-decoration:none;color:#e1eaf6;
+  font-size:.78rem;font-weight:750;
+}
+#calendar .fc-day-other .fc-daygrid-day-frame{
+  background:rgba(17,29,44,.28);border-color:rgba(131,164,205,.045);
+  box-shadow:none;
+}
+#calendar .fc-day-other .fc-daygrid-day-number{color:#52667d}
+#calendar .day-circle .fc-daygrid-day-number{border-radius:50%;width:29px;height:29px}
+#calendar .day-circle-green .fc-daygrid-day-number{
+  background:linear-gradient(145deg,#21845e,#176448);color:#d2ffe8;
+  box-shadow:0 0 0 3px rgba(66,206,145,.08);
+}
+#calendar .day-circle-brown .fc-daygrid-day-number{
+  background:linear-gradient(145deg,#795234,#563a27);color:#ffdfba;
+  box-shadow:0 0 0 3px rgba(221,157,94,.07);
+}
+#calendar .day-circle-red .fc-daygrid-day-number{
+  background:linear-gradient(145deg,#f06a58,#c9443b);color:#fff;
+  box-shadow:0 0 0 3px rgba(240,106,88,.13);
+}
+#calendar .fc-day-today .fc-daygrid-day-frame{
+  border-color:rgba(239,104,83,.42);
+  background:linear-gradient(145deg,rgba(116,48,48,.2),rgba(39,42,59,.8));
+}
+#calendar .fc-daygrid-day-events{margin:0 1px;min-height:19px}
+#calendar .fc-daygrid-event-harness{margin:0 0 2px!important}
+#calendar .fc-event{
+  display:block;border:0!important;border-radius:7px!important;
+  padding:4px 2px!important;
+  background:linear-gradient(135deg,rgba(232,143,63,.22),rgba(213,112,42,.13))!important;
+  color:#ffc17d!important;border:1px solid rgba(241,157,79,.22)!important;
+  font-size:.59rem!important;font-weight:850;line-height:1.15;
+  text-align:center;white-space:normal;overflow-wrap:anywhere;
+}
+#calendar .fc-event-main{color:inherit!important}
+#calendar .fc-daygrid-event-dot{display:none}
+#calendar .fc-daygrid-more-link{font-size:.62rem;color:#9ccfff}
+#calendar .weekend-day .fc-daygrid-day-frame{background:linear-gradient(145deg,rgba(32,49,68,.8),rgba(20,35,51,.82))}
+#calendar .fc-daygrid-day:hover .fc-daygrid-day-frame{
+  border-color:rgba(104,164,225,.35);background:linear-gradient(145deg,rgba(47,72,99,.88),rgba(26,46,67,.9));
+}
+#calendar .fc-daygrid-day.fc-day-disabled .fc-daygrid-day-frame{background:transparent;border-color:transparent}
+body.light-mode .calendar-card{
+  background:linear-gradient(160deg,#ffffff,#f5f8fc)!important;
+  border-color:#dce6f1!important;box-shadow:0 14px 32px rgba(24,42,65,.08);
+}
+body.light-mode #calendar .fc-toolbar-title{color:#20364f}
+body.light-mode #calendar .fc-button{background:#edf3fa!important;color:#2c4764!important;border-color:#d4e0ed!important}
+body.light-mode #calendar .fc-col-header-cell-cushion{color:#71839a}
+body.light-mode #calendar .fc-daygrid-day-frame{background:linear-gradient(145deg,#fff,#f4f8fc);border-color:#dce6f0;box-shadow:0 3px 8px rgba(30,56,84,.035)}
+body.light-mode #calendar .fc-day-other .fc-daygrid-day-frame{background:#f5f7fa;border-color:#edf0f4}
+body.light-mode #calendar .fc-daygrid-day-number{color:#30445b}
+body.light-mode #calendar .fc-day-other .fc-daygrid-day-number{color:#a2adbb}
+body.light-mode #calendar .fc-day-today .fc-daygrid-day-frame{background:#fff6f2;border-color:#f2b6aa}
+body.light-mode #calendar .fc-event{background:#fff0df!important;color:#9a551e!important;border-color:#f1d1ae!important}
+@media(max-width:390px){
+  .calendar-card{padding:12px 8px 10px!important}
+  #calendar .fc-toolbar{gap:4px;margin-bottom:12px!important}
+  #calendar .fc-toolbar-title{font-size:.9rem!important}
+  #calendar .fc-button{padding:6px 7px!important;font-size:.68rem!important}
+  #calendar .fc-daygrid-day{padding:2px 1px!important}
+  #calendar .fc-daygrid-day-frame{min-height:66px;padding:4px 1px;border-radius:11px}
+  #calendar .fc-daygrid-day-number{width:26px;height:26px;font-size:.73rem}
+  #calendar .day-circle .fc-daygrid-day-number{width:26px;height:26px}
+  #calendar .fc-event{font-size:.53rem!important;padding:3px 1px!important}
+}
+
 </style>
 </head>
 <body>
@@ -431,11 +921,19 @@ body.light-mode input::placeholder { color:#6b7280; }
   </div>
 </header>
 
-<nav>
-  <button class="active" onclick="showInicio(this)">🏠<span>Inicio</span></button>
-  <button onclick="showDatos(this)">📋<span>Datos</span></button>
-  <button onclick="showCalendario(this)">🗓️<span>Calendario</span></button>
-  <button onclick="showGrafica(this)">📊<span>Gráfica</span></button>
+<nav class="app-bottom-nav">
+  <button class="active" onclick="showInicio(this)" aria-label="Inicio">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span>Inicio</span>
+  </button>
+  <button onclick="showDatos(this)" aria-label="Datos">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Datos</span>
+  </button>
+  <button onclick="showCalendario(this)" aria-label="Calendario">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg><span>Calendario</span>
+  </button>
+  <button onclick="showGrafica(this)" aria-label="Gráfica">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11h4v9M10 20V4h4v16M16 20v-7h4v7M2 20h20"/></svg><span>Gráfica</span>
+  </button>
 </nav>
 
 <div id="content"></div>
@@ -605,35 +1103,42 @@ function renderInicio(){
   if(!p) return;
   const c=calcularConsumo(p);
   content.innerHTML=`
-    <div class="card" id="homeSummary">
-      <h3 style="margin-top:0">📦 Resumen general</h3>
-      <p><span>🟦 Sacos iniciales</span><strong>${Number(p.sacos)||0}</strong></p>
-      <p><span>🔴 Sacos consumidos</span><strong>${c.consumidos}</strong></p>
-      <p><span>🟢 Sacos en almacén</span><strong>${c.restantesAlmacen}</strong></p>
-      <p><span>📦 Total disponible</span><strong>${c.totalDisponible}</strong></p>
-      <p><span>⚡ Consumo medio diario</span><strong>${c.mediaDiaria.toFixed(2)} sacos/día</strong></p>
-      <p><span>📅 Duración estimada</span><strong>${c.totalDisponible>0 && c.mediaDiaria>0 ? c.diasEstimados+" días" : "Sin estimación"}</strong></p>
+    <div class="screen-heading">
+      <div><span class="eyebrow">TU TEMPORADA</span><h2>Resumen general</h2><p>Así van tus sacos de pellet</p></div>
+      <div class="heading-icon">🔥</div>
+    </div>
+    <div class="card home-hero" id="homeSummary">
+      <div class="hero-title"><span class="hero-icon">📦</span><div><h3>Control de existencias</h3><small>Estado actual del almacén</small></div></div>
+      <div class="summary-grid">
+        <div class="summary-item"><span class="summary-symbol blue">▣</span><small>Sacos iniciales</small><strong>${Number(p.sacos)||0}</strong></div>
+        <div class="summary-item"><span class="summary-symbol orange">↘</span><small>Consumidos</small><strong>${c.consumidos}</strong></div>
+        <div class="summary-item"><span class="summary-symbol green">▤</span><small>En almacén</small><strong>${c.restantesAlmacen}</strong></div>
+        <div class="summary-item"><span class="summary-symbol violet">⌂</span><small>En casa</small><strong>${Number(p.sacosCasa)||0}</strong></div>
+      </div>
+      <div class="available-total"><div><small>Total disponible</small><span>Entre almacén y casa</span></div><strong>${c.totalDisponible}<small> sacos</small></strong></div>
+      <div class="estimate-grid">
+        <div class="estimate-item"><span>⚡</span><div><small>Consumo medio diario</small><strong>${c.mediaDiaria.toFixed(2)} <em>sacos/día</em></strong></div></div>
+        <div class="estimate-item"><span>📅</span><div><small>Duración estimada</small><strong>${c.totalDisponible>0 && c.mediaDiaria>0 ? c.diasEstimados+" días" : "Sin estimación"}</strong></div></div>
+      </div>
       ${c.totalDisponible<=0 && Number(p.sacos)>0 && (p.pickups||[]).length && !p.fechaStockCero ? `
-        <div style="margin-top:14px;padding:12px;border:1px solid #f59e0b;border-radius:10px;background:#292015;">
-          <strong>⚠️ ¿Qué día te quedaste exactamente sin sacos?</strong>
-          <p style="display:block">Confirma la fecha para ajustar la media de consumo.</p>
+        <div class="stock-alert"><strong>⚠️ ¿Qué día te quedaste exactamente sin sacos?</strong><p>Confirma la fecha para ajustar la media de consumo.</p>
           <input id="fechaStockCero" type="date" max="${new Date().toLocaleDateString('en-CA')}" value="${(p.pickups||[]).map(r=>r.fecha).filter(Boolean).sort().slice(-1)[0]||new Date().toLocaleDateString('en-CA')}">
           <button class="primary" onclick="confirmarFechaStockCero()">Confirmar fecha de agotamiento</button>
-        </div>` : p.fechaStockCero ? `<p style="display:block">📍 Stock agotado confirmado el: <strong>${p.fechaStockCero}</strong> <button onclick="cambiarFechaStockCero()" style="width:auto;padding:5px 9px;">Cambiar</button></p>` : ''}
+        </div>` : p.fechaStockCero ? `<p class="stock-confirmed">📍 Stock agotado confirmado el: <strong>${p.fechaStockCero}</strong> <button onclick="cambiarFechaStockCero()">Cambiar</button></p>` : ''}
     </div>
-    <div class="card">
-      <h3 style="margin-top:0">🏠 Sacos en casa</h3>
-      <div class="card-casa" style="max-width:100%">
-        <button onclick="updateCasa(-1)">−</button>
-        <input id="sacosCasa" type="number" value="${p.sacosCasa||0}" readonly>
-        <button class="primary" onclick="updateCasa(1)">+</button>
+    <div class="card home-house-card">
+      <div class="section-title"><div class="section-icon house-icon">⌂</div><div><h3>Sacos en casa</h3><p>Actualiza los sacos que tienes a mano</p></div></div>
+      <div class="card-casa home-counter" style="max-width:100%">
+        <button aria-label="Restar un saco" onclick="updateCasa(-1)">−</button>
+        <div class="counter-value"><input id="sacosCasa" type="number" value="${p.sacosCasa||0}" readonly><small>sacos disponibles</small></div>
+        <button class="primary" aria-label="Añadir un saco" onclick="updateCasa(1)">＋</button>
       </div>
     </div>
     <div id="pickupPanel">
-      <h3 style="margin-top:0">➕ Añadir recogida</h3>
+      <div class="section-title"><div class="section-icon pickup-icon">＋</div><div><h3>Añadir recogida</h3><p>Registra los sacos que has recogido</p></div></div>
       <div class="pickup-fields">
-        <input id="fecha" type="date" aria-label="Fecha de recogida">
-        <input id="cantidad" type="number" min="1" placeholder="Sacos" aria-label="Cantidad de sacos">
+        <label>Fecha de recogida<input id="fecha" type="date" aria-label="Fecha de recogida"></label>
+        <label>Número de sacos<input id="cantidad" type="number" min="1" placeholder="Ej. 15" aria-label="Cantidad de sacos"></label>
       </div>
       <button class="primary" onclick="addPickup()">Guardar recogida</button>
       <button onclick="togglePickupPanel(false)">Cancelar</button>
@@ -649,31 +1154,38 @@ function renderDatos(){
   const costeAnual=(Math.max(0,Number(p.sacos)||0))*precio;
   const costeDiario=c.mediaDiaria*precio;
   content.innerHTML=`
-    <div class="card">
-      <h3 style="margin-top:0">📦 Sacos en almacén</h3>
-      <p style="color:#9ca3af">Cantidad inicial de sacos de esta temporada.</p>
-      <div class="card-datos" style="max-width:100%">
-        <input id="sacosAlmacen" type="number" min="0" value="${p.sacos||0}">
-        <button class="primary" onclick="saveSacosAlmacen()">💾</button>
+    <div class="screen-heading">
+      <div><span class="eyebrow">AJUSTES Y COSTES</span><h2>Datos</h2><p>Configura tu temporada de pellet</p></div>
+      <div class="heading-icon">⚙️</div>
+    </div>
+    <div class="card data-stock-card">
+      <div class="section-title"><div class="section-icon stock-icon">📦</div><div><h3>Sacos en almacén</h3><p>Cantidad inicial de esta temporada</p></div></div>
+      <div class="input-action-row">
+        <input id="sacosAlmacen" type="number" min="0" value="${p.sacos||0}" aria-label="Sacos iniciales en almacén">
+        <span class="input-suffix">sacos</span>
+        <button class="primary save-round" onclick="saveSacosAlmacen()" aria-label="Guardar sacos">✓</button>
       </div>
     </div>
-    <div class="card">
-      <h3 style="margin-top:0">💶 Costes</h3>
-      <label for="precioSaco">Precio por saco (€)</label>
-      <div class="card-datos" style="max-width:100%; margin-top:8px">
-        <input id="precioSaco" type="number" min="0" step="0.01" placeholder="Ej. 5,50" value="${p.precioSaco??''}">
-        <button class="primary" onclick="savePrecioSaco()">💾</button>
+    <div class="card data-price-card">
+      <div class="section-title"><div class="section-icon money-icon">€</div><div><h3>Precio por saco</h3><p>Introduce el precio que pagas por cada saco</p></div></div>
+      <div class="input-action-row">
+        <input id="precioSaco" type="number" min="0" step="0.01" placeholder="Ej. 5,50" value="${p.precioSaco??''}" aria-label="Precio por saco">
+        <span class="input-suffix">€/saco</span>
+        <button class="primary save-round" onclick="savePrecioSaco()" aria-label="Guardar precio">✓</button>
       </div>
-      <div class="metric"><small>Coste anual estimado de los sacos iniciales</small><strong>${costeAnual.toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong></div>
-      <div class="metric"><small>Coste diario estimado según el consumo medio</small><strong>${costeDiario.toLocaleString('es-ES',{style:'currency',currency:'EUR'})} / día</strong></div>
-      <p style="color:var(--muted-color);font-size:.85rem">El coste diario se actualiza al cambiar la media de consumo. El coste anual mostrado se calcula con los sacos iniciales de la temporada y el precio por saco.</p>
     </div>
-    <div class="card">
-      <h3 style="margin-top:0">🧾 Recogidas registradas</h3>
-      <button id="togglePickups" class="primary">👁️ Ver recogidas</button>
-      <div id="listPickups" style="display:none;max-height:300px;overflow-y:auto;margin-top:8px"></div>
+    <div class="section-heading-inline"><h3>Costes estimados</h3><small>Según el precio y tu consumo</small></div>
+    <div class="cost-summary-grid">
+      <div class="cost-summary-card annual-cost"><span class="cost-card-icon">🗓️</span><small>Coste de sacos iniciales</small><strong>${costeAnual.toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong><span>Por temporada</span></div>
+      <div class="cost-summary-card daily-cost"><span class="cost-card-icon">⚡</span><small>Coste medio diario</small><strong>${costeDiario.toLocaleString('es-ES',{style:'currency',currency:'EUR'})}</strong><span>Según consumo medio</span></div>
     </div>
-    <div class="card"><button onclick="exportExcel()">📤 Exportar a Excel</button></div>
+    <p class="helper-note">El coste diario se actualiza al cambiar la media de consumo. El coste de temporada se calcula con los sacos iniciales y el precio por saco.</p>
+    <div class="card pickups-data-card">
+      <div class="section-title"><div class="section-icon pickup-list-icon">🧾</div><div><h3>Recogidas registradas</h3><p>Consulta o elimina recogidas anteriores</p></div></div>
+      <button id="togglePickups" class="secondary-action">⌄ Ver recogidas</button>
+      <div id="listPickups" style="display:none;max-height:300px;overflow-y:auto;margin-top:12px"></div>
+    </div>
+    <div class="export-wrap"><button class="secondary-action" onclick="exportExcel()">↥ Exportar datos a Excel</button></div>
   `;
   updateDatos();
   const toggleBtn=document.getElementById("togglePickups");
@@ -681,7 +1193,7 @@ function renderDatos(){
   toggleBtn.onclick=()=>{
     const visible=pickupsDiv.style.display!=="none";
     pickupsDiv.style.display=visible?"none":"block";
-    toggleBtn.textContent=visible?"👁️ Ver recogidas":"🔽 Ocultar recogidas";
+    toggleBtn.textContent=visible?"⌄ Ver recogidas":"⌃ Ocultar recogidas";
   };
 }
 function togglePickupPanel(force){
@@ -847,7 +1359,12 @@ async function deleteSeason(){
 function showCalendario(btn){
   const p=getCurrentSeasonData(); if(!p) return;
   setActive(btn);
-  content.innerHTML=`<div id="calendar"></div>`;
+  content.innerHTML=`
+    <div class="screen-heading">
+      <div><span class="eyebrow">PLANIFICACIÓN</span><h2>Calendario</h2><p>Consumo, recogidas y previsión</p></div>
+      <div class="heading-icon">🗓️</div>
+    </div>
+    <div class="card calendar-card"><div id="calendar"></div></div>`;
   const calEl=document.getElementById("calendar");
 
   const hoy=new Date();
@@ -936,7 +1453,7 @@ function showCalendario(btn){
     calendar.addEvent({
       start: recogida.fecha,
       allDay: true,
-      title: `-${cantidad} sacos`,
+      title: `+${cantidad} sacos`,
       classNames: ["pickup-event"],
       display: "block"
     });
@@ -1047,12 +1564,18 @@ content.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
   touchStartX = 0; touchStartY = 0;
-  if (Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+  if (Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy) * 1.05) return;
   const buttons = navButtons();
   const activeIndex = Math.max(0, buttons.findIndex(b => b.classList.contains('active')));
   const nextIndex = Math.min(buttons.length - 1, Math.max(0, activeIndex + (dx < 0 ? 1 : -1)));
   if (nextIndex === activeIndex) return;
+  content.classList.add('swipe-changing');
   buttons[nextIndex].click();
+  requestAnimationFrame(() => {
+    content.classList.remove('swipe-changing');
+    content.classList.add('swipe-enter');
+    requestAnimationFrame(() => content.classList.remove('swipe-enter'));
+  });
 }, {passive:true});
 
 // ----------------- GASTOS ANUALES -----------------
@@ -1095,7 +1618,8 @@ function openGastos() {
         <input id="mesFactura" type="month" value="${anioActual}-${String(new Date().getMonth()+1).padStart(2,'0')}" style="width:100%;box-sizing:border-box">
         <label for="importeLuz">Importe de la factura (€)</label>
         <input id="importeLuz" type="number" min="0" step="0.01" placeholder="Ej. 68,50" style="width:100%;box-sizing:border-box">
-        <button class="primary" onclick="guardarGastoLuz()">💾 Guardar gasto de luz</button>
+        <button class="primary" onclick="guardarGastoLuz()">💾 Guardar / modificar gasto de luz</button>
+        <p id="luzEditHint" style="font-size:.78rem;color:var(--muted-color);margin:8px 0 0">Si ya existe un gasto para ese mes, aparecerá aquí para que puedas corregirlo.</p>
         <p style="font-size:.8rem;color:var(--muted-color);margin-bottom:0">Solo se guarda el importe mensual en MiPellets. Para ver la factura completa, utiliza el botón de Repsol.</p>
       </div>
       <div class="card">
@@ -1110,6 +1634,8 @@ function openGastos() {
       </div>
     </div>`;
   document.getElementById('gastosAnio').addEventListener('change', pintarGraficaGastos);
+  document.getElementById('mesFactura').addEventListener('change', cargarGastoLuz);
+  cargarGastoLuz();
   pintarGraficaGastos();
 }
 function calcularGastosMensuales(anio) {
@@ -1134,37 +1660,67 @@ function pintarGraficaGastos() {
   const anio = Number(document.getElementById('gastosAnio')?.value || new Date().getFullYear());
   if (!p || !document.getElementById('gastosPie')) return;
   const gastos = calcularGastosMensuales(anio);
-  const nombresMes = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const nombresMes = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   const claves = Array.from({length:12},(_,i)=>`${anio}-${String(i+1).padStart(2,'0')}`);
-  const labels = [], valores = [], colores = [];
-  claves.forEach(clave => {
-    const mesNum = Number(clave.slice(5,7))-1;
-    const nombre = nombresMes[mesNum] || clave;
-    const dato = gastos[clave] || {pellets:0,luz:0};
-    if (dato.pellets > 0) { labels.push('Pellets · '+nombre); valores.push(dato.pellets); colores.push('#d97706'); }
-    if (dato.luz > 0) { labels.push('Luz · '+nombre); valores.push(dato.luz); colores.push('#3b82f6'); }
-  });
-  const totalPellets = claves.reduce((a,k)=>a+(gastos[k]?.pellets||0),0);
-  const totalLuz = claves.reduce((a,k)=>a+(gastos[k]?.luz||0),0);
+  const pellets = claves.map(clave => gastos[clave]?.pellets || 0);
+  const luz = claves.map(clave => gastos[clave]?.luz || 0);
+  const totalPellets = pellets.reduce((a,v)=>a+v,0);
+  const totalLuz = luz.reduce((a,v)=>a+v,0);
   document.getElementById('totalPellets').textContent = euros(totalPellets);
   document.getElementById('totalLuz').textContent = euros(totalLuz);
   document.getElementById('totalGastos').textContent = euros(totalPellets+totalLuz);
   if (window.gastosPieInstancia) { window.gastosPieInstancia.destroy(); window.gastosPieInstancia=null; }
   window.gastosPieInstancia = new Chart(document.getElementById('gastosPie'), {
-    type:'pie',
-    data:{labels,datasets:[{data:valores,backgroundColor:colores,borderColor:document.body.classList.contains('light-mode')?'#fff':'#1e1e1e',borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{
-      legend:{position:'bottom',labels:{color:document.body.classList.contains('light-mode')?'#1f2937':'#f0f0f0',padding:12}},
-      tooltip:{callbacks:{label:c=>` ${c.label}: ${euros(c.parsed)}`}}
-    }}
+    type:'bar',
+    data:{
+      labels:nombresMes,
+      datasets:[
+        {label:'Pellets',data:pellets,backgroundColor:'#f59e0b',borderRadius:6,borderSkipped:false,maxBarThickness:22},
+        {label:'Luz',data:luz,backgroundColor:'#4f9cf9',borderRadius:6,borderSkipped:false,maxBarThickness:22}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      scales:{
+        x:{grid:{display:false},ticks:{color:document.body.classList.contains('light-mode')?'#526174':'#aebed0',maxRotation:0,autoSkip:false},border:{display:false}},
+        y:{beginAtZero:true,grid:{color:document.body.classList.contains('light-mode')?'rgba(31,41,55,.10)':'rgba(180,200,225,.10)'},ticks:{color:document.body.classList.contains('light-mode')?'#526174':'#aebed0',callback:v=>`${v} €`},border:{display:false}}
+      },
+      plugins:{
+        legend:{position:'bottom',labels:{color:document.body.classList.contains('light-mode')?'#1f2937':'#f0f0f0',padding:16,usePointStyle:true,pointStyle:'roundedRect'}},
+        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${euros(c.parsed.y)}`}}
+      }
+    }
   });
   const detalle = document.getElementById('detalleGastosMes');
   detalle.innerHTML = claves.map(clave=>{
     const mesNum=Number(clave.slice(5,7))-1;
     const dato=gastos[clave]||{pellets:0,luz:0};
     const total=dato.pellets+dato.luz;
-    return `<div class="expense-row"><div><strong>${nombresMes[mesNum][0].toUpperCase()+nombresMes[mesNum].slice(1)}</strong><small>🔥 Pellets: ${euros(dato.pellets)} · 💡 Luz: ${euros(dato.luz)}</small></div><div style="text-align:right"><strong>${euros(total)}</strong><small>Total del mes</small></div></div>`;
+    return `<div class="expense-row"><div><strong>${nombresMes[mesNum][0].toUpperCase()+nombresMes[mesNum].slice(1)}</strong><small>🔥 Pellets: ${euros(dato.pellets)} · 💡 Luz: ${euros(dato.luz)}</small></div><div class="expense-row-total" style="text-align:right"><strong>${euros(total)}</strong><small>Total del mes</small>${(p?.gastosLuz||{})[clave] ? `<button class="edit-light-btn" onclick="editarGastoLuz('${clave}')">✎ Corregir luz</button>` : (dato.pellets>0 ? `<button class="edit-light-btn" onclick="editarGastoLuz('${clave}')">＋ Añadir luz</button>` : '')}</div></div>`;
   }).join('');
+}
+function cargarGastoLuz() {
+  const p = datosGastosTemporada();
+  const mes = document.getElementById('mesFactura')?.value;
+  const input = document.getElementById('importeLuz');
+  const hint = document.getElementById('luzEditHint');
+  if (!p || !mes || !input) return;
+  const guardado = p.gastosLuz?.[mes];
+  input.value = guardado && guardado.importe !== undefined ? guardado.importe : '';
+  if (hint) hint.textContent = guardado
+    ? `Importe guardado para ${mes}: ${euros(guardado.importe)}. Puedes corregirlo y volver a guardar.`
+    : 'Todavía no hay un importe guardado para este mes.';
+}
+function editarGastoLuz(mes) {
+  openGastos();
+  const selector = document.getElementById('mesFactura');
+  if (selector) {
+    selector.value = mes;
+    cargarGastoLuz();
+    document.getElementById('importeLuz')?.focus();
+    document.getElementById('importeLuz')?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
 }
 async function guardarGastoLuz() {
   const p = datosGastosTemporada();
@@ -1188,6 +1744,7 @@ async function guardarGastoLuz() {
 }
 window.openGastos=openGastos;
 window.guardarGastoLuz=guardarGastoLuz;
+window.editarGastoLuz=editarGastoLuz;
 
 // ----------------- CONFIGURACIÓN Y TEMA -----------------
 const THEME_KEY = "mipellets-theme";
@@ -1299,4 +1856,3 @@ document.addEventListener("click",()=>{ menuDropdown.style.display="none"; seaso
 
 </body>
 </html>
-
