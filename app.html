@@ -1585,6 +1585,21 @@ function datosGastosTemporada() {
   if (!p.gastosLuz) p.gastosLuz = {};
   return p;
 }
+function gastosLuzCompartidos() {
+  const salida = {};
+  // Prioriza los datos de la temporada seleccionada y recupera también
+  // facturas guardadas en temporadas anteriores para no perderlas.
+  const nombres = Object.keys(data || {});
+  const orden = [currentSeason, ...nombres.filter(nombre => nombre !== currentSeason)];
+  orden.forEach(nombre => {
+    const temporada = data[nombre];
+    if (!temporada || typeof temporada !== 'object' || Array.isArray(temporada)) return;
+    Object.entries(temporada.gastosLuz || {}).forEach(([mes, dato]) => {
+      if (salida[mes] === undefined && dato && dato.importe !== undefined) salida[mes] = dato;
+    });
+  });
+  return salida;
+}
 function euros(n) { return (Number(n)||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'}); }
 
 function openGastos() {
@@ -1592,7 +1607,6 @@ function openGastos() {
   if (!p) return;
   const anioActual = new Date().getFullYear();
   const opcionesAnio = Array.from({length:8},(_,i)=>anioActual-5+i);
-  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   content.innerHTML = `
     <div id="gastosSection">
       <div class="card">
@@ -1609,7 +1623,7 @@ function openGastos() {
       </div>
       <div class="card">
         <h3 style="margin-top:0">📅 Desglose de gastos mes a mes</h3>
-        <p style="color:var(--muted-color);font-size:.85rem;margin-top:0">Pellets calculados según las recogidas de cada mes y el precio por saco; la luz corresponde al importe que hayas guardado.</p>
+        <p style="color:var(--muted-color);font-size:.85rem;margin-top:0">Se suman las recogidas de pellets de todas las temporadas por fecha y su precio por saco. Las facturas de luz son comunes a toda la aplicación y cada mes se contabiliza una sola vez.</p>
         <div id="detalleGastosMes"></div>
       </div>
       <div class="card">
@@ -1620,7 +1634,7 @@ function openGastos() {
         <input id="importeLuz" type="number" min="0" step="0.01" placeholder="Ej. 68,50" style="width:100%;box-sizing:border-box">
         <button class="primary" onclick="guardarGastoLuz()">💾 Guardar / modificar gasto de luz</button>
         <p id="luzEditHint" style="font-size:.78rem;color:var(--muted-color);margin:8px 0 0">Si ya existe un gasto para ese mes, aparecerá aquí para que puedas corregirlo.</p>
-        <p style="font-size:.8rem;color:var(--muted-color);margin-bottom:0">Solo se guarda el importe mensual en MiPellets. Para ver la factura completa, utiliza el botón de Repsol.</p>
+        <p style="font-size:.8rem;color:var(--muted-color);margin-bottom:0">El importe de luz es común a todas las temporadas, por lo que no se duplica al calcular el gasto anual.</p>
       </div>
       <div class="card">
         <h3 style="margin-top:0">🧾 Resumen del gasto anual</h3>
@@ -1639,16 +1653,18 @@ function openGastos() {
   pintarGraficaGastos();
 }
 function calcularGastosMensuales(anio) {
-  const p = getCurrentSeasonData();
   const salida = {};
-  const precio = Math.max(0, Number(p?.precioSaco)||0);
-  (p?.pickups||[]).forEach(r => {
-    if (!r.fecha || !r.fecha.startsWith(String(anio)+'-')) return;
-    const mes = r.fecha.slice(0,7);
-    salida[mes] ||= {pellets:0,luz:0};
-    salida[mes].pellets += Math.max(0,Number(r.sacos)||0) * precio;
+  Object.values(data || {}).forEach(p => {
+    if (!p || typeof p !== 'object' || Array.isArray(p)) return;
+    const precio = Math.max(0, Number(p.precioSaco) || 0);
+    (p.pickups || []).forEach(r => {
+      if (!r.fecha || !r.fecha.startsWith(String(anio)+'-')) return;
+      const mes = r.fecha.slice(0,7);
+      salida[mes] ||= {pellets:0,luz:0};
+      salida[mes].pellets += Math.max(0,Number(r.sacos)||0) * precio;
+    });
   });
-  Object.entries(p?.gastosLuz||{}).forEach(([mes, dato]) => {
+  Object.entries(gastosLuzCompartidos()).forEach(([mes, dato]) => {
     if (!mes.startsWith(String(anio)+'-')) return;
     salida[mes] ||= {pellets:0,luz:0};
     salida[mes].luz = Math.max(0,Number(dato.importe)||0);
@@ -1697,7 +1713,7 @@ function pintarGraficaGastos() {
     const mesNum=Number(clave.slice(5,7))-1;
     const dato=gastos[clave]||{pellets:0,luz:0};
     const total=dato.pellets+dato.luz;
-    return `<div class="expense-row"><div><strong>${nombresMes[mesNum][0].toUpperCase()+nombresMes[mesNum].slice(1)}</strong><small>🔥 Pellets: ${euros(dato.pellets)} · 💡 Luz: ${euros(dato.luz)}</small></div><div class="expense-row-total" style="text-align:right"><strong>${euros(total)}</strong><small>Total del mes</small>${(p?.gastosLuz||{})[clave] ? `<button class="edit-light-btn" onclick="editarGastoLuz('${clave}')">✎ Corregir luz</button>` : (dato.pellets>0 ? `<button class="edit-light-btn" onclick="editarGastoLuz('${clave}')">＋ Añadir luz</button>` : '')}</div></div>`;
+    return `<div class="expense-row"><div><strong>${nombresMes[mesNum][0].toUpperCase()+nombresMes[mesNum].slice(1)}</strong><small>🔥 Pellets: ${euros(dato.pellets)} · 💡 Luz: ${euros(dato.luz)}</small></div><div class="expense-row-total" style="text-align:right"><strong>${euros(total)}</strong><small>Total del mes</small>${gastosLuzCompartidos()[clave] ? `<button class="edit-light-btn" onclick="editarGastoLuz('${clave}')">✎ Corregir luz</button>` : (dato.pellets>0 ? `<button class="edit-light-btn" onclick="editarGastoLuz('${clave}')">＋ Añadir luz</button>` : '')}</div></div>`;
   }).join('');
 }
 function cargarGastoLuz() {
@@ -1706,7 +1722,7 @@ function cargarGastoLuz() {
   const input = document.getElementById('importeLuz');
   const hint = document.getElementById('luzEditHint');
   if (!p || !mes || !input) return;
-  const guardado = p.gastosLuz?.[mes];
+  const guardado = gastosLuzCompartidos()[mes];
   input.value = guardado && guardado.importe !== undefined ? guardado.importe : '';
   if (hint) hint.textContent = guardado
     ? `Importe guardado para ${mes}: ${euros(guardado.importe)}. Puedes corregirlo y volver a guardar.`
@@ -1730,10 +1746,16 @@ async function guardarGastoLuz() {
   if (!p || !mes || importeRaw === '' || !Number.isFinite(importe) || importe < 0) {
     alert('Selecciona el mes e introduce un importe de luz válido.'); return;
   }
-  const datoAnterior = p.gastosLuz[mes] || {};
+  const datoAnterior = gastosLuzCompartidos()[mes] || {};
   const dato = { ...datoAnterior, importe };
   try {
-    p.gastosLuz[mes] = dato;
+    // Mantiene la factura compartida sincronizada en las temporadas existentes.
+    Object.values(data).forEach(temporada => {
+      if (temporada && typeof temporada === 'object' && !Array.isArray(temporada)) {
+        if (!temporada.gastosLuz) temporada.gastosLuz = {};
+        temporada.gastosLuz[mes] = dato;
+      }
+    });
     await setDoc(datosRef,data);
     alert('Gasto de luz guardado.');
     openGastos();
