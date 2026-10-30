@@ -890,6 +890,253 @@ body.light-mode #calendar .fc-event{background:#fff0df!important;color:#9a551e!i
   #calendar .fc-event{font-size:.53rem!important;padding:3px 1px!important}
 }
 
+
+
+/* ===== AJUSTE GLOBAL DE CONTRASTE: MODO CLARO ===== */
+body.light-mode{
+  --page-bg:#f3f6fa; --header-bg:#ffffff; --card-bg:#ffffff;
+  --input-bg:#f8fafc; --text-color:#172638; --muted-color:#526579;
+  --border-color:#d5dee8; --hover-bg:#eaf0f6; --metric-bg:#f5f8fb;
+  --shadow-color:rgba(24,43,66,.09);
+  color:#172638!important;
+}
+body.light-mode #content,
+body.light-mode #content p,
+body.light-mode #content h1,
+body.light-mode #content h2,
+body.light-mode #content h3,
+body.light-mode #content h4,
+body.light-mode #content label,
+body.light-mode #content strong,
+body.light-mode #content span:not(.eyebrow):not(.summary-symbol){
+  text-shadow:none;
+}
+body.light-mode .card,
+body.light-mode .metric,
+body.light-mode .data-stock-card,
+body.light-mode .data-price-card,
+body.light-mode .pickups-data-card,
+body.light-mode .home-hero,
+body.light-mode .home-house-card,
+body.light-mode .calendar-card{
+  color:#172638;
+  border-color:#d9e2ec!important;
+}
+body.light-mode small,
+body.light-mode .helper-note,
+body.light-mode .screen-heading p,
+body.light-mode .section-title small,
+body.light-mode .section-title p,
+body.light-mode .hero-title small,
+body.light-mode .summary-item small,
+body.light-mode .counter-value small,
+body.light-mode .input-suffix,
+body.light-mode .cost-summary-card small,
+body.light-mode .cost-summary-card>span:last-child,
+body.light-mode .expense-row small,
+body.light-mode .stock-confirmed,
+body.light-mode .stock-alert p,
+body.light-mode .estimate-item small,
+body.light-mode .estimate-item em{
+  color:#526579!important;
+}
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea,
+body.light-mode .season-box select,
+body.light-mode #content input,
+body.light-mode #content select,
+body.light-mode #content textarea{
+  color:#172638!important;background:#fff!important;border-color:#c7d3df!important;
+}
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder{color:#687b8e!important;opacity:1}
+body.light-mode button:not(.active):not(.fc-button),
+body.light-mode .secondary-action,
+body.light-mode .edit-light-btn{
+  text-shadow:none;
+}
+body.light-mode .summary-item{background:#f5f8fc!important;border-color:#dce5ef!important;color:#172638!important}
+body.light-mode .summary-symbol.blue{background:#dcecff!important;color:#174f87!important}
+body.light-mode .summary-symbol.orange{background:#fff0dc!important;color:#8a4a0b!important}
+body.light-mode .summary-symbol.green{background:#dff5e9!important;color:#176344!important}
+body.light-mode .summary-symbol.violet{background:#eee7ff!important;color:#5c3a9b!important}
+body.light-mode .available-total{border-color:#dce5ef!important}
+body.light-mode .available-total div small{color:#263c52!important}
+body.light-mode .available-total div span{color:#526579!important}
+body.light-mode .available-total>strong{color:#1764a5!important}
+body.light-mode .estimate-item{background:#f1f6fb!important;border-color:#d6e2ee!important;color:#172638!important}
+body.light-mode .estimate-item small,body.light-mode .estimate-item em{color:#526579!important}
+body.light-mode .cost-summary-card{background:linear-gradient(145deg,#fff,#f2f6fa)!important;border-color:#d8e2ec!important;color:#172638!important}
+body.light-mode .cost-card-icon{background:#e2edf8!important;color:#24547e!important}
+body.light-mode .daily-cost{background:linear-gradient(145deg,#f0f8f2,#e6f2e9)!important}
+body.light-mode .daily-cost .cost-card-icon{background:#d8eddf!important;color:#21613d!important}
+body.light-mode .hero-icon,body.light-mode .section-icon,body.light-mode .stock-icon,body.light-mode .pickup-list-icon{background:#e5eef7!important;color:#244d72!important}
+body.light-mode .money-icon{background:#fff0d9!important;color:#80500e!important}
+body.light-mode .stock-alert{background:#fff8e9!important;border-color:#e6c987!important;color:#674713!important}
+body.light-mode .stock-alert p{color:#674713!important}
+body.light-mode .secondary-action{background:#eaf2fa!important;color:#214b70!important;border-color:#c9d9e9!important}
+body.light-mode .edit-light-btn{background:#eaf3ff!important;color:#174f87!important;border-color:#c4d9ee!important}
+body.light-mode nav.app-bottom-nav button.active{background:#dceafa!important;color:#153f67!important}
+body.light-mode nav.app-bottom-nav button.active svg{color:#b45c18!important}
+body.light-mode .eyebrow{color:#245f95!important}
+body.light-mode .heading-icon{background:linear-gradient(145deg,#e5eef8,#d5e3f1)!important;border-color:#c7d7e7!important}
+body.light-mode .fab-pickup{color:#fff!important}
+body.light-mode .menu-dropdown,body.light-mode .submenu{background:#fff!important;color:#172638!important}
+body.light-mode .menu-dropdown div,body.light-mode .submenu div{color:#263c52!important}
+body.light-mode .expense-row{border-color:#dce5ef!important;color:#172638!important}
+body.light-mode .expense-row-total strong{color:#172638!important}
+body.light-mode .chart-switch button{color:#263c52!important}
+
+/* ===== CALENDARIO: CUADRÍCULA MÁS LIMPIA Y LEGIBLE ===== */
+.calendar-card{
+  padding:16px 11px 14px!important;
+  border-radius:22px!important;
+}
+#calendar{padding:2px!important;border:0!important;border-radius:0!important}
+#calendar .fc-toolbar{margin:2px 1px 18px!important;gap:8px!important}
+#calendar .fc-toolbar-title{font-size:1.08rem!important;font-weight:850!important;letter-spacing:-.035em!important}
+#calendar .fc-col-header{margin-bottom:8px!important}
+#calendar .fc-col-header-cell{padding:5px 0 8px!important}
+#calendar .fc-col-header-cell-cushion{
+  display:inline-block;padding:7px 2px!important;font-size:.68rem!important;
+  font-weight:900!important;letter-spacing:.055em!important;text-decoration:none!important;
+}
+#calendar .fc-daygrid-day{padding:3px 2px!important}
+#calendar .fc-daygrid-day-frame{
+  min-height:78px!important;padding:6px 3px 4px!important;border-radius:13px!important;
+  display:flex;flex-direction:column;align-items:stretch;
+}
+#calendar .fc-daygrid-day-top{justify-content:center!important}
+#calendar .fc-daygrid-day-number{
+  width:29px;height:29px;margin:0 auto 5px!important;border-radius:10px!important;
+  font-size:.79rem!important;font-weight:850!important;
+}
+#calendar .day-circle .fc-daygrid-day-number{border-radius:50%!important}
+#calendar .fc-daygrid-day-events{margin:0!important;min-height:18px!important}
+#calendar .fc-event{
+  border-radius:7px!important;padding:4px 2px!important;font-size:.60rem!important;
+  font-weight:850!important;line-height:1.15!important;white-space:normal!important;
+}
+#calendar .fc-daygrid-more-link{font-weight:800!important}
+#calendar .fc-day-today .fc-daygrid-day-frame{border-width:1.5px!important}
+body.light-mode .calendar-card{background:#fff!important;border:1px solid #d9e2ec!important}
+body.light-mode #calendar .fc-toolbar-title{color:#172f49!important}
+body.light-mode #calendar .fc-button{
+  background:#edf3f9!important;color:#294761!important;border:1px solid #d2deea!important;
+  font-weight:800!important;box-shadow:none!important;
+}
+body.light-mode #calendar .fc-button:hover{background:#e0ebf6!important}
+body.light-mode #calendar .fc-button-primary:not(:disabled).fc-button-active,
+body.light-mode #calendar .fc-button-primary:focus{background:#245f91!important;color:#fff!important;border-color:#245f91!important}
+body.light-mode #calendar .fc-col-header-cell-cushion{color:#354f68!important}
+body.light-mode #calendar .fc-daygrid-day-frame{background:#f8fafc!important;border:1px solid #e0e7ef!important;box-shadow:none!important}
+body.light-mode #calendar .weekend-day .fc-daygrid-day-frame{background:#f1f5f9!important}
+body.light-mode #calendar .fc-day-other .fc-daygrid-day-frame{background:#f5f7fa!important;border-color:#edf1f5!important}
+body.light-mode #calendar .fc-daygrid-day-number{color:#20384f!important}
+body.light-mode #calendar .fc-day-other .fc-daygrid-day-number{color:#8796a6!important}
+body.light-mode #calendar .fc-day-today .fc-daygrid-day-frame{background:#fff7f3!important;border-color:#e9a18f!important}
+body.light-mode #calendar .day-circle-green .fc-daygrid-day-number{background:#d8f2e4!important;color:#17613f!important;box-shadow:0 0 0 2px #b9e5cd!important}
+body.light-mode #calendar .day-circle-brown .fc-daygrid-day-number{background:#f6e6d7!important;color:#78451f!important;box-shadow:0 0 0 2px #ead0b7!important}
+body.light-mode #calendar .day-circle-red .fc-daygrid-day-number{background:#d94f43!important;color:#fff!important;box-shadow:0 0 0 2px #f3c2bc!important}
+body.light-mode #calendar .fc-event{background:#fff0df!important;color:#87470e!important;border:1px solid #f0d0aa!important}
+body.light-mode #calendar .fc-daygrid-more-link{color:#245f91!important}
+@media(max-width:520px){
+  .calendar-card{padding:13px 7px 11px!important}
+  #calendar .fc-toolbar{grid-template-columns:auto 1fr auto!important;gap:4px!important;margin-bottom:13px!important}
+  #calendar .fc-toolbar-chunk:nth-child(2){grid-column:2!important;grid-row:1!important;justify-content:center!important}
+  #calendar .fc-toolbar-chunk:first-child{grid-column:1!important;grid-row:1!important}
+  #calendar .fc-toolbar-chunk:last-child{grid-column:3!important;grid-row:1!important;justify-content:flex-end!important}
+  #calendar .fc-toolbar-title{font-size:.91rem!important}
+  #calendar .fc-button{padding:6px 7px!important;font-size:.67rem!important}
+  #calendar .fc-daygrid-day{padding:2px 1px!important}
+  #calendar .fc-daygrid-day-frame{min-height:68px!important;padding:4px 1px 3px!important;border-radius:10px!important}
+  #calendar .fc-col-header-cell-cushion{font-size:.61rem!important;letter-spacing:.025em!important}
+  #calendar .fc-daygrid-day-number{width:26px;height:26px;font-size:.72rem!important;margin-bottom:4px!important}
+  #calendar .day-circle .fc-daygrid-day-number{width:26px;height:26px}
+  #calendar .fc-event{font-size:.53rem!important;padding:3px 1px!important}
+}
+
+
+/* ===== CALENDARIO: MAYOR CONTRASTE EN LOS NOMBRES DE LOS DÍAS (MODO OSCURO) ===== */
+body:not(.light-mode) #calendar .fc-col-header-cell {
+  background: rgba(105, 139, 177, .13) !important;
+  border-radius: 9px !important;
+}
+body:not(.light-mode) #calendar .fc-col-header-cell-cushion {
+  color: #f1f6ff !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+}
+
+
+/* ===== ACCESOS RÁPIDOS: RECOGIDA MANUAL Y POR VOZ ===== */
+.pickup-fab-group{
+  position:fixed;
+  right:17px;
+  bottom:calc(88px + env(safe-area-inset-bottom));
+  z-index:1200;
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+.pickup-fab-group .fab-pickup,
+.pickup-fab-group .fab-voice{
+  position:static!important;
+  inset:auto!important;
+  flex:0 0 60px;
+  width:60px!important;
+  min-width:60px;
+  height:60px!important;
+  min-height:60px;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:21px!important;
+  display:grid;
+  place-items:center;
+  color:#fff!important;
+  font-size:1.9rem!important;
+  line-height:1;
+}
+.pickup-fab-group .fab-pickup{
+  background:linear-gradient(145deg,#ffab45,#f97316)!important;
+  box-shadow:0 10px 25px rgba(249,115,22,.38)!important;
+}
+.pickup-fab-group .fab-voice{
+  background:linear-gradient(145deg,#2878bd,#18518b)!important;
+  box-shadow:0 10px 25px rgba(37,112,190,.34)!important;
+}
+.pickup-fab-group button:active{transform:scale(.94)}
+@media(min-width:700px){
+  .pickup-fab-group{right:max(24px,calc((100vw - 860px)/2))}
+}
+@media(max-width:390px){
+  .pickup-fab-group{gap:9px;right:13px}
+  .pickup-fab-group .fab-pickup,
+  .pickup-fab-group .fab-voice{
+    flex-basis:56px;width:56px!important;min-width:56px;
+    height:56px!important;min-height:56px;border-radius:19px!important;
+  }
+}
+
+
+/* Confirmación de recogida por voz: modal integrado con el tema de MiPellets */
+.voice-confirm-overlay{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.68);backdrop-filter:blur(5px)}
+.voice-confirm-card{width:100%;max-width:360px;box-sizing:border-box;padding:22px;background:var(--card-bg);color:var(--text-color);border:1px solid var(--border-color);border-radius:20px;box-shadow:0 18px 55px rgba(0,0,0,.38);text-align:center;animation:voiceModalIn .18s ease-out}
+@keyframes voiceModalIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.voice-confirm-icon{width:58px;height:58px;margin:0 auto 12px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(37,99,235,.14);font-size:29px}
+.voice-confirm-card h3{margin:4px 0 6px;font-size:1.18rem;color:var(--text-color)}
+.voice-confirm-subtitle{margin:0 0 18px;color:var(--muted-color);font-size:.88rem}
+.voice-confirm-data{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 20px}
+.voice-confirm-data div{padding:13px 8px;background:var(--metric-bg);border:1px solid var(--border-color);border-radius:13px}
+.voice-confirm-data small{display:block;color:var(--muted-color);font-size:.75rem;margin-bottom:5px}
+.voice-confirm-data strong{font-size:1.12rem;color:var(--text-color)}
+.voice-confirm-actions{display:flex;gap:9px}
+.voice-confirm-actions button{margin:0;flex:1;border-radius:11px;padding:12px 8px;font-size:.92rem}
+.voice-confirm-actions .voice-cancel{background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color)}
+.voice-confirm-actions .voice-save{background:#2563eb;color:#fff;font-weight:650}
+
 </style>
 </head>
 <body>
@@ -1143,7 +1390,10 @@ function renderInicio(){
       <button class="primary" onclick="addPickup()">Guardar recogida</button>
       <button onclick="togglePickupPanel(false)">Cancelar</button>
     </div>
-    <button class="primary fab-pickup" aria-label="Añadir recogida" title="Añadir recogida" onclick="togglePickupPanel()">＋</button>
+    <div class="pickup-fab-group" aria-label="Acciones de recogida">
+      <button class="fab-voice" aria-label="Registrar recogida por voz" title="Registrar recogida por voz" onclick="startVoicePickup()">🎙️</button>
+      <button class="primary fab-pickup" aria-label="Añadir recogida manual" title="Añadir recogida manual" onclick="togglePickupPanel()">＋</button>
+    </div>
   `;
 }
 function renderDatos(){
@@ -1202,7 +1452,144 @@ function togglePickupPanel(force){
   const show=typeof force==="boolean"?force:!panel.classList.contains("show");
   panel.classList.toggle("show",show);
 }
+
 window.togglePickupPanel=togglePickupPanel;
+
+// ===== REGISTRO DE RECOGIDAS POR VOZ =====
+function parseSpanishNumber(text){
+  const t=text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g," ").replace(/[.,]/g," ").trim();
+  const beforeSacos=(t.split(/\bsacos?\b/)[0]||t);
+  const digit=(beforeSacos.match(/\b\d{1,3}\b/)||[])[0];
+  if(digit) return Number(digit);
+  const units={cero:0,un:1,uno:1,una:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10,once:11,doce:12,trece:13,catorce:14,quince:15,dieciseis:16,diecisiete:17,dieciocho:18,diecinueve:19,veinte:20,veintiuno:21,veintiun:21,veintidos:22,veintitres:23,veinticuatro:24,veinticinco:25,veintiseis:26,veintisiete:27,veintiocho:28,veintinueve:29,treinta:30,cuarenta:40,cincuenta:50, sesenta:60,setenta:70,ochenta:80,noventa:90};
+  const words=beforeSacos.split(/\s+/);
+  let total=0, found=false;
+  for(let i=0;i<words.length;i++){
+    const w=words[i];
+    if(units[w]!==undefined){total+=units[w];found=true;}
+    else if(w==="y" || w==="sacos" || w==="saco" || w==="he" || w==="recogido" || w==="recogida" || w==="apunta" || w==="apuntame" || w==="anota" || w==="anotame" || w==="el" || w==="de" || w==="del" || w==="dia" || w==="hoy" || w==="ayer" || w==="anteayer" || w==="octubre" || w==="enero" || w==="febrero" || w==="marzo" || w==="abril" || w==="mayo" || w==="junio" || w==="julio" || w==="agosto" || w==="septiembre" || w==="noviembre" || w==="diciembre" || /^\d{4}$/.test(w)) continue;
+  }
+  return found?total:null;
+}
+function parsePickupDate(text){
+  const t=text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g," ");
+  const now=new Date();
+  const iso=(t.match(/\b(20\d{2})-(\d{1,2})-(\d{1,2})\b/)||[]);
+  if(iso.length){return `${iso[1]}-${String(iso[2]).padStart(2,"0")}-${String(iso[3]).padStart(2,"0")}`;}
+  const slash=t.match(/\b(\d{1,2})[\/\-](\d{1,2})[\/\-](20\d{2})\b/);
+  if(slash) return `${slash[3]}-${String(slash[2]).padStart(2,"0")}-${String(slash[1]).padStart(2,"0")}`;
+  let d=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(/\banteayer\b/.test(t)) d.setDate(d.getDate()-2);
+  else if(/\bayer\b/.test(t)) d.setDate(d.getDate()-1);
+  else if(/\bhoy\b/.test(t)) {}
+  else {
+    const months={enero:0,febrero:1,marzo:2,abril:3,mayo:4,junio:5,julio:6,agosto:7,septiembre:8,octubre:9,noviembre:10,diciembre:11};
+    const monthMatch=t.match(/\b(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\b/);
+    if(monthMatch){
+      const before=t.slice(0,monthMatch.index);
+      const dayMatches=[...before.matchAll(/\b(\d{1,2})\b/g)];
+      const dayMatch=dayMatches.length?dayMatches[dayMatches.length-1]:null;
+      const after=t.slice(monthMatch.index+monthMatch[0].length);
+      const yearMatch=after.match(/\b(20\d{2})\b/) || t.match(/\b(20\d{2})\b/);
+      const day=dayMatch?Number(dayMatch[1]):null;
+      if(day && day>=1 && day<=31){
+        const year=yearMatch?Number(yearMatch[1]):now.getFullYear();
+        d=new Date(year,months[monthMatch[0]],day);
+        if(d.getMonth()!==months[monthMatch[0]]) return null;
+      } else return null;
+    } else {
+      const dayOnly=t.match(/\b(?:dia\s*)?(\d{1,2})\b/);
+      if(dayOnly && /\b(dia|el)\b/.test(t)){
+        d=new Date(now.getFullYear(),now.getMonth(),Number(dayOnly[1]));
+      } else return null;
+    }
+  }
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function showVoicePickupConfirmation(quantity,dateLabel){
+  return new Promise(resolve=>{
+    document.querySelector(".voice-confirm-overlay")?.remove();
+    const overlay=document.createElement("div");
+    overlay.className="voice-confirm-overlay";
+    overlay.innerHTML=`
+      <section class="voice-confirm-card" role="dialog" aria-modal="true" aria-labelledby="voiceConfirmTitle">
+        <div class="voice-confirm-icon">🎙️</div>
+        <h3 id="voiceConfirmTitle">Recogida reconocida</h3>
+        <p class="voice-confirm-subtitle">Comprueba los datos antes de guardarlos</p>
+        <div class="voice-confirm-data">
+          <div><small>Sacos recogidos</small><strong>${quantity}</strong></div>
+          <div><small>Fecha</small><strong>${dateLabel}</strong></div>
+        </div>
+        <div class="voice-confirm-actions">
+          <button type="button" class="voice-cancel">Cancelar</button>
+          <button type="button" class="voice-save">Guardar recogida</button>
+        </div>
+      </section>`;
+    document.body.appendChild(overlay);
+    const finish=value=>{overlay.remove();resolve(value);};
+    overlay.querySelector(".voice-cancel").addEventListener("click",()=>finish(false));
+    overlay.querySelector(".voice-save").addEventListener("click",()=>finish(true));
+    overlay.addEventListener("click",event=>{if(event.target===overlay) finish(false);});
+  });
+}
+
+function startVoicePickup(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){
+    alert("Tu navegador no ofrece reconocimiento de voz. Abre MiPellets con Google Chrome actualizado y comprueba que tenga permiso para usar el micrófono.");
+    return;
+  }
+  const recognition=new SpeechRecognition();
+  recognition.lang="es-ES";
+  recognition.continuous=false;
+  recognition.interimResults=false;
+  recognition.maxAlternatives=1;
+  const voiceButton=document.querySelector(".fab-voice");
+  if(voiceButton){voiceButton.disabled=true;voiceButton.textContent="…";}
+  recognition.onresult=async(event)=>{
+    const transcript=event.results?.[0]?.[0]?.transcript||"";
+    const quantity=parseSpanishNumber(transcript);
+    const date=parsePickupDate(transcript);
+    if(!quantity || quantity<1 || quantity>999){
+      alert(`He oído: «${transcript}».\nNo he podido identificar correctamente la cantidad de sacos. Prueba diciendo, por ejemplo: «He recogido 10 sacos hoy».`);
+      return;
+    }
+    if(!date){
+      alert(`He oído: «${transcript}».\nNo he podido identificar la fecha. Prueba diciendo: «He recogido 10 sacos el 30 de octubre de 2026».`);
+      return;
+    }
+    const [year,month,day]=date.split("-");
+    const dateLabel=`${day}/${month}/${year}`;
+    const accepted=await showVoicePickupConfirmation(quantity,dateLabel);
+    if(accepted){
+      const fechaInput=document.getElementById("fecha");
+      const cantidadInput=document.getElementById("cantidad");
+      if(fechaInput && cantidadInput){
+        fechaInput.value=date;
+        cantidadInput.value=quantity;
+        await addPickup();
+      } else {
+        alert("No se ha podido abrir el registro. Vuelve a Inicio e inténtalo de nuevo.");
+      }
+    }
+  };
+  recognition.onerror=(event)=>{
+    if(event.error==="not-allowed" || event.error==="service-not-allowed")
+      alert("No hay permiso para usar el micrófono. Activa el permiso de micrófono para Chrome en los ajustes de Android.");
+    else if(event.error!=="no-speech" && event.error!=="aborted")
+      alert("No se ha podido reconocer la voz. Comprueba la conexión y vuelve a intentarlo.");
+  };
+  recognition.onend=()=>{
+    if(voiceButton){voiceButton.disabled=false;voiceButton.textContent="🎙️";}
+  };
+  try{recognition.start();}
+  catch(error){
+    if(voiceButton){voiceButton.disabled=false;voiceButton.textContent="🎙️";}
+    alert("No se ha podido iniciar el micrófono. Espera un momento y vuelve a intentarlo.");
+  }
+}
+window.startVoicePickup=startVoicePickup;
+
 
 // ----------------- SACOS CASA -----------------
 function updateCasa(delta){
