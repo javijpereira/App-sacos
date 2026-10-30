@@ -54,10 +54,43 @@ body {
 }
 
 .auth-header .logo {
-  width: 3000px;
-  height: 300px;
-  object-fit: contain;
-  margin-bottom: 1rem;
+   width: 112px;
+   height: 112px;
+   display: block;
+   margin: 0 auto;
+   filter: drop-shadow(0 10px 22px rgba(249, 115, 22, 0.22));
+}
+
+.logo-wrap {
+   width: 124px;
+   height: 124px;
+   margin: 0 auto 1.15rem;
+   display: grid;
+   place-items: center;
+   border-radius: 50%;
+   background: radial-gradient(circle, rgba(249,115,22,.13), rgba(30,41,59,.12) 68%);
+}
+
+.auth-subtitle {
+   margin: .55rem 0 0;
+   color: #94a3b8;
+   font-size: .9rem;
+}
+
+@media (max-width: 420px) {
+   .auth-card {
+      padding: 2rem 1.4rem;
+   }
+
+   .auth-header .logo {
+      width: 104px;
+      height: 104px;
+   }
+
+   .logo-wrap {
+      width: 116px;
+      height: 116px;
+   }
 }
 
 .auth-header h1 {
@@ -134,10 +167,81 @@ body {
     <div class="auth-card">
       
       <!-- Cabecera centrada -->
-      <div class="auth-header">
-        <img src="sacospellet.jpg" alt="Pellets" class="logo">
-        <h1>Control de Sacos de Pellets</h1>
-      </div>
+    <div class="auth-header">
+
+    <div class="logo-wrap">
+
+        <svg class="logo" viewBox="0 0 120 120">
+
+            <defs>
+                <linearGradient id="flame" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#fde68a"/>
+                    <stop offset="55%" stop-color="#fb923c"/>
+                    <stop offset="100%" stop-color="#ea580c"/>
+                </linearGradient>
+            </defs>
+
+            <!-- Fondo -->
+            <circle cx="60" cy="60" r="56"
+                fill="#1e293b"
+                stroke="#334155"
+                stroke-width="2"/>
+
+            <circle cx="60" cy="60" r="47"
+                fill="#0f172a"/>
+
+            <!-- Estufa -->
+            <rect x="35" y="35" width="50" height="52"
+                rx="9"
+                fill="#334155"
+                stroke="#94a3b8"
+                stroke-width="2"/>
+
+            <rect x="42" y="43" width="36" height="35"
+                rx="5"
+                fill="#0f172a"
+                stroke="#64748b"
+                stroke-width="2"/>
+
+            <!-- Llama -->
+            <path d="M60 20
+                C63 31 53 36 54 45
+                C55 50 58 53 61 56
+                C62 49 68 45 69 37
+                C78 46 82 55 80 65
+                C78 77 70 84 60 84
+                C48 84 40 77 40 65
+                C40 56 46 47 54 40
+                C53 49 56 53 59 56
+                C63 48 60 38 60 20Z"
+                fill="url(#flame)"/>
+
+            <path d="M60 48
+                C61 54 56 58 56 63
+                C56 68 59 71 63 71
+                C67 71 71 68 71 63
+                C71 59 69 56 66 53
+                C65 57 63 59 60 61
+                C61 56 61 52 60 48Z"
+                fill="#fff7ed"/>
+
+            <!-- Base -->
+            <path d="M29 87 H91 L86 100 H34 Z"
+                fill="#334155"
+                stroke="#64748b"
+                stroke-width="2"/>
+
+        </svg>
+
+    </div>
+
+    <h1>Control de Sacos de Pellets</h1>
+
+    <p class="auth-subtitle">
+        Tu calefacción, siempre bajo control
+    </p>
+
+</div>
 
       <!-- Formulario -->
       <input type="email" id="email" placeholder="Correo electrónico">
